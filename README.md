@@ -4,7 +4,7 @@ Olá, aluno(a)! Bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. A
 
 ### Configuração do Ambiente: 
 
-Para garantir uma experiência mais uniforme a todos os alunos, fornecemos uma máquina virtual (VM) pré-configurada. Essa abordagem garante que todos comecem o curso com o mesmo ambiente e configurações. Embora o Docker possa rodar diretamente em diversos sistemas operacionais, esta padronização simplifica nosso suporte e proporciona soluções mais ágeis e consistentes diante de eventuais desafios técnicos.
+Para garantir uma experiência mais uniforme, fornecemos uma máquina virtual (VM) pré-configurada. Essa abordagem garante que todos comecem o curso com o mesmo ambiente e configurações. Embora o Docker possa rodar diretamente em diversos sistemas operacionais, esta padronização simplifica nosso suporte e proporciona soluções mais ágeis e consistentes diante de eventuais desafios técnicos.
 
 - **Nota**: Se você tem experiência com Docker e prefere executá-lo diretamente no seu sistema operacional, sinta-se à vontade. A estrutura do repositório suporta este modo de operação. Para os usuários dos hardwares mais recentes da Apple, como o M2 e outros processadores novos, é especialmente relevante considerar esta opção, visto que algumas versões do Oracle Virtual Box podem não ser compatíveis com esses dispositivos. 
 
@@ -29,7 +29,7 @@ A imagem OVA fornecida foi pré-configurada com 'docker' e 'docker-compose', fac
 - **Usuário:** labihc
 - **Senha:** L@b1hc
 
-## 2. Ambientes de Laboratório
+## 2. Descrição das Ferramentas Utilizadas
 
 ### Docker:
 
