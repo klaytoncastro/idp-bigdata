@@ -78,7 +78,7 @@ Depois de acessar o ambiente virtual:
    git clone https://github.com/klaytoncastro/idp-bigdata   
 '''
 
-2. Entre na subpasta de cada ambiente, construa e inicie os serviços usando o Docker Compose. Ex:
+3. Entre na subpasta de cada ambiente, construa e inicie os serviços usando o Docker Compose. Ex:
 
 '''bash
    cd /opt/idp-bigdata/jupyter-spark
