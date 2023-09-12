@@ -1,9 +1,14 @@
 # Instruções para os Laboratórios da disciplina de Big Data e NoSQL
 
-Olá, aluno! Este repositório os recursos necessários para os nossos laboratórios. Siga atentamente as instruções abaixo para configurar seu ambiente.
+Olá, aluno! Bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Aqui, você encontrará um conjunto diversificado de ferramentas que serão utilizadas ao longo do curso. Este repositório foi projetado para auxiliá-lo a configurar e gerenciar essas ferramentas. Siga atentamente as instruções abaixo para configurar seu ambiente. 
+
+### Configuração do Ambiente: 
+
+Para garantir uma experiência uniforme e livre de problemas técnicos para todos os alunos, fornecemos uma máquina virtual (VM) pré-configurada. Esta abordagem nos permite certificar que todos iniciem o curso com o mesmo ambiente e configurações. Embora as tecnologias como Docker possam rodar diretamente em diversos sistemas operacionais, esta abordagem de padronização facilita nosso suporte e, em caso de desafios técnicos, torna a solução mais ágil e consistente para todos. 
+
+- **Nota**: Se você tem experiência com Docker e prefere executá-lo diretamente no seu sistema operacional, sinta-se à vontade. A estrutura do repositório suporta este modo de operação. Para os usuários dos hardwares mais recentes da Apple, como o M2 e outros processadores novos, é especialmente relevante considerar esta opção, visto que algumas versões do Oracle Virtual Box podem não ser compatíveis com esses dispositivos.
 
 ## 1. Sobre a Imagem OVA
-
 
 OVA (Open Virtual Appliance ou Open Virtualization Archive) é um formato de empacotamento de arquivos para máquinas virtuais. Basicamente, é um único arquivo que contém todo o conteúdo de uma máquina virtual, incluindo sua configuração, discos virtuais, entre outros. O formato OVA visa facilitar a portabilidade e o deploy de máquinas virtuais, independentemente do software de virtualização utilizado. Uma vez que você tenha um arquivo OVA, você pode importá-lo em várias plataformas de virtualização para iniciar a máquina virtual.
 
@@ -11,9 +16,7 @@ Oracle VirtualBox é um software de virtualização de propósito geral de códi
 
 Por meio de um arquivo OVA, você pode importá-lo facilmente para o Oracle VirtualBox para criar uma nova máquina virtual. Essa é uma maneira comum de distribuir ambientes pré-configurados, como laboratórios de teste, ambientes de desenvolvimento ou demonstrações, pois garante que todos os usuários terão exatamente o mesmo ambiente, independentemente de onde eles estejam executando a máquina virtual.
 
-
 A imagem OVA fornecida foi pré-configurada com 'docker' e 'docker-compose', facilitando a configuração e utilização dos ambientes de laboratório. 
-
 
 ### Como Usar:
 1. Baixe a imagem OVA através do [link](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3).
@@ -48,19 +51,19 @@ Assim, com Docker e Docker Compose temos uma grande conveniência e eficiência,
 
 Dentro deste projeto, temos diversos diretórios, cada um representando um ambiente específico:
 
-### jupyter-spark
-Este diretório contém um ambiente com Jupyter Notebook e Spark em modo standalone. 
+### Jupyter/Spark
+Este diretório contém um ambiente com Jupyter Notebook e Spark em modo stand-alone. 
 
 - **Jupyter Notebook**: É uma aplicação web que permite criar e compartilhar documentos que contêm código ativo, equações, visualizações e texto. Muito usado para análise de dados.
   
 - **Spark**: Uma estrutura de processamento de dados rápida, em memória, utilizada para big data analytics.
 
-### mongodb
+### Mongodb
 Dentro deste diretório, temos uma configuração para o MongoDB.
 
 - **MongoDB**: É um banco de dados NoSQL baseado em documentos, onde cada registro é um documento, que é uma estrutura de dados composta por pares de chave e valor.
 
-### neo4j
+### Neo4j
 Neste diretório, está a configuração para o Neo4j.
 
 - **Neo4j**: É um sistema de gerenciamento de banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de vértices e arestas. 
