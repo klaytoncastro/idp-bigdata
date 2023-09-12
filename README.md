@@ -40,11 +40,11 @@ O Docker surge como solução, permitindo desenvolver e executar aplicações em
 
 ### Docker Compose:
 
-O Docker Compose é uma ferramenta dentro do ecossistema Docker que simplifica a definição e gestão de aplicações multicontêiner. Com ele, é possível orquestrar aplicações complexas compostas por vários contêineres interligados, usando um único arquivo: docker-compose.yml. Com um comando simples (docker-compose up -d), todos os contêineres definidos no arquivo são iniciados simultaneamente, garantindo a integração e configuração correta de cada componente.
+O Docker Compose é uma ferramenta do ecossistema Docker projetada para definir e gerenciar aplicações multicontêiner. Através do arquivo docker-compose.yml, é possível orquestrar aplicações complexas compostas por diversos contêineres. Com o comando docker-compose up -d, todos os contêineres especificados são iniciados simultaneamente, garantindo sua configuração e integração correta.
 
-Imagine uma aplicação que envolve um servidor web, um banco de dados MongoDB e um cache Redis. Em vez de iniciar e configurar cada contêiner manualmente, com o Docker Compose, é possível definir toda essa configuração em um arquivo e ativá-la de uma vez, assegurando que cada contêiner esteja devidamente configurado e interligado.
+Por exemplo, para uma aplicação que combina um servidor web, um banco de dados MongoDB e um cache Redis, o Docker Compose elimina a necessidade de configuração manual de cada contêiner. Basta definir a configuração em um arquivo e ativá-la.
 
-Dessa forma, com as ferramentas Docker e Docker Compose, ganhamos em conveniência e eficiência, focando no uso das aplicações e eliminando preocupações com instalações e configurações manuais. A imagem OVA padronizada amplia esse benefício, permitindo a evolução e integração do ambiente, aproveitando o poder computacional do laboratório.
+Com Docker e Docker Compose, simplificamos o processo de implantação e integração de aplicações, reduzindo preocupações com procedimentos manuais. A utilização de uma imagem OVA padronizada eleva essa eficiência, maximizando o aproveitamento do poder computacional disponível.
 
 Dentro deste projeto, temos diversos diretórios, cada um representando um ambiente específico:
 
