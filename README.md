@@ -51,20 +51,35 @@ Assim, com Docker e Docker Compose temos uma grande conveniência e eficiência,
 
 Dentro deste projeto, temos diversos diretórios, cada um representando um ambiente específico:
 
+### Hadoop
+Neste diretório, você encontrará o ambiente para o Hadoop. 
+
+- **Hadoop**: Framework de código aberto para armazenamento distribuído e processamento de conjuntos de dados grandes, usando o modelo de programação MapReduce.
+
 ### Jupyter/Spark
-Este diretório contém um ambiente com Jupyter Notebook e Spark em modo stand-alone. 
+Neste diretório, você encontrará o ambiente com Jupyter Notebook e Spark. 
 
 - **Jupyter Notebook**: É uma aplicação web que permite criar e compartilhar documentos que contêm código ativo, equações, visualizações e texto. Muito usado para análise de dados.
   
 - **Spark**: Uma estrutura de processamento de dados rápida, em memória, utilizada para big data analytics.
 
 ### MongoDB
-Dentro deste diretório, temos uma configuração para o MongoDB.
+Neste diretório, você encontrará o ambiente para o MongoDB.
 
 - **MongoDB**: É um banco de dados NoSQL baseado em documentos, onde cada registro é um documento, que é uma estrutura de dados composta por pares de chave e valor.
 
+### Redis
+Neste diretório, você encontrará o ambiente para o Redis.
+
+- **Redis**: Armazenamento de estrutura de dados em memória, usado como banco de dados NoSQL da família chave-valor. É conhecido por sua alta velocidade e flexibilidade em aplicações como cache e corretor de mensagens. 
+
+### Cassandra
+Neste diretório, você encontrará o ambiente para o Cassandra.
+
+- **Cassandra**: Banco de dados NoSQL distribuído, projetado para gerenciar grandes volumes de dados em múltiplos servidores sem nenhum ponto único de falha.
+
 ### Neo4j
-Neste diretório, está a configuração para o Neo4j.
+Neste diretório, você encontrará o ambiente para o Neo4j.
 
 - **Neo4j**: É um sistema de gerenciamento de banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de vértices e arestas. 
 
