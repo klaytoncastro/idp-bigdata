@@ -41,13 +41,11 @@ Os contêineres Docker são leves e podem aproveitar a mesma infraestrutura de m
 
 ### Docker Compose:
 
-O Docker Compose é uma ferramenta do Docker que permite definir e gerenciar aplicações de vários contêineres. Com o Docker Compose, você pode definir uma aplicação multicontêiner em um único arquivo, o docker-compose.yml, e depois iniciar todos esses contêineres juntos com um único comando (docker-compose up -d). Isso facilita a orquestração e automação de aplicações complexas compostas por vários contêineres interconectados.
+O Docker Compose é uma ferramenta dentro do ecossistema Docker que simplifica a definição e gestão de aplicações multicontêiner. Com ele, é possível orquestrar aplicações complexas compostas por vários contêineres interligados, usando um único arquivo: docker-compose.yml. Com um comando simples (docker-compose up -d), todos os contêineres definidos no arquivo são iniciados simultaneamente, garantindo a integração e configuração correta de cada componente.
 
-No entanto, com o Docker Compose, você pode definir toda essa configuração complexa em um único arquivo, o docker-compose.yml, e depois iniciar todos esses serviços juntos com um único comando (docker-compose up). Isso não apenas garante a integração correta desses componentes, mas também simplifica drasticamente o processo de configuração e implantação.
+Imagine uma aplicação que envolve um servidor web, um banco de dados MongoDB e um cache Redis. Em vez de iniciar e configurar cada contêiner manualmente, com o Docker Compose, é possível definir toda essa configuração em um arquivo e ativá-la de uma vez, assegurando que cada contêiner esteja devidamente configurado e interligado.
 
-Por exemplo, se você tiver uma aplicação que requer um servidor web, um banco de dados MongoDB e um cache Redis, em vez de iniciar manualmente cada contêiner e configurá-los para se comunicar entre si, você pode definir essa configuração no docker-compose.yml e iniciar tudo de uma vez. Isso garante que os contêineres tenham a configuração correta e os recursos de rede necessários para se comunicarem entre si.
-
-Assim, com Docker e Docker Compose temos uma grande conveniência e eficiência, permitindo nos concentrar diretamente no uso das ferramentas e aplicações, sem se preocupar com a instalação, configuração e orquestração manual. Além disso, com a imagem OVA padronizada, o ambiente poderá ser evoluído e configurado para compor sistemas distribuídos utilizando o poder computacional de todas as máquinas do Laboratório. 
+Dessa forma, com as ferramentas Docker e Docker Compose, ganhamos em conveniência e eficiência, focando no uso das aplicações e eliminando preocupações com instalações e configurações manuais. A imagem OVA padronizada amplia esse benefício, permitindo a evolução e integração do ambiente, aproveitando o poder computacional do laboratório.
 
 Dentro deste projeto, temos diversos diretórios, cada um representando um ambiente específico:
 
