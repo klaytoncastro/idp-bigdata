@@ -85,3 +85,23 @@ Depois de acessar o ambiente virtual:
    docker-compose build
    docker-compose up -d
 ```
+
+### Usando o SSH para para conexão
+
+SSH (Secure Shell) é um protocolo que possibilita a conexão e controle de servidores remotos, como nossa VM no Virtual Box. Em nossos laboratórios é preferível utilizar uma conexão SSH para gerenciar o ambiente ao invés da console física do Virtual Box:
+
+1. Conveniência e Eficiência
+
+- **Copiar e Colar**: Ao utilizar SSH, fica muito mais fácil copiar e colar comandos, scripts ou até mesmo arquivos entre o host e a VM. Essa funcionalidade torna a execução de tarefas mais rápida e evita erros humanos que podem ocorrer ao digitar manualmente.
+
+- **Multitarefa**: Com o SSH, é possível abrir várias sessões em paralelo, permitindo que você execute várias tarefas simultaneamente. 
+
+2. Evita limitações da console "física"
+
+- **Resolução e Interface**: A console física do Virtual Box pode apresentar desafios, como resolução de tela limitada ou interações de interface de usuário não intuitivas. O SSH fornece uma interface padronizada, independentemente do software de virtualização usado.
+
+- **Padrão de Gerenciamento**: Ao se familiarizar com o SSH, você estará equipando-se com uma habilidade crucial, não apenas para este ambiente de laboratório, mas para qualquer situação futura que envolva administração de sistemas, trabalho em cloud, times de infraestrutura, DevOps ou desenvolvimento de soluções profissionais.
+
+### Pronto! 
+
+Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br). 
