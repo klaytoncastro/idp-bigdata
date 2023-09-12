@@ -22,7 +22,7 @@ A imagem OVA fornecida foi pré-configurada com 'docker', 'docker-compose', 'git
 1. Baixe a imagem OVA através do [link](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3).
 2. Caso não esteja instalado, baixe e instale o Oracle VirtualBox através do [link](https://www.oracle.com/br/virtualization/technologies/vm/downloads/virtualbox-downloads.html).
 3. Escolha a versão correspondente ao seu sistema operacional e siga as instruções de instalação. 
-4. Execute o Oracle Virtual Box, vá até **Arquivo** e cliqque em **Importar Appliance**.
+4. Execute o Oracle Virtual Box, vá até **Arquivo** e clique em **Importar Appliance**.
 5. Selecione o arquivo OVA baixado e siga as instruções na tela.
 
 ### Credenciais para acesso à VM:
