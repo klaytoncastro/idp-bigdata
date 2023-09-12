@@ -58,7 +58,7 @@ Este diretório contém um ambiente com Jupyter Notebook e Spark em modo stand-a
   
 - **Spark**: Uma estrutura de processamento de dados rápida, em memória, utilizada para big data analytics.
 
-### Mongodb
+### MongoDB
 Dentro deste diretório, temos uma configuração para o MongoDB.
 
 - **MongoDB**: É um banco de dados NoSQL baseado em documentos, onde cada registro é um documento, que é uma estrutura de dados composta por pares de chave e valor.
