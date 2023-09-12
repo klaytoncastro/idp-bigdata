@@ -84,24 +84,6 @@ Neste diretório, você encontrará o ambiente para o Neo4j.
 
 ## 3. Preparando o Ambiente de Laboratório
 
-Depois de acessar o ambiente virtual:
-
-1. Crie uma pasta e baixe os arquivos do projeto:
-
-```bash   
-   sudo su -
-   cd /opt
-   git clone https://github.com/klaytoncastro/idp-bigdata   
-```
-
-3. Entre na subpasta de cada ambiente, construa e inicie os serviços usando o Docker Compose. Por exemplo, para o Jupyter-Spark:
-
-```bash
-   cd /opt/idp-bigdata/jupyter-spark
-   docker-compose build
-   docker-compose up -d
-```
-
 ### Usando o SSH para para conexão
 
 SSH (Secure Shell) é um protocolo que possibilita a conexão e controle de servidores remotos, como nossa VM no Virtual Box. Para gerenciar nossa VM nos laboratórios, recomendamos o uso de conexões SSH em vez da console física. O [Putty](https://www.putty.org/) é uma opção popular e confiável como cliente SSH, especialmente útil para sistemas Windows, embora esteja disponível para outras plataformas. Sua interface intuitiva e funcionalidades robustas o estabeleceram como preferência entre muitos administradores de sistemas e desenvolvedores ao longo dos anos. 
@@ -119,6 +101,24 @@ SSH (Secure Shell) é um protocolo que possibilita a conexão e controle de serv
 - **Resolução e Interface**: A console física do Virtual Box pode apresentar limitações, como resolução de tela reduzida ou interações de interface de usuário não intuitivas. O SSH fornece uma interface padronizada, independentemente do software de virtualização usado.
 
 - **Padrão de Gerenciamento**: Ao se familiarizar com o SSH, você estará equipando-se com uma habilidade crucial, não apenas para este ambiente de laboratório, mas para qualquer situação futura que envolva administração de sistemas, trabalho em cloud, times de infraestrutura, DevOps ou desenvolvimento de soluções profissionais.
+
+Depois de acessar o ambiente virtual:
+
+1. Crie uma pasta e baixe os arquivos do projeto:
+
+```bash   
+   sudo su -
+   cd /opt
+   git clone https://github.com/klaytoncastro/idp-bigdata   
+```
+
+3. Entre na subpasta de cada ambiente, construa e inicie os serviços usando o Docker Compose. Por exemplo, para o Jupyter-Spark:
+
+```bash
+   cd /opt/idp-bigdata/jupyter-spark
+   docker-compose build
+   docker-compose up -d
+```
 
 ### Pronto! 
 
