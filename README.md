@@ -16,7 +16,7 @@ Oracle VirtualBox é um software de virtualização de propósito geral de códi
 
 Por meio de um arquivo OVA, você pode importá-lo facilmente para o Oracle VirtualBox para criar uma nova máquina virtual. Essa é uma maneira comum de distribuir ambientes pré-configurados, como laboratórios de teste, ambientes de desenvolvimento ou demonstrações, pois garante que todos os usuários terão exatamente o mesmo ambiente, independentemente de onde eles estejam executando a máquina virtual.
 
-A imagem OVA fornecida foi pré-configurada com 'docker' e 'docker-compose', facilitando a configuração e utilização dos ambientes de laboratório. 
+A imagem OVA fornecida foi pré-configurada com 'docker', 'docker-compose', 'git', e outras ferramentas, facilitando a configuração e utilização dos ambientes de laboratório. 
 
 ### Como Usar:
 1. Baixe a imagem OVA através do [link](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3).
