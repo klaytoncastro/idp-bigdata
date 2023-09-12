@@ -16,15 +16,15 @@ Oracle VirtualBox é um software de virtualização de propósito geral de códi
 
 Por meio de um arquivo OVA, você pode importá-lo facilmente para o Oracle VirtualBox para criar uma nova máquina virtual. Essa é uma maneira comum de distribuir ambientes pré-configurados, como laboratórios de teste, ambientes de desenvolvimento ou demonstrações, pois garante que todos os usuários terão exatamente o mesmo ambiente, independentemente de onde eles estejam executando a máquina virtual.
 
-A imagem OVA fornecida foi pré-configurada com 'docker', 'docker-compose', 'git', e outras ferramentas, facilitando a configuração e utilização dos ambientes de laboratório. 
+A imagem OVA fornecida foi pré-configurada com 'docker', 'docker-compose', 'git', 'ssh' e outras ferramentas, facilitando a configuração e utilização dos ambientes de laboratório. 
 
 ### Como Usar:
 1. Baixe a imagem OVA através do [link](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3).
 2. Caso não esteja instalado, baixe e instale o Oracle VirtualBox através do [link](https://www.oracle.com/br/virtualization/technologies/vm/downloads/virtualbox-downloads.html). 
-3. Clique em **Arquivo** > **Importar Appliance**.
+3. Execute o Oracle Virtual Box e clique em **Arquivo** > **Importar Appliance**.
 4. Selecione o arquivo OVA baixado e siga as instruções na tela.
 
-### Credenciais do Ambiente Virtual:
+### Credenciais para acesso à VM:
 
 - **Usuário:** labihc
 - **Senha:** L@b1hc
@@ -106,7 +106,9 @@ Depois de acessar o ambiente virtual:
 
 ### Usando o SSH para para conexão
 
-SSH (Secure Shell) é um protocolo que possibilita a conexão e controle de servidores remotos, como nossa VM no Virtual Box. Em nossos laboratórios é preferível utilizar uma conexão SSH para gerenciar o ambiente ao invés da console física do Virtual Box:
+SSH (Secure Shell) é um protocolo que possibilita a conexão e controle de servidores remotos, como nossa VM no Virtual Box. Para gerenciar nossa VM nos laboratórios, recomendamos o uso de conexões SSH em vez da console física. O [Putty](https://www.putty.org/) é uma opção popular e confiável como cliente SSH, especialmente útil para sistemas Windows, embora esteja disponível para outras plataformas. Sua interface intuitiva e funcionalidades robustas o estabeleceram como preferência entre muitos administradores de sistemas e desenvolvedores ao longo dos anos. 
+
+- **Nota**: Se você já possui outras ferramentas de SSH ou tem uma preferência particular, sinta-se à vontade para utilizá-las em nossos laboratórios. 
 
 1. Conveniência e Eficiência
 
@@ -116,7 +118,7 @@ SSH (Secure Shell) é um protocolo que possibilita a conexão e controle de serv
 
 2. Evita limitações da console "física"
 
-- **Resolução e Interface**: A console física do Virtual Box pode apresentar desafios, como resolução de tela limitada ou interações de interface de usuário não intuitivas. O SSH fornece uma interface padronizada, independentemente do software de virtualização usado.
+- **Resolução e Interface**: A console física do Virtual Box pode apresentar limitações, como resolução de tela reduzida ou interações de interface de usuário não intuitivas. O SSH fornece uma interface padronizada, independentemente do software de virtualização usado.
 
 - **Padrão de Gerenciamento**: Ao se familiarizar com o SSH, você estará equipando-se com uma habilidade crucial, não apenas para este ambiente de laboratório, mas para qualquer situação futura que envolva administração de sistemas, trabalho em cloud, times de infraestrutura, DevOps ou desenvolvimento de soluções profissionais.
 
