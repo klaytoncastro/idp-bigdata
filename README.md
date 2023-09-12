@@ -58,12 +58,12 @@ Este diretório contém um ambiente com Jupyter Notebook e Spark em modo standal
 ### mongodb
 Dentro deste diretório, temos uma configuração para o MongoDB.
 
-- **MongoDB**: É um banco de dados NoSQL baseado em documentos, onde cada registro é um documento, que é uma estrutura de dados composta por pares de campos e valores.
+- **MongoDB**: É um banco de dados NoSQL baseado em documentos, onde cada registro é um documento, que é uma estrutura de dados composta por pares de chave e valor.
 
 ### neo4j
 Neste diretório, está a configuração para o Neo4j.
 
-- **Neo4j**: É um sistema de gerenciamento de banco de dados orientado a grafos, que permite trazer à tona relacionamentos complexos com padrões e estruturas de dados ricos.
+- **Neo4j**: É um sistema de gerenciamento de banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de vértices e arestas. 
 
 ## 3. Configurando o Ambiente de Laboratório
 
