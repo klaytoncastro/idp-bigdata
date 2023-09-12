@@ -47,16 +47,16 @@ Com Docker e Docker Compose, simplificamos o processo de implantação e integra
 Dentro deste projeto, temos diversos diretórios, cada um representando um ambiente específico:
 
 ### Hadoop
-Neste diretório, você encontrará o ambiente para o Hadoop. 
+Neste diretório, você encontrará o ambiente para o ecossistema Hadoop. 
 
-- **Hadoop**: Framework de código aberto para armazenamento distribuído e processamento de conjuntos de big data, usando o modelo de programação MapReduce.
+- **Hadoop**: Um framework de código aberto para armazenamento distribuído e processamento de conjuntos de big data, usando o modelo de programação MapReduce.
 
 ### Jupyter/Spark
 Neste diretório, você encontrará o ambiente com Jupyter Notebook e Spark. 
 
 - **Jupyter Notebook**: É uma aplicação web que permite criar e compartilhar documentos que contêm código ativo, equações, visualizações e texto. Muito usado para análise de dados.
   
-- **Spark**: Uma estrutura de processamento de dados rápida, em memória, utilizada para big data analytics.
+- **Spark**: Um framework de processamento de dados rápido, baseado em memória, muito utilizado atualmente para big data analytics.
 
 ### MongoDB
 Neste diretório, você encontrará o ambiente para o MongoDB.
@@ -71,12 +71,12 @@ Neste diretório, você encontrará o ambiente para o Redis.
 ### Cassandra
 Neste diretório, você encontrará o ambiente para o Cassandra.
 
-- **Cassandra**: Banco de dados NoSQL distribuído, orientado a colunas, projetado para gerenciar grandes volumes de dados em múltiplos servidores.
+- **Cassandra**: É um banco de dados NoSQL distribuído, orientado a colunas, projetado para gerenciar grandes volumes de dados em múltiplos servidores.
 
 ### Neo4j
 Neste diretório, você encontrará o ambiente para o Neo4j.
 
-- **Neo4j**: É um sistema de gerenciamento de banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de nós e arestas. 
+- **Neo4j**: É um banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de nós e arestas. 
 
 ## 3. Preparando o Ambiente de Laboratório
 
