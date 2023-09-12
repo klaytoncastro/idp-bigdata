@@ -75,7 +75,7 @@ Neste diretório, você encontrará o ambiente para o Redis.
 ### Cassandra
 Neste diretório, você encontrará o ambiente para o Cassandra.
 
-- **Cassandra**: Banco de dados NoSQL distribuído, projetado para gerenciar grandes volumes de dados em múltiplos servidores.
+- **Cassandra**: Banco de dados NoSQL distribuído, orientado a colunas, projetado para gerenciar grandes volumes de dados em múltiplos servidores.
 
 ### Neo4j
 Neste diretório, você encontrará o ambiente para o Neo4j.
