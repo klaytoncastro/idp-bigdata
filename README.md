@@ -34,11 +34,9 @@ A imagem OVA fornecida foi pré-configurada com 'docker', 'docker-compose', 'git
 
 ### Docker:
 
-Em contextos de Big Data, é comum ter diversos serviços interconectados. Por exemplo, você pode ter uma pipeline de processamento de dados que utiliza o Spark para processamento em memória, o Hadoop para armazenamento de dados distribuídos e múltiplos bancos de dados NoSQL como MongoDB (para armazenamento de documentos), Redis (para armazenamento em cache), Cassandra (para dados altamente distribuídos) e Neo4j (para dados baseados em grafo). Configurar manualmente cada um desses serviços para funcionar em harmonia pode ser uma tarefa desafiadora. 
+Em contextos de Big Data, é comum a interconexão de diversos serviços. Por exemplo, uma pipeline de processamento de dados pode envolver o Spark para processamento em memória, o Hadoop para armazenamento distribuído e bancos de dados NoSQL como MongoDB, Redis, Cassandra e Neo4j para diferentes finalidades. Manualmente, configurar esses serviços para trabalharem em conjunto é desafiador.
 
-Nesse cenário, o Docker é uma plataforma que facilita esta tarefa, pois permite desenvolver e executar aplicações dentro de contêineres, que é uma unidade padrão de software que empacota o código e todas as suas dependências, de forma que a aplicação possa ser executada de forma confiável de um ambiente de computação para outro. Pense nos contêineres como uma caixa isolada onde sua aplicação e todas as suas dependências estão empacotadas juntas, o que garante que ela funcione de forma consistente em qualquer ambiente que suporte Docker.
-
-Os contêineres Docker são leves e podem aproveitar a mesma infraestrutura de máquinas físicas ou virtuais. Costumam ser inicializados rapidamente e são portáteis, o que significa que você pode criar um contêiner no seu notebook e reaproveitá-lo facilmente para um ambiente de nuvem ou um servidor. 
+O Docker surge como solução, permitindo desenvolver e executar aplicações em contêineres. Esses contêineres são unidades padrão de software que contêm o código e todas as suas dependências, garantindo consistência em diferentes ambientes. Eles são leves, iniciam rapidamente e são altamente portáteis, facilitando a transição entre, por exemplo, um notebook e um servidor ou ambiente de nuvem.
 
 ### Docker Compose:
 
