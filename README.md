@@ -1,4 +1,4 @@
-# Instruções para os Laboratórios da disciplina de Big Data e NoSQL
+# Instruções para os Laboratórios da Disciplina de Big Data e NoSQL
 
 Olá, aluno(a)! Bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Aqui, você encontrará um conjunto diversificado de ferramentas que serão utilizadas ao longo do curso. Este repositório foi projetado para auxiliá-lo a configurar e gerenciar essas ferramentas. Siga atentamente as instruções abaixo para configurar seu ambiente. 
 
