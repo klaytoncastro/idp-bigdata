@@ -79,7 +79,7 @@ Neste diretório, você encontrará o ambiente para o Cassandra.
 ### Neo4j
 Neste diretório, você encontrará o ambiente para o Neo4j.
 
-- **Neo4j**: É um sistema de gerenciamento de banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de vértices e arestas. 
+- **Neo4j**: É um sistema de gerenciamento de banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de nós e arestas. 
 
 ## 3. Preparando o Ambiente de Laboratório
 
