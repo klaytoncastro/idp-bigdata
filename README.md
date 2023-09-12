@@ -68,7 +68,7 @@ Neste diretório, está a configuração para o Neo4j.
 
 - **Neo4j**: É um sistema de gerenciamento de banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de vértices e arestas. 
 
-## 3. Configurando o Ambiente de Laboratório
+## 3. Preparando o Ambiente de Laboratório
 
 Depois de acessar o ambiente virtual:
 
