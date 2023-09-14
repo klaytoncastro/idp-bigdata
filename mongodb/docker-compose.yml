@@ -2,15 +2,41 @@ version: '3.3'
 
 services:
   mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
+    image: mongo:4.4-bionic
+    container_name: mongo_service
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: mongodb
+      MONGO_INITDB_ROOT_PASSWORD: mongo
+    ports:
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db
+      - dbdata:/data/db
+      - ./db-seed:/db-seed
+    networks:
+      - mongo-network
+
+  mongo-express:
+    image: mongo-express:latest
+    container_name: mongo_express_service
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo
+      ME_CONFIG_MONGODB_URL: mongodb://root:mongo@mongo:27017/
+    ports:
+      - "8081:8081"
+    networks:
+      - mongo-network
+    depends_on:
+      - mongo
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
+    command: ["/bin/sh", "-c", "npm install -g cross-env && npm start"]
+
+networks:
+  mongo-network:
+    driver: bridge
 
 volumes:
-  mongo-data:
+  dbdata:
+  db-seed:
 
