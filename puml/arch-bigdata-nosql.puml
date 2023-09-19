@@ -25,28 +25,42 @@ package "IDE" {
         + "Python"
         + "R"
         + "Scala"
+        + "Dataframe"
     }
 }
 note "Análise de dados\n e desenvolvimento." as JupyterNote
 JupyterNote .. "Jupyter Notebook"
 
 package "Big Data Tools" {
-    class "Spark" {
+    class "Spark Framework" {
+        + "Spark SQL"
         + "Spark Streaming"
+        + "Spark MLlib"
         + "GraphX"
-        + "MLlib"
+        + "RDD"
+        
     }
     class "Hadoop Framework" {
-        + HDFS
-        + MapReduce
-        + YARN
-        + Hive
-    }
+    + "HDFS"
+    + "MapReduce"
+    + "YARN"
+    + "Hive"
+    + "HBase"
+    + "Hue"
+}
+
+class "Additional Tools" {
+    + "Trino"
+    + "Nifi"
+    + "Kafka"
+    + "Zookeeper"
+}
+
 }
 
 note "Processamento em\n memória para Big Data." as SparkNote
 note "Armazenamento distribuído\n e MapReduce." as HadoopNote
-SparkNote .. Spark
+SparkNote .. "Spark Framework"
 HadoopNote .. "Hadoop Framework"
 
 package "NoSQL Databases" {
@@ -81,8 +95,8 @@ Neo4jNote .. Neo4j
 
 package "Infraestrutura" {
     class "Docker" {
-        + Containers
-        + Dockerfile
+        + "Containers"
+        + "Dockerfile"
     }
     class "Docker Compose" {
         + "Orquestração"
@@ -96,10 +110,10 @@ note "Gerencia e orquestra\n contêineres." as DockerComposeNote
 Docker .. DockerNote
 "Docker Compose" .. DockerComposeNote
 
-"Jupyter Notebook" -down-> Spark
+"Jupyter Notebook" -down-> "Spark Framework"
 "Jupyter Notebook" -down-> MongoDB
 
-Spark -down-> Docker
+"Spark Framework" -down-> Docker
 MongoDB -down-> "Docker Compose"
 
 @enduml
