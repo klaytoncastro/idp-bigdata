@@ -1,0 +1,105 @@
+@startuml
+
+skinparam backgroundColor #EEF9E3
+skinparam package {
+    BackgroundColor #D3D3D3
+    BorderColor #A9A9A9
+    FontColor #333333
+    Shadowing false
+}
+skinparam class {
+    BackgroundColor #F5F5F5
+    BorderColor #A9A9A9
+    FontColor #333333
+    Shadowing false
+}
+skinparam note {
+    BackgroundColor #B0C4DE
+    BorderColor #A9A9A9
+    FontColor #333333
+    Shadowing false
+}
+
+package "IDE" {
+    class "Jupyter Notebook" {
+        + "Python"
+        + "R"
+        + "Scala"
+    }
+}
+note "Análise de dados\n e desenvolvimento." as JupyterNote
+JupyterNote .. "Jupyter Notebook"
+
+package "Big Data Tools" {
+    class "Spark" {
+        + "Spark Streaming"
+        + "GraphX"
+        + "MLlib"
+    }
+    class "Hadoop Framework" {
+        + HDFS
+        + MapReduce
+        + YARN
+        + Hive
+    }
+}
+
+note "Processamento em\n memória para Big Data." as SparkNote
+note "Armazenamento distribuído\n e MapReduce." as HadoopNote
+SparkNote .. Spark
+HadoopNote .. "Hadoop Framework"
+
+package "NoSQL Databases" {
+    class "MongoDB" {
+        + "Collections"
+        + "JSON-like documents"
+        + "Shards"
+    }
+    class "Redis" {
+        + "In-Memory"
+        + "Cache"
+        + "Pub/Sub"
+    }
+    class "Cassandra" {
+        + "Distributed"
+        + "Decentralized"
+    }
+    class "Neo4j" {
+        + "Nodes"
+        + "Relationships"
+    }
+}
+
+note "Orientado a \n documentos." as MongoDBNote
+note "Armazenamento \n chave-valor." as RedisNote
+note "Orientado a colunas." as CassandraNote
+note "Orientado a grafos." as Neo4jNote
+MongoDBNote .. MongoDB
+RedisNote .. Redis
+CassandraNote .. Cassandra
+Neo4jNote .. Neo4j
+
+package "Infraestrutura" {
+    class "Docker" {
+        + Containers
+        + Dockerfile
+    }
+    class "Docker Compose" {
+        + "Orquestração"
+        + "Definição de serviços"
+        + "docker-compose.yml"
+    }
+}
+
+note "Contêineres para\n serviços individuais." as DockerNote
+note "Gerencia e orquestra\n contêineres." as DockerComposeNote
+Docker .. DockerNote
+"Docker Compose" .. DockerComposeNote
+
+"Jupyter Notebook" -down-> Spark
+"Jupyter Notebook" -down-> MongoDB
+
+Spark -down-> Docker
+MongoDB -down-> "Docker Compose"
+
+@enduml
