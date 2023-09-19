@@ -10,9 +10,7 @@ Visando uma experiência mais uniforme, disponibilizamos uma máquina virtual (V
 
 No entanto, valorizamos a autonomia de cada estudante, especialmente quando se trata da prática em seus computadores pessoais. Se você já está familiarizado com o Docker e deseja executá-lo nativamente em seu sistema operacional, este repositório está preparado para essa alternativa. Além disso, para os usuários de hardware recente da Apple, como o M2, essa opção é particularmente relevante, devido a possíveis incompatibilidades com versões do VirtualBox originalmente desenvolvidas para ambientes x86_64.
 
-No caso dos estudantes que utilizam o sistema Windows e preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, o Windows Subsystem for Linux (WSL) é uma alternativa interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2).
-
-É importante salientar que tanto as VMs quanto o Docker são utilizados para objetivos de virtualização, embora apresentem diferenças marcantes em suas abordagens. Enquanto as VMs emulam sistemas operacionais completos, oferecendo isolamento robusto e a capacidade de replicar ambientes completos e padronizados, o Docker adota uma abordagem de virtualização em nível de processo, onde os aplicativos são executados em contêineres isolados que compartilham o kernel do sistema hospedeiro.
+No caso dos usuários de Windows, que preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, o Windows Subsystem for Linux (WSL) é uma alternativa interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2).
 
 ## 1. Sobre o Oracle Virtual Box e a imagem OVA
 
@@ -79,6 +77,8 @@ Diante da quantidade de informações e ferramentas envolvidas, é natural temer
 Em contextos de Big Data, é comum a interconexão de diversos serviços. Por exemplo, uma pipeline de processamento de dados pode envolver o Spark para processamento em memória, o Hadoop para armazenamento distribuído e bancos de dados NoSQL como MongoDB, Redis, Cassandra e Neo4j para diferentes finalidades. Para desenvolver e testar as aplicações, é comumente utilizado um Jupyter Notebook. Configurar essa quantidade de serviços para trabalharem de modo integrado é desafiador.
 
 O Docker surge como solução, permitindo desenvolver e executar aplicações em contêineres. Esses contêineres são unidades padrão de software que contêm o código e todas as suas dependências, garantindo consistência em diferentes ambientes. Eles são leves, iniciam rapidamente e são altamente portáteis, facilitando a transição entre, por exemplo, um computador pessoal e um servidor ou ambiente de nuvem.
+
+Importante destacar que, tanto as VMs quanto o Docker são utilizados para objetivos de virtualização, embora apresentem diferenças marcantes em suas abordagens. Enquanto as VMs emulam sistemas operacionais completos, oferecendo isolamento robusto e a capacidade de replicar ambientes completos e padronizados, o Docker adota uma abordagem de virtualização em nível de processo, onde os aplicativos são executados em contêineres isolados que compartilham o kernel do sistema hospedeiro.
 
 ### Docker Compose:
 
