@@ -68,7 +68,7 @@ Além de fornecer acesso à Internet, o recurso de NAT do VirtualBox também per
 
 No cenário atual de Big Data, é evidente a necessidade de plataformas integradas que consigam gerenciar, processar e analisar grandes volumes de dados de diversas fontes. A ideia de um Data Lake ou Data Lakehouse é central para essa abordagem, onde os dados são armazenados em sua forma bruta e processados conforme a necessidade, em vez de serem pré-processados em silos de dados. A combinação de ferramentas como Spark, Hadoop, e diversos bancos de dados NoSQL, dentro de uma arquitetura orquestrada pelo Docker e Docker Compose, pode ser vista como uma representação de uma plataforma Data Lakehouse, que visa otimizar o fluxo de dados, desde a ingestão até a análise. A seguir, você encontrará um diagrama que representa a arquitetura desta plataforma:
 
-![Arquitetura Básica Data Lake](puml/arch-bigdata-nosql.png)
+![Arquitetura Básica do Data Lake](puml/arch-bigdata-nosql.svg)
 
 ### Docker:
 
