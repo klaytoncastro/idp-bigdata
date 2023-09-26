@@ -1,4 +1,9 @@
-# Seu base image, exemplo:
+# Este template obtém o certificado digital utilizado na execução de SSL-Inspection
+# a partir de redes tipicamente corporativas. Pode ser útil para viabilizar o acesso
+# à Internet para contêineres hospedados em VMs utilizando modo Bridge, caso deseje 
+# implementar o ambiente de laboratório com este modo de configuração. 
+
+# Sua base image, exemplo:
 FROM ubuntu:20.04
 # FROM debian:buster
 
