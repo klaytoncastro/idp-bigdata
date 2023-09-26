@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# Este script obtém o certificado digital utilizado na execução de SSL-Inspection
+# a partir de redes tipicamente corporativas. Pode ser útil para viabilizar o acesso
+# à Internet em modo Bridge, caso deseje implementar o ambiente de laboratório com 
+# este modo de configuração. 
+
 # Nome do certificado
 CERT_NAME="firewall_certificate.crt"
 
