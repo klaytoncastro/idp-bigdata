@@ -2,8 +2,8 @@
 FROM jupyter/base-notebook:latest
 
 # Define variáveis de ambiente para o Spark
-ENV SPARK_VERSION=3.2.4
-ENV HADOOP_VERSION=3.2
+ENV SPARK_VERSION=3.3.3
+ENV HADOOP_VERSION=3
 ENV SPARK_HOME=/usr/local/spark
 ENV PATH=$SPARK_HOME/bin:$PATH
 
@@ -22,11 +22,10 @@ RUN wget https://downloads.apache.org/spark/spark-$SPARK_VERSION/spark-$SPARK_VE
     rm /tmp/spark.tgz
 
 # Instale as bibliotecas Python necessárias
-RUN pip install pyspark==${SPARK_VERSION}
+RUN pip install pyspark==${SPARK_VERSION} terminado
 
 # Troque para o usuário jovyan (default no Jupyter Docker)
 USER $NB_UID
 
 # Configure o diretório de trabalho padrão para os notebooks
 WORKDIR /home/jovyan/work
-

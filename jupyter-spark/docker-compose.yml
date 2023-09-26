@@ -4,8 +4,10 @@ services:
   jupyter-spark:
     build: .
     ports:
-      - "8888:8888"
+      - "8888:8888"  # Porta padrão da interface web do Jupyter Notebook
       - "4040:4040"  # Porta padrão da interface web do Spark
     volumes:
-      - ./notebooks:/home/jovyan/work
-      - ./data:/data
+      - notebooks:/home/jovyan/work
+
+volumes:
+  notebooks:
