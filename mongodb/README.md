@@ -12,7 +12,7 @@ docker-compose up -d
 2. Verifique se os contêineres estão ativos e sem erros de implantação: 
 
 ```bash
-docker-compose ps
+docker ps
 docker-compose logs
 ```
 
@@ -108,7 +108,7 @@ Este modelo permite uma ampla gama de consultas, como buscar estudantes por curs
 
 1. Acessando o Shell do Contêiner MongoDB: 
 ```bash
-docker exec -it mongo_service mongo /bin/bash
+docker exec -it mongo_service /bin/bash
 ```
 2. Autentique-se no MongoDB: 
 ```bash
@@ -116,6 +116,7 @@ mongo -u root -p mongo
 ```
 
 3. Selecionando a Base de Dados:
+
 Para selecionar (ou criar, caso ainda não exista) a base de dados chamada "AulaDemo":
 ```bash
 use AulaDemo
@@ -136,6 +137,7 @@ db.Estudantes.insert({
 })
 ```
 Você pode repetir este comando para os outros estudantes, alterando os valores conforme necessário.
+
 4. Consultando Documentos:
 
 a) Para buscar todos os estudantes da coleção:
@@ -155,23 +157,33 @@ db.Estudantes.aggregate([
     }
 ])
 ```
+
 5. Atualizando Documentos:
+
 Para atualizar a média de um estudante específico (por exemplo, "Lucas Silva"):
+
 ```bash
 db.Estudantes.update({ nome: "Lucas Silva" }, { $set: { media: 87 } })
 ```
+
 6. Deletando Documentos:
+
 Para deletar um estudante específico:
+
 ```bash
 db.Estudantes.remove({ nome: "Lucas Silva" })
 ```
 7. Índices:
+
 Para criar um índice no campo ```nome```:
+
 ```bash
 db.Estudantes.createIndex({ nome: 1 })
 ```
 8. Saindo do Shell:
+
 Para sair do shell do MongoDB:
+
 ```bash
 exit
 ```
