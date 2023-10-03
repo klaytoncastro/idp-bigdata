@@ -126,21 +126,22 @@ Neste diretório, você encontrará o ambiente para o Neo4j.
 
 ### Usando o SSH: Guia Básico
 
-SSH (_Secure Shell_) é um protocolo que possibilita a conexão e controle de servidores remotos, como a VM instanciada no VirtualBox. Para gerenciar nossa VM, recomendamos o uso de conexões SSH em vez da console física. O [Putty](https://www.putty.org/) é uma opção popular e confiável. A versão _portable_ pode ser baixada e usada diretamente em nossos laboratórios. 
+SSH (_Secure Shell_), que se traduz como "cápsula segura", é um protocolo que viabiliza uma comunicação segura (criptografada) entre um computador cliente e um servidor remoto. Para gerenciar nossa VM instanciada no VirtualBox (ambiente servidor), é altamente recomendado o uso de conexões SSH ao invés da console física. Uma opção popular e confiável para realizar uma conexão via SSH em clientes Windows é o [Putty](https://www.putty.org/). A versão _portable_ pode ser obtida e usada diretamente em nossos laboratórios [aqui](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3). 
 
-- **Nota**: Se você já possui outras ferramentas de SSH instaladas ou tem uma preferência particular, sinta-se à vontade para utilizá-las. 
+- **Nota**: Caso você já possua experiência com outras ferramentas de SSH ou tenha uma preferência específica, fique à vontade para usá-las.
 
-### Conveniência e Eficiência
+### Benefícios: Conveniência e Eficiência
 
-- **Copiar e Colar**: Ao utilizar SSH, fica muito mais fácil copiar _logs_ de erros, colar comandos, _scripts_, código, ou até mesmo movimentar arquivos entre _host_, VM e vice-versa. Essa funcionalidade torna a execução de tarefas muito mais rápida e evita erros humanos que podem ocorrer ao digitar manualmente.
+- **Copiar e Colar**: Ao trabalhar com SSH, é mais simples copiar logs de erros, colar comandos, scripts, código, ou até mesmo transferir arquivos entre o host e a VM (e vice-versa). Isso torna a execução de tarefas muito mais eficiente e minimiza erros manuais de digitação.
 
-- **Multitarefa**: Com o SSH, é possível estabelecer várias sessões em paralelo, permitindo que você execute várias tarefas simultaneamente. 
+1. Para copiar, selecione o texto desejado com o botão esquerdo do mouse e clique com o botão direito para copiar. 
+2. Para colar, clique com o botão direito do mouse no local desejado. 
 
-### Evita as limitações da console "física"
+- **Sessões e Multitarefa**: O SSH permite estabelecer múltiplas sessões em paralelo, o que facilita a execução de diversas tarefas simultaneamente. 
 
-- **Resolução e Interface**: A console física do VirtualBox pode apresentar limitações, como resolução de tela reduzida ou interações de interface de usuário não intuitivas. O SSH fornece uma interface padronizada, independentemente do software de virtualização usado.
+- **Superação das Limitações da Console Física**: A console física do VirtualBox pode ter certas limitações, como resolução de tela reduzida ou problemas no mapeamento de caracteres para interações com teclado em alguns sistemas. Usando SSH, você obterá uma interface padronizada, independente do software de virtualização em uso.
 
-- **Padrão de Gerenciamento**: Ao se familiarizar com o SSH, você estará equipando-se com uma habilidade crucial, não apenas para este ambiente de laboratório, mas para o desenvolvimento de soluções profissionais e situações futuras que envolvam a administração de sistemas, times de infraestrutura, DevOps, SRE e Cloud. 
+- **Padrão Profissional**: Ao se familiarizar com o SSH, você estará equipando-se com uma habilidade importante não apenas para este ambiente de laboratório, mas também em cenários profissionais abrangendo administração de sistemas, equipes de infraestrutura, DevOps, SRE e Cloud.
 
 ### Como se conectar ao ambiente virtual:
 
@@ -174,7 +175,9 @@ SSH (_Secure Shell_) é um protocolo que possibilita a conexão e controle de se
    docker-compose up -d
 ```
 
-3. Para criar e alterar os arquivos de configuração diretamente na VM, pode ser utilizado o editor Vim, opção robusta e versátil para terminais Linux. O Vim é uma ferramenta bastante útil administradores de sistemas e desenvolvedores, permitindo que usuários mais experientes editem arquivos com poucos comandos. 
+3. Para criar e alterar os arquivos de configuração diretamente na VM, recomendamos o uso do editor **Vim**. Este é um editor robusto e versátil, amplamente adotado em ambientes de terminal Linux. O Vim é uma ferramenta poderosa para administradores de sistemas e desenvolvedores, possibilitando que usuários experientes realizem edições com poucos comandos.
+
+**Nota:** Se estiver trabalhando fora do laboratório, em sua casa ou escritório, pode preferir uma interface gráfica mais amigável. Neste caso, você pode considerar o uso do Visual Studio Code ([VS Code](https://code.visualstudio.com/)) e habilitar a extensão [SSH Remote](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh), que permite estabelecer uma sessão SSH diretamente na IDE (Integrated Development Environment). Para quem não está tão familiarizado com uso de terminal baseado em CLI (Command Line Interface), esta pode ser uma alternativa mais intuitiva ao Vim para edição de arquivos, unificando sua experiência de desenvolvimento e administração. 
 
 ### Usando o Vim: Guia Básico
 
