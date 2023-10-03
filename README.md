@@ -177,8 +177,6 @@ SSH (_Secure Shell_), que se traduz como "cápsula segura", é um protocolo que 
 
 3. Para criar e alterar os arquivos de configuração diretamente na VM, recomendamos o uso do editor **Vim**. Este é um editor robusto e versátil, amplamente adotado em ambientes de terminal Linux. O Vim é uma ferramenta poderosa para administradores de sistemas e desenvolvedores, possibilitando que usuários experientes realizem edições com poucos comandos.
 
-**Nota:** Se estiver trabalhando fora do laboratório, em sua casa ou escritório, pode preferir uma interface gráfica mais amigável. Neste caso, você pode considerar o uso do Visual Studio Code ([VS Code](https://code.visualstudio.com/)) e habilitar a extensão [SSH Remote](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh), que permite estabelecer uma sessão SSH diretamente na IDE (Integrated Development Environment). Para quem não está tão familiarizado com uso de terminal baseado em CLI (Command Line Interface), esta pode ser uma alternativa mais intuitiva ao Vim para edição de arquivos, unificando sua experiência de desenvolvimento e administração. 
-
 ### Usando o Vim: Guia Básico
 
 Neste guia, focaremos apenas em algumas operações básicas, tais como: abrir, editar e salvar arquivos. 
@@ -218,10 +216,18 @@ Neste guia, focaremos apenas em algumas operações básicas, tais como: abrir, 
 
     No modo normal, posicione-se na linha que deseja deletar e digite `dd`.
 
-### Dicas
+### Dicas 
 
-- O Vim é uma ferramenta robusta, repleta de comandos e atalhos que podem otimizar sua produtividade ao editar arquivos em sistemas operacionais baseados em terminal. À medida que se familiariza com os comandos básicos, você descobrirá as potencialidades desta ferramenta. Para quem ainda não está habituado com ambientes de terminal, caso se sinta perdido ou incerto sobre uma ação, simplesmente pressione `Esc` e digite `:q!`. Este comando retornará ao terminal, ignorando quaisquer mudanças não salvas.
+- O Vim é uma ferramenta robusta, repleta de comandos e atalhos que podem otimizar sua produtividade ao editar arquivos em sistemas operacionais baseados em terminal. À medida que se familiariza com os comandos básicos, você descobrirá as potencialidades desta ferramenta. Se não estiver familiarizado com ambientes de terminal, lembre-se de que pode sair do Vim pressionando `Esc` e digitando `:q!`. Esse comando retornará ao terminal, ignorando quaisquer mudanças não salvas.
 
+- Se você está **fora do laboratório**, em casa ou no escritório, pode preferir uma interface gráfica mais amigável. Neste caso, considere o uso do [Visual Studio Code (VS Code)](https://code.visualstudio.com/) com a extensão [SSH Remote](https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-ssh), que permite estabelecer uma sessão [SSH](https://code.visualstudio.com/docs/remote/ssh) diretamente na IDE (Integrated Development Environment). Esta alternativa pode ser mais intuitiva para edição de arquivos, unificando sua experiência de desenvolvimento e administração.
+
+- Considere o uso de plataformas de controle de versão, como o [GitHub](https://github.com), para gerenciar e rastrear as mudanças no seu código e colaborar com outros desenvolvedores. Isso facilita o fluxo de trabalho e a integração contínua.
+
+- Para a transferência de arquivos entre o _host_ e a VM, pode ser interessante utilizar uma ferramenta com suporte a SFTP (Secure File Transfer Protocol), como o [Filezilla](https://filezilla-project.org/download.php).
+
+- **Nota**: Discutiremos e apresentaremos a configuração, vantagens e desvantagens de cada uma destas abordagens em sala de aula. 
+  
 ### Usando Docker e Docker Compose: Guia Básico
 
 Recomenda-se a leitura da documentação oficial para se aprofundar, mas este guia básico é suficiente para iniciar a utilizar utilização das ferramentas. 
