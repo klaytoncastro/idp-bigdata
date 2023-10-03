@@ -319,6 +319,12 @@ chmod +x docker-cleanup.sh
 
 - **Nota**: Este script remove recursos não utilizados e imagens antigas para recuperar espaço. Para evitar a remoção inadvertida de recursos importantes, certifique-se de entender o que ele faz antes de executá-lo. Lembre-se que, ao executá-lo, apenas os contêineres em execução serão mantidos no armazenamento da VM. 
 
+### Desligamento Seguro do Ambiente 
+
+- **Preservação de Configurações:** É uma boa prática de administração encerrar sistemas e serviços adequadamente para evitar possíveis problemas de integridade de dados e garantir um ambiente de laboratório confiável. Quando você desliga a VM corretamente, as configurações e alterações feitas nos contêineres e na própria VM são preservadas. Isso significa que, ao reiniciar a VM, ela estará no mesmo estado em que você a deixou, evitando a necessidade de reconfigurar tudo novamente.
+
+- **Consistência de Dados:** Ao desligar a VM de forma adequada (usando o comando ```shutdown -h now``` no terminal), você garante que todos os processos em execução, incluindo os contêineres Docker, tenham a oportunidade de encerrar suas operações normalmente. Isso ajuda a manter a consistência dos dados armazenados. Se a VM for desligada abruptamente, seja por meio de um encerramento forçado ou pelo fechamento do VirtualBox sem desligar a VM, os contêineres podem não ter a chance de liberar recursos e gravar dados importantes nos volumes persistentes. 
+
 ### Pronto! 
 
 Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br). 
