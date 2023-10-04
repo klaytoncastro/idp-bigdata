@@ -58,6 +58,7 @@ Além de fornecer acesso à Internet, o recurso de NAT do VirtualBox também per
 |----------------------|-----------|---------------------|---------------|-------------------|-------------|
 | Acesso SSH           |    TCP    |      127.0.0.1      |      2222     |     10.0.2.15     |      22     |
 | Acesso Jupyter       |    TCP    |      127.0.0.1      |      8888     |     10.0.2.15     |     8888    |
+| Acesso Spark         |    TCP    |      127.0.0.1      |      8888     |     10.0.2.15     |     4040    |
 | Acesso Mongo Express |    TCP    |      127.0.0.1      |      8081     |     10.0.2.15     |     8081    |
 | Acesso Neo4j Browser |    TCP    |      127.0.0.1      |      7474     |     10.0.2.15     |     7474    |
 | Acesso Neo4j Bolt    |    TCP    |      127.0.0.1      |      7687     |     10.0.2.15     |     7687    |
