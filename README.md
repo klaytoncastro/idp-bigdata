@@ -327,9 +327,7 @@ chmod +x docker-cleanup.sh
 
 ### Desligamento Seguro do Ambiente 
 
-- **Preservação de Configurações:** É uma boa prática de administração encerrar sistemas e serviços adequadamente para evitar possíveis problemas de integridade de dados e garantir um ambiente de laboratório confiável. Quando você desliga a VM corretamente, as configurações e alterações feitas nos contêineres e na própria VM são preservadas. Isso significa que, ao reiniciar a VM, ela estará no mesmo estado em que você a deixou, evitando a necessidade de reconfigurar tudo novamente.
-
-- **Consistência de Dados:** Ao desligar a VM de forma adequada (usando o comando ```shutdown -h now``` no terminal), você garante que todos os processos em execução, incluindo os contêineres Docker, tenham a oportunidade de encerrar suas operações normalmente. Isso ajuda a manter a consistência dos dados armazenados. Se a VM for desligada abruptamente, seja por meio de um encerramento forçado ou pelo fechamento do VirtualBox sem desligar a VM, os contêineres podem não ter a chance de liberar recursos e gravar dados importantes nos volumes persistentes. 
+Desligamentos abruptos, seja por interrupções forçadas ou por encerramento inadequado do VirtualBox, podem afetar a consistência dos discos virtuais, levando à perda ou corrupção de dados e desestabilizando o ambiente. Por isso, ao concluir suas atividades, é fundamental executar o comando `shutdown -h now` a partir do terminal. Esse passo garante um desligamento apropriado, a integridade do sistema operacional da VM, incluindo os contêineres Docker. Assim, todas as alterações serão preservadas, assegurando que, ao reiniciar, o sistema retorne exatamente ao estado anterior, sem a necessidade de ajustes adicionais.
 
 ### Pronto! 
 
