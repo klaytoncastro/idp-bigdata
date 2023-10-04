@@ -19,8 +19,8 @@ services:
     image: mongo-express:latest
     container_name: mongo_express_service
     environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: mongo
+      ME_CONFIG_MONGODB_ADMINUSERNAME: admin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: pass
       ME_CONFIG_MONGODB_URL: mongodb://root:mongo@mongo:27017/
     ports:
       - "8081:8081"
@@ -30,7 +30,7 @@ services:
       - mongo
     volumes:
       - ./wait-for-it.sh:/wait-for-it.sh
-    command: ["/bin/sh", "-c", "npm install -g cross-env && npm start"]
+    command: ["/wait-for-it.sh", "mongo:27017", "--", "npm", "start"]
 
 networks:
   mongo-network:
@@ -39,4 +39,3 @@ networks:
 volumes:
   dbdata:
   db-seed:
-
