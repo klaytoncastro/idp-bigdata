@@ -12,6 +12,7 @@ services:
     volumes:
       - dbdata:/data/db
       - ./db-seed:/db-seed
+      - ./datasets:/datasets
     networks:
       - mongo-network
 

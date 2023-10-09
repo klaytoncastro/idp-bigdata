@@ -1,0 +1,97 @@
+# ===================
+# = Sistemas Operacionais =
+# ===================
+
+# --- MacOS ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+
+# --- Windows ---
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+Recycle.Bin/
+
+# --- Linux ---
+*~
+.directory
+
+# =====================
+# = Ferramentas de Desenvolvimento =
+# =====================
+
+# --- IDEs e editores ---
+
+# Visual Studio Code
+.vscode/
+
+# PyCharm e outras IDEs JetBrains
+.idea/
+
+# Sublime Text
+*.sublime-workspace
+
+# --- Ambientes Virtuais (Python) ---
+venv/
+ENV/
+*.pyc
+__pycache__/
+
+# --- Node e NPM ---
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# ===================
+# = Controle de Versão =
+# ===================
+
+# Git
+.git/
+
+# ====================
+# = Arquivos Sensíveis =
+# ====================
+
+.env
+secret-config.json
+
+# ================================
+# = Outros arquivos/diretórios =
+# ================================
+
+# Arquivos de log
+*.log
+
+# Diretório de build e distribuição
+dist/
+build/
+
+# Dependências
+*.egg-info/
+
+# Ferramentas de build
+*.o
+*.a
+*.so
+*.dll
+
+# ===================
+# = Sincronização Dropbox =
+# ===================
+
+# Cache do Dropbox
+.dropbox
+.dropbox.cache
+
+# Arquivos temporários do Dropbox
+~*
+.icon.db
+*.db
+*.db-journal
+
+# Pastas temporárias do Dropbox
+.dropbox.attr
+.dropbox.attrs
