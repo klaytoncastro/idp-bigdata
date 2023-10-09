@@ -1,7 +1,7 @@
 ```bash
 chmod +x permissions.sh
 ./permissions.sh
-docker exec -it <nome_conteiner> bash
+docker exec -it <nome_do_contêiner> /bin/bash
 ```
 
 ```bash
