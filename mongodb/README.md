@@ -14,9 +14,9 @@ O **MongoDB** é um sistema de gerenciamento de banco de dados (SGBD) NoSQL ampl
 
 - **Flexibilidade de Esquema**: Como mencionado, o MongoDB não requer um esquema fixo, o que permite que os desenvolvedores adicionem ou removam campos conforme necessário.
 
-### Agregações no MongoDB
+### MongoDB Aggregation Framework
 
-O **Aggregation Framework** no MongoDB é um poderoso recurso, que permite realizar operações complexas de análise e agregação de dados. Ele oferece a capacidade de processar e transformar dados em várias etapas, permitindo que você obtenha insights significativos e informações resumidas de seus documentos. Ele permite que você realize uma variedade de operações de análise e transformação de dados em seus documentos BSON. É especialmente útil quando você precisa:
+O **Aggregation Framework** é um poderoso recurso do MongoDB, que permite realizar operações complexas de análise e agregação de dados. Ele oferece a capacidade de processar e transformar dados em várias etapas, permitindo que você obtenha insights significativos e informações resumidas de seus documentos. Ele permite que você realize uma variedade de operações de análise e transformação de dados em seus documentos BSON. É especialmente útil quando você precisa:
 
 - **Agrupar Dados**: Você pode agrupar documentos com base em um ou mais campos-chave, criando resumos e agregações.
 
@@ -112,55 +112,6 @@ docker network inspect <NETWORK_NAME>
 3. Selecione um documento e clique em `Edit Document`. Altere algum campo, por exemplo, mude a `idade` de um estudante. 
 4. Selecione um documento e clique em `Delete Document`. 
 5. No menu lateral, clique em `Indexes` para visualizar os índices da coleção. Observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`.
-6. Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Exemplos de Campos Adicionais: 
-
-`matricula`: Um identificador único para cada estudante.
-
-`notas`: Um objeto contendo as notas do estudante em diferentes disciplinas. As disciplinas listadas são apenas exemplos e podem ser adaptadas conforme necessário.
-
-`media`: A média de notas do estudante. Pode ser calculada com base nas notas fornecidas.
-
-`status`: Indica se o estudante está ativo, inativo, formado, etc.
-
-`anoIngresso`: O ano em que o estudante ingressou no curso.
-
-Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de notas como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura geral do documento. Exemplo: 
-
-```json
-[
-    {
-        "nome": "Vladimir Silva",
-        "idade": 22,
-        "curso": "Engenharia da Computação",
-        "email": "vladimir.silva@email.com",
-        "matricula": "EC54321",
-        "notas": {
-            "matematica": 85,
-            "programacao": 90,
-            "fisica": 80
-        },
-        "media": 85,
-        "status": "Ativo",
-        "anoIngresso": 2020
-    },
-    {
-        "nome": "Deocleciano Oliveira",
-        "idade": 20,
-        "curso": "Design Gráfico",
-        "email": "deocleciano.oliveira@email.com",
-        "matricula": "DG12345",
-        "notas": {
-            "designBasico": 92,
-            "ilustracao": 89,
-            "fotografia": 93
-        },
-        "media": 91.33,
-        "status": "Ativo",
-        "anoIngresso": 2021
-    },
-    // ... adicione mais estudantes seguindo o mesmo formato
-]
-```
 ## Acesso CLI: MongoDB 
 
 1. Acessando o Shell do Contêiner MongoDB: 
@@ -276,6 +227,56 @@ db.Estudantes.insertMany([
 )
 ```
 
+Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Exemplos de Campos Adicionais do estudante "Haroldo Ramos": 
+
+`matricula`: Um identificador único para cada estudante.
+
+`notas`: Um objeto contendo as notas do estudante em diferentes disciplinas. As disciplinas listadas são apenas exemplos e podem ser adaptadas conforme necessário.
+
+`media`: A média de notas do estudante. Pode ser calculada com base nas notas fornecidas.
+
+`status`: Indica se o estudante está ativo, inativo, formado, etc.
+
+`anoIngresso`: O ano em que o estudante ingressou no curso.
+
+Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de notas como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura geral do documento. Exemplo: 
+
+```json
+[
+    {
+        "nome": "Vladimir Silva",
+        "idade": 22,
+        "curso": "Engenharia da Computação",
+        "email": "vladimir.silva@email.com",
+        "matricula": "EC54321",
+        "notas": {
+            "matematica": 85,
+            "programacao": 90,
+            "fisica": 80
+        },
+        "media": 85,
+        "status": "Ativo",
+        "anoIngresso": 2020
+    },
+    {
+        "nome": "Deocleciano Oliveira",
+        "idade": 20,
+        "curso": "Design Gráfico",
+        "email": "deocleciano.oliveira@email.com",
+        "matricula": "DG12345",
+        "notas": {
+            "designBasico": 92,
+            "ilustracao": 89,
+            "fotografia": 93
+        },
+        "media": 91.33,
+        "status": "Ativo",
+        "anoIngresso": 2021
+    },
+    // ... adicione mais estudantes seguindo o mesmo formato
+]
+```
+
 ```javascript
 //Obter todos os registros
 db.Estudantes.find()
@@ -347,13 +348,13 @@ db.Estudantes.aggregate([
 exit
 ```
 
-## Utilizando Pipelines de Dados
+## Pipelines de Dados
 
-Um pipeline de agregação é uma série de etapas que os documentos passam, onde cada etapa executa uma operação específica no conjunto de dados. Essas etapas são executadas em sequência, permitindo que você processe e transforme os documentos de maneira flexível e controlada. 
+Um pipeline de dados constitui uma série de etapas que os documentos passam, onde cada passo executa uma operação específica no conjunto de dados. Essas etapas são executadas em sequência, permitindo que você processe e transforme os documentos de maneira flexível e controlada. 
 
-### Componentes do Pipeline de Agregação
+### Componentes do Pipeline
 
-Cada etapa no pipeline de agregação é representada por um estágio. Os estágios podem incluir operações de filtro, projeção, ordenação, agrupamento, cálculos e muito mais. Alguns dos estágios comuns incluem:
+Cada etapa no pipeline é representada por um estágio. Os estágios podem incluir operações de filtro, projeção, ordenação, agrupamento, cálculos e muito mais. Alguns dos estágios comuns incluem:
 
 `$match`: Filtra documentos com base em critérios específicos, permitindo que você selecione apenas os documentos que atendam a determinadas condições.
 
@@ -371,9 +372,105 @@ Cada etapa no pipeline de agregação é representada por um estágio. Os estág
 
 `$out`: Escreve os resultados da agregação em uma nova coleção.
 
-### Exemplo de Utilização de Pipeline de Agregação
+### Carga de Dados
 
-Vamos considerar um exemplo prático de como usar um pipeline de agregação no MongoDB para análise de dados. Suponha que tenhamos uma coleção chamada Vendas com documentos que representam vendas de produtos. Desejamos calcular a receita total por categoria de produto. Podemos fazer isso com um pipeline de agregação da seguinte forma:
+Vamos considerar um exemplo prático de como desenvolver um pipeline básico com recursos do MongoDB Aggregation Framework para análise de dados. Considerando uma coleção chamada `Vendas` com documentos que representam vendas de produtos, desejamos calcular a receita total por categoria de produto. Você pode usar o seguinte exemplo para inserir dados na coleção `Vendas`:
+
+```javascript
+db.Vendas.insertMany([
+    {
+        "produto": "Laptop",
+        "categoria": "Eletrônicos",
+        "valor": 1200.00
+    },
+    {
+        "produto": "Smartphone",
+        "categoria": "Eletrônicos",
+        "valor": 800.00
+    },
+    {
+        "produto": "Livros",
+        "categoria": "Livraria",
+        "valor": 300.00
+    },
+    {
+        "produto": "Televisor",
+        "categoria": "Eletrônicos",
+        "valor": 1500.00
+    },
+    {
+        "produto": "Tablet",
+        "categoria": "Eletrônicos",
+        "valor": 600.00
+    },
+    {
+        "produto": "Fones de Ouvido",
+        "categoria": "Eletrônicos",
+        "valor": 100.00
+    },
+    {
+        "produto": "Máquina de Café",
+        "categoria": "Eletrodomésticos",
+        "valor": 250.00
+    },
+    {
+        "produto": "Console de Videogame",
+        "categoria": "Eletrônicos",
+        "valor": 450.00
+    },
+    {
+        "produto": "Roupas",
+        "categoria": "Moda",
+        "valor": 50.00
+    },
+    {
+        "produto": "Cadeira de Escritório",
+        "categoria": "Móveis",
+        "valor": 200.00
+    },
+    {
+        "produto": "Instrumento Musical",
+        "categoria": "Arte e Música",
+        "valor": 700.00
+    },
+    {
+        "produto": "Tênis Esportivo",
+        "categoria": "Esportes",
+        "valor": 120.00
+    },
+    {
+        "produto": "Bicicleta",
+        "categoria": "Esportes",
+        "valor": 350.00
+    },
+    {
+        "produto": "Ferramentas",
+        "categoria": "Ferramentas",
+        "valor": 80.00
+    },
+    {
+        "produto": "Jogos de Tabuleiro",
+        "categoria": "Jogos",
+        "valor": 40.00
+    },
+    {
+        "produto": "Decoração de Casa",
+        "categoria": "Casa e Jardim",
+        "valor": 120.00
+    },
+    {
+        "produto": "Artigos de Beleza",
+        "categoria": "Beleza",
+        "valor": 90.00
+    }
+    // Adicione mais documentos conforme necessário
+])
+
+```
+
+### Exemplo de Utilização
+
+Podemos fazer isso com um pipeline de agregação da seguinte forma:
 
 ```javascript
 db.Vendas.aggregate([
@@ -394,6 +491,6 @@ db.Vendas.aggregate([
 
 ### Integração do MongoDB com outras ferramentas
 
-Para conectar o MongoDB a ferramentas como Jupyter Notebook, Spark, você pode usar bibliotecas e drivers específicos para o MongoDB, como o PyMongo para Python. Isso permite que você carregue dados diretamente do MongoDB para análise distribuída com o Spark. Essas técnicas são valiosas em ambientes de análise de dados e processamento de big data.
+Para conectar o MongoDB a ferramentas como Jupyter Notebook, Spark, você pode usar bibliotecas e drivers específicos para o MongoDB, como o PyMongo para Python. Isso permite que você carregue dados diretamente do MongoDB para análise distribuída com o Spark. Essas técnicas são valiosas em ambientes de análise de dados e processamento de big data. Veremos isso em maiores detalhes nos laboratórios. 
 
 
