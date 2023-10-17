@@ -349,7 +349,7 @@ exit
 
 ## Pipelines de Dados
 
-Um pipeline de dados constitui uma série de etapas que os documentos passam, onde cada passo executa uma operação específica no conjunto de dados. Essas etapas são executadas em sequência, permitindo que você processe e transforme os documentos de maneira flexível e controlada. 
+Um pipeline constitui uma série de etapas pelas quais os documentos passam, onde cada etapa efetua uma operação específica no conjunto de dados. Essas etapas são executadas em sequência, permitindo que você processe e transforme os documentos de maneira controlada. 
 
 ### Operações do Pipeline
 
