@@ -89,7 +89,7 @@ docker-compose logs
 ```
 ## Acesso GUI: MongoDB Express 
 
-1. Acesse o MongoDB Express pelo navegador na porta `8081`. Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, clique em `Create Collection` e nomeie-a `Estudantes`. 
+1. Acesse o MongoDB Express pelo navegador na porta `8081`. Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, nomeie a coleção `Estudantes` e clique em `Create Collection`. 
 
 2. Clique na coleção `Estudantes` e então em `Insert Document`. Insira um estudante com atributos como `nome`, `idade` e `curso`. Exemplo: 
 
@@ -103,7 +103,7 @@ docker-compose logs
 ```
 3. Selecione um documento e clique em `Edit Document`. Altere algum campo, por exemplo, mude a `idade` de um estudante. 
 4. Selecione um documento e clique em `Delete Document`. 
-5. No menu lateral, clique em `Indexes` para visualizar os índices da coleção. Observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`.
+5. Na parte inferior da tela, observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`. 
 
 ## Acesso CLI: MongoDB 
 
@@ -115,7 +115,7 @@ docker exec -it mongo_service /bin/bash
 ```bash
 mongo -u root -p mongo
 ```
-## Guia Básico: MongoDB Query Language (MQL)
+### Guia Básico: MongoDB Query Language (MQL)
 
 A linguagem de query do MongoDB (MQL) permite que você consulte, atualize e manipule documentos de forma eficiente. Dentre suas principais características, destacamos: 
 
@@ -140,11 +140,6 @@ db
 ```
 
 ```javascript
-//Mostrar todas as bases de dados
-show dbs
-```
-
-```javascript
 //Criar ou mudar de base de dados
 use AulaDemo2
 ```
@@ -162,7 +157,7 @@ show collections
 
 ```javascript
 //Criar uma coleção chamada "Estudantes2022"
-db.createCollection(Estudantes2022)
+db.createCollection("Estudantes2022")
 ```
 
 ```javascript
@@ -172,7 +167,7 @@ db.Estudantes.insert(
         "nome": "Fernando Campos",
         "idade": 22,
         "curso": "Engenharia da Computação",
-        "email": "fernando.campos@email.com"
+        "email": "fernando.campos@email.com",
         "data": Date()
     }
 )
@@ -235,7 +230,7 @@ Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando ao
 Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de notas como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura do documento. Mais exemplos: 
 
 ```json
-[
+db.Estudantes.insertMany([
     {
         "nome": "Vladimir Silva",
         "idade": 22,
@@ -267,7 +262,7 @@ Este modelo permite uma ampla gama de consultas, como buscar estudantes por curs
         "anoIngresso": 2021
     },
     // ... adicione mais estudantes seguindo o mesmo formato
-]
+])
 ```
 A seguir, mais alguns comandos básicos do MongoDB, que permitem consultar, manipular e analisar documentos em suas coleções: 
 
@@ -289,38 +284,43 @@ db.Estudantes.find({curso: 'Engenharia da Computação'}).pretty()
 ```javascript
 //Ordenar registros por nome, de forma ascendente
 db.Estudantes.find().sort({nome: 1}).pretty()
+```
 
+```javascript
 //Ordenar registros por nome, de forma descendente
 db.Estudantes.find().sort({nome: -1}).pretty()
+```
 
+```javascript
 // Contar Registros
-db.Estudantes.find().count().pretty()
+var count = db.Estudantes.find().count();
+print("Número de registros na coleção Estudantes: " + count);
+```
 
+```javascript
 // Contar Registros por curso
-db.Estudantes.find({curso: 'Engenharia da Computação'}).count().pretty()
+var count = db.Estudantes.find({ curso: 'Engenharia da Computação' }).count();
+print("Número de registros na coleção Estudantes com curso 'Engenharia da Computação': " + count);
 ```
 
 ```javascript
 //Limitar exibição de linhas
 db.Estudantes.find().limit(2).pretty()
+```
 
+```javascript
 //Encadeamento
 db.Estudantes.find().limit(3).sort({nome: 1}).pretty()
 ```
 
 ```javascript
 //Para buscar estudantes com média acima de 80:
-db.Estudantes.find({ media: { $gt: 80 } })
+db.Estudantes.find({ media: { $gt: 80 } }).pretty()
 ```
 
 ```javascript
-//Para atualizar a média de um estudante específico (por exemplo, "Lucas Silva"):
-db.Estudantes.update({ nome: "Lucas Silva" }, { $set: { media: 87 } })
-```
-
-```javascript
-//Para deletar um estudante específico:
-db.Estudantes.remove({ nome: "Lucas Silva" })
+//Para atualizar a média de um estudante específico (por exemplo, "Deocleciano Oliveira"):
+db.Estudantes.update({ nome: "Deocleciano Oliveira" }, { $set: { media: 92 } })
 ```
 
 ```javascript
@@ -335,6 +335,11 @@ db.Estudantes.aggregate([
         $sortByCount: "$curso"
     }
 ])
+```
+
+```javascript
+//Para deletar um estudante específico:
+db.Estudantes.remove({ nome: "Vladimir Silva" })
 ```
 
 ```javascript
@@ -368,7 +373,7 @@ Cada etapa no pipeline é representada por um estágio. Os estágios podem inclu
 
 ### Carga de Dados
 
-Vamos considerar um exemplo prático de como desenvolver um pipeline básico com recursos do MongoDB Aggregation Framework para análise de dados. Considerando uma coleção chamada `Vendas` com documentos que representam vendas de produtos, desejamos calcular a receita total por categoria de produto. Você pode usar o seguinte exemplo para inserir dados na coleção `Vendas`:
+Segue um exemplo básico de pipeline de dados utilizando recursos do MongoDB Aggregation Framework para análise de dados. Considerando uma coleção chamada `Vendas` com documentos que representam vendas de produtos, desejamos calcular a receita total por categoria de produto. Você pode usar os dados a seguir para inserir dados na coleção `Vendas`:
 
 ```javascript
 db.Vendas.insertMany([
@@ -458,8 +463,8 @@ db.Vendas.insertMany([
         "valor": 90.00
     }
     // Adicione mais documentos conforme necessário
-])
-
+  ]
+)
 ```
 
 ### Exemplo de Utilização
@@ -482,4 +487,4 @@ db.Vendas.aggregate([
 
 ## Conclusão
 
-Esta documentação fornece uma visão completa do MongoDB, uma das soluções mais populares e poderosas para gerenciamento e análise de dados no contexto de Big Data e NoSQL. Exploramos a flexibilidade de esquema do MongoDB, sua linguagem e recursos avançados de consulta (MQL) e agregação (MAF). Vimos que o MongoDB Express proporciona uma interface gráfica (GUI) amigável para gerenciamento de bases MongoDB, tornando o trabalho com documentos mais acessível. Além do MongoDB Express, você também pode baixar a ferramenta [MongoDB Compass](https://www.mongodb.com/try/download/compass) para uma experiência de visualização e consulta ainda mais avançada.  Para aprofundar seu conhecimento, consulte a documentação oficial do [MongoDB](https://docs.mongodb.com/). 
+Esta documentação fornece uma visão completa do MongoDB, uma das soluções mais populares e poderosas para gerenciamento exite análise de dados no contexto de Big Data e NoSQL. Exploramos a flexibilidade de esquema do MongoDB, sua linguagem e recursos avançados de consulta (MQL) e agregação (MAF). Vimos que o MongoDB Express proporciona uma interface gráfica (GUI) amigável para gerenciamento de bases MongoDB, tornando o trabalho com documentos mais acessível. Além do MongoDB Express, você também pode baixar a ferramenta [MongoDB Compass](https://www.mongodb.com/try/download/compass) para uma experiência de visualização e consulta ainda mais avançada.  Para aprofundar seu conhecimento, consulte a documentação oficial do [MongoDB](https://docs.mongodb.com/). 
