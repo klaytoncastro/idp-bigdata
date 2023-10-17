@@ -219,7 +219,7 @@ db.Estudantes.insertMany([
 )
 ```
 
-Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Exemplos de Campos Adicionais do estudante "Haroldo Ramos": 
+Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Por exemplo, colocamos os seguintes campos adicionais nos atributos do estudante "Haroldo Ramos": 
 
 `matricula`: Um identificador único para cada estudante.
 
@@ -231,7 +231,7 @@ Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando ao
 
 `anoIngresso`: O ano em que o estudante ingressou no curso.
 
-Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de notas como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura geral do documento. Exemplo: 
+Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de notas como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura geral do documento. Mais exemplos: 
 
 ```json
 [
