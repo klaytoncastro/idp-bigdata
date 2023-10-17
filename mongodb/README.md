@@ -122,7 +122,7 @@ docker exec -it mongo_service /bin/bash
 ```bash
 mongo -u root -p mongo
 ```
-### Guia Básico: MongoDB Query Language (MQL)
+## Guia Básico: MongoDB Query Language (MQL)
 
 O MongoDB é um sistema gerenciador de banco de dados (SGBD) NoSQL, orientado a documentos, que armazena dados em formato JSON (BSON). A linguagem de query do MongoDB (MQL) permite que você consulte, atualize e manipule documentos de forma eficiente. Dentre suas principais características, destacamos: 
 
@@ -276,6 +276,7 @@ Este modelo permite uma ampla gama de consultas, como buscar estudantes por curs
     // ... adicione mais estudantes seguindo o mesmo formato
 ]
 ```
+A seguir, mais alguns comandos básicos do MongoDB, que permitem consultar, manipular e analisar documentos em suas coleções: 
 
 ```javascript
 //Obter todos os registros
@@ -352,7 +353,7 @@ exit
 
 Um pipeline de dados constitui uma série de etapas que os documentos passam, onde cada passo executa uma operação específica no conjunto de dados. Essas etapas são executadas em sequência, permitindo que você processe e transforme os documentos de maneira flexível e controlada. 
 
-### Componentes do Pipeline
+### Operações do Pipeline
 
 Cada etapa no pipeline é representada por um estágio. Os estágios podem incluir operações de filtro, projeção, ordenação, agrupamento, cálculos e muito mais. Alguns dos estágios comuns incluem:
 
@@ -489,8 +490,6 @@ db.Vendas.aggregate([
 - Neste exemplo, no primeiro estágio `$group`, estamos agrupando os documentos por categoria (`$categoria`) e calculando a receita total para cada categoria usando `$sum`. 
 - No segundo estágio `$sort`, estamos ordenando os resultados com base na receita total em ordem descendente. Isso nos dará uma lista das categorias de produtos com a receita total calculada para cada uma delas.
 
-### Integração do MongoDB com outras ferramentas
+### Integração com outras ferramentas
 
 Para conectar o MongoDB a ferramentas como Jupyter Notebook, Spark, você pode usar bibliotecas e drivers específicos para o MongoDB, como o PyMongo para Python. Isso permite que você carregue dados diretamente do MongoDB para análise distribuída com o Spark. Essas técnicas são valiosas em ambientes de análise de dados e processamento de big data. Veremos isso em maiores detalhes nos laboratórios. 
-
-
