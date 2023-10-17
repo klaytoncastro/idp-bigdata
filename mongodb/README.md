@@ -214,8 +214,7 @@ db.Estudantes.insertMany([
   ]    
 )
 ```
-
-Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Por exemplo, colocamos os seguintes campos adicionais nos atributos do estudante "Haroldo Ramos": 
+Graças à arquitetura NoSQL que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Por exemplo, colocamos os seguintes campos adicionais nos atributos do estudante "Haroldo Ramos": 
 
 `matricula`: Um identificador único para cada estudante.
 
