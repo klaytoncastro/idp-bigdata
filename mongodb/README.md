@@ -115,9 +115,13 @@ docker network inspect <NETWORK_NAME>
 6. Graças à arquitetura que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Exemplos de Campos Adicionais: 
 
 `matricula`: Um identificador único para cada estudante.
+
 `notas`: Um objeto contendo as notas do estudante em diferentes disciplinas. As disciplinas listadas são apenas exemplos e podem ser adaptadas conforme necessário.
+
 `media`: A média de notas do estudante. Pode ser calculada com base nas notas fornecidas.
+
 `status`: Indica se o estudante está ativo, inativo, formado, etc.
+
 `anoIngresso`: O ano em que o estudante ingressou no curso.
 
 Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de notas como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura geral do documento. Exemplo: 
