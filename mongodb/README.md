@@ -87,14 +87,6 @@ docker-compose up -d
 docker ps
 docker-compose logs
 ```
-
-6. Para facilitar a integração do MongoDB como outras ferramentas, tais como o Jupyter, uma API Flask, ou outros serviços, pode ser necessário verificar o endereço IP dos contêineres e a rede virtual na qual estão conectados. Neste caso, utilize os comandos abaixo: 
-
-```bash
-docker inspect <CONTAINER_ID> | grep IPAddress
-docker network inspect <NETWORK_NAME>
-```
-
 ## Acesso GUI: MongoDB Express 
 
 1. Acesse o MongoDB Express pelo navegador na porta `8081`. Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, clique em `Create Collection` e nomeie-a `Estudantes`. 
@@ -492,4 +484,11 @@ db.Vendas.aggregate([
 
 ### Integração com outras ferramentas
 
-Para conectar o MongoDB a ferramentas como Jupyter Notebook, Spark, você pode usar bibliotecas e drivers específicos para o MongoDB, como o PyMongo para Python. Isso permite que você carregue dados diretamente do MongoDB para análise distribuída com o Spark. Essas técnicas são valiosas em ambientes de análise de dados e processamento de big data. Veremos isso em maiores detalhes nos laboratórios. 
+- Para conectar o MongoDB a ferramentas como Jupyter Notebook, Spark, você pode usar bibliotecas e drivers específicos para o MongoDB, como o PyMongo para Python. Isso permite que você carregue dados diretamente do MongoDB para análise distribuída com o Spark. Essas técnicas são valiosas em ambientes de análise de dados e processamento de big data. Veremos isso em maiores detalhes nos laboratórios. 
+
+- Para facilitar a integração do MongoDB como outras ferramentas, tais como o Jupyter, uma API Flask, ou outros serviços, pode ser necessário verificar o endereço IP dos contêineres e a rede virtual na qual estão conectados. Neste caso, utilize os comandos abaixo: 
+
+```bash
+docker inspect <CONTAINER_ID> | grep IPAddress
+docker network inspect <NETWORK_NAME>
+```
