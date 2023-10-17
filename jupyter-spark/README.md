@@ -59,3 +59,14 @@ spark = SparkSession.builder.getOrCreate()
 ```python
 spark.stop()
 ```
+
+### Integração com outras ferramentas
+
+- Para conectar o seu Jupyter Notebook com Spark para operar com MongoDB e outras ferramentas, você pode usar bibliotecas e drivers específicos. Por exemplo, no caso do MongoDB, você poderia utilizar o PyMongo. Isso permite que você carregue dados diretamente do MongoDB para análise distribuída com o Spark. Essas técnicas são valiosas em ambientes de análise de dados e processamento de big data. Veremos isso em maiores detalhes nos laboratórios. 
+
+- Para facilitar a integração, tanto do MongoDB como de outras ferramentas, tais como uma API Flask, um banco de dados MySQL e outros serviços, pode ser necessário verificar o endereço IP dos contêineres e a rede virtual na qual estão conectados. Neste caso, utilize os comandos abaixo: 
+
+```bash
+docker inspect <CONTAINER_ID> | grep IPAddress
+docker network inspect <NETWORK_NAME>
+```
