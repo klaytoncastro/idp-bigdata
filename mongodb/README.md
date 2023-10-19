@@ -91,9 +91,9 @@ docker-compose logs
 ```
 ## Acesso GUI: MongoDB Express 
 
-1. Acesse o MongoDB Express pelo navegador na porta `8081`. Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, nomeie a coleção `Estudantes` e clique em `Create Collection`. 
+1. Acesse o MongoDB Express pelo navegador (`http:\\localhost:8081`). Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, clique em `Create Collection` e crie a coleção `Estudantes`. 
 
-2. Clique na coleção `Estudantes` e então em `Insert Document`. Insira um estudante com atributos como `nome`, `idade` e `curso`. Exemplo: 
+2. Clique na coleção `Estudantes` e depois em `Insert Document`. Insira um estudante com atributos como `nome`, `idade` e `curso`. Exemplo: 
 
 ```json
     {
@@ -103,13 +103,25 @@ docker-compose logs
         "email": "joao.leite@email.com"
     }
 ```
-3. Selecione um documento e clique em `Edit Document`. Altere algum campo, por exemplo, mude a `idade` de um estudante. 
-4. Selecione um documento e clique em `Delete Document`. 
+
+3. Insira mais um estudante. Exemplo: 
+
+```json
+    {
+        "nome": "Domitila Canto",
+        "idade": 22,
+        "curso": "Letras",
+        "email": "domitila.canto@email.com"
+    }
+```
+
+4. Selecione um documento e clique em `Edit Document`. Altere algum campo. Por exemplo, mude a `idade` de um estudante. 
 5. Na parte inferior da tela, observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`. 
+6. Selecione um documento e clique em `Delete Document`. 
 
 ## Acesso CLI: MongoDB 
 
-1. Acessando o Shell do Contêiner MongoDB: 
+1. Acesse o Shell do Contêiner MongoDB: 
 ```bash
 docker exec -it mongo_service /bin/bash
 ```
@@ -525,7 +537,7 @@ db.Vendas.aggregate([
     {
         $group: {
             _id: "$categoria",
-            totalPreco: { $sum: "$valor" }, // Corrigir para "$valor" em vez de "$preco"
+            totalPreco: { $sum: "$valor" },
             totalProdutos: { $sum: 1 }
         }
     },
