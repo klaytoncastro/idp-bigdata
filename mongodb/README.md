@@ -119,15 +119,7 @@ mongo -u root -p mongo
 ```
 ### Guia Básico: MongoDB Query Language (MQL)
 
-A linguagem de query do MongoDB (MQL) permite que você consulte, atualize e manipule documentos de forma eficiente. Dentre suas principais características, destacamos: 
-
-- **Consulta Flexível:** Você pode realizar consultas flexíveis para recuperar documentos com base em campos específicos, operadores lógicos e outros critérios.
-
-- **Suporte a Índices:** Índices podem ser criados para acelerar consultas e melhorar o desempenho.
-
-- **Manipulação de Documentos:** Além de consultar dados, você pode inserir, atualizar e excluir documentos usando a mesma linguagem.
-
-### Exemplos de Comandos:
+A linguagem de query do MongoDB (MQL) permite que você consulte, atualize e manipule documentos de forma eficiente. Seguem alguns exemplos de comandos:
 
 ```javascript
 //Mostrar todas as bases de dados
@@ -228,7 +220,7 @@ Como vimos, o MongoDB permite adotar um dinâmico. Aos poucos, podemos acrescent
 
 Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de `notas` como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura do documento. 
 
-Assim, à medida que novos requisitos ou informações precisam ser rastreados, você pode simplesmente adicionar novos campos aos documentos já inseridos, sem afetar a utilidade dos dados existentes. Os documentos não precisam conter campos em branco quando as informações não se aplicam a um determinado registro. Isso economiza espaço de armazenamento e torna os documentos mais concisos. Isso evita a necessidade de migrações complexas de esquema: 
+Assim, à medida que novos requisitos surgem, você pode simplesmente adicionar novos campos aos documentos já inseridos, sem afetar a utilidade dos dados existentes. Os documentos não precisam conter campos em branco quando as informações não se aplicam a um determinado registro. Isso economiza espaço de armazenamento e torna os documentos mais concisos e evita a necessidade de migrações complexas de esquema. Adicione mais dados à sua coleção: 
 
 ```javascript
 db.Estudantes.insertMany([
@@ -268,7 +260,7 @@ db.Estudantes.insertMany([
 
 ### Uso de Operadores
 
-No MongoDB, o operador `$` é usado para acessar muitas operações de consulta, atualização, projeção e agregação, ou seja, indica que determinada funcionalidade deve ser aplicada a um campo ou valor nos documentos. Seguem alguns exemplos de operadores frequentemente utilizados: 
+No MongoDB, o operador `$` é usado para acessar as funcionalidades de consulta, atualização, projeção e agregação, ou seja, indica que determinada operação deve ser aplicada a um campo ou valor nos documentos. Seguem alguns exemplos de operadores frequentemente utilizados: 
 
 ```javascript
 //Os operadores de comparação, como $eq, $ne, $gt, $lt, $gte e $lte, são usados em consultas para comparar valores em campos.
