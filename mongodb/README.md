@@ -117,7 +117,7 @@ docker exec -it mongo_service /bin/bash
 ```bash
 mongo -u root -p mongo
 ```
-### Guia Básico: MongoDB Query Language (MQL)
+### Guia Básico: MongoDB Query Language
 
 A linguagem de query do MongoDB (MQL) permite que você consulte, atualize e manipule documentos de forma eficiente. Seguem alguns exemplos de comandos:
 
