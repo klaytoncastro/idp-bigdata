@@ -216,7 +216,7 @@ db.Estudantes.insertMany([
   ]    
 )
 ```
-Graças à arquitetura NoSQL que permite schema dinâmico, podemos ir acrescentando aos poucos um modelo mais detalhado para a base de estudantes. Por exemplo, colocamos os seguintes campos adicionais nos atributos do estudante "Haroldo Ramos": 
+Como vimos, o MongoDB permite adotar um dinâmico. Aos poucos, podemos acrescentar campos mais detalhados para a base de estudantes. No exemplo acima, inserimos campos adicionais relativos ao estudante "Haroldo Ramos": 
 
 `matricula`: Um identificador único para cada estudante.
 
@@ -228,9 +228,11 @@ Graças à arquitetura NoSQL que permite schema dinâmico, podemos ir acrescenta
 
 `anoIngresso`: O ano em que o estudante ingressou no curso.
 
-Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de notas como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura do documento. Mais exemplos: 
+Este modelo permite uma ampla gama de consultas, como buscar estudantes por curso, status, média de notas ou ano de ingresso. Além disso, você pode adicionar outros campos conforme necessário, como endereço, telefone de contato, entre outros. Adicionar um campo de `notas` como um objeto também permite que você adicione ou remova disciplinas facilmente sem alterar a estrutura do documento. 
 
-```json
+Assim, à medida que novos requisitos ou informações precisam ser rastreados, você pode simplesmente adicionar novos campos aos documentos já inseridos, sem afetar a utilidade dos dados existentes. Os documentos não precisam conter campos em branco quando as informações não se aplicam a um determinado registro. Isso economiza espaço de armazenamento e torna os documentos mais concisos. Isso evita a necessidade de migrações complexas de esquema: 
+
+```javascript
 db.Estudantes.insertMany([
     {
         "nome": "Vladimir Silva",
