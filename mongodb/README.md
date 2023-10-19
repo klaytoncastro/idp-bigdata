@@ -127,8 +127,6 @@ A linguagem de query do MongoDB (MQL) permite que você consulte, atualize e man
 
 - **Manipulação de Documentos:** Além de consultar dados, você pode inserir, atualizar e excluir documentos usando a mesma linguagem.
 
-- **Aggregation Framework:** O MongoDB oferece um poderoso framework de agregação que permite realizar operações complexas de análise, agregação e construção de pipelines de dados.
-
 ### Exemplos de Comandos:
 
 ```javascript
@@ -526,7 +524,6 @@ db.Vendas.aggregate([
     }
 ])
 ```
-
 ## Ferramentas para Ingestão de Dados e Administração do Ambiente
 
 ### Importação de Dados
