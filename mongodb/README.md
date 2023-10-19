@@ -322,6 +322,7 @@ db.Estudantes.find().sort({nome: 1}).pretty()
 //Ordenar registros por nome, de forma descendente
 db.Estudantes.find().sort({nome: -1}).pretty()
 ```
+As variáveis desempenham um papel importante no MongoDB Aggregation Framework e permitem que você armazene valores intermediários durante a execução de uma operação. Elas podem ser declaradas e utilizadas para tornar mais legível a obtenção dos resultados. Seguem exemplos: 
 
 ```javascript
 // Contar Registros
@@ -516,6 +517,34 @@ db.Vendas.aggregate([
     }
 ])
 ```
+
+Suponha que você deseja calcular a média de preço por categoria de produto. Aqui está um exemplo de um pipeline de agregação que utiliza variáveis:
+
+```javascript
+db.Vendas.aggregate([
+    {
+        $group: {
+            _id: "$categoria",
+            totalPreco: { $sum: "$preco" },
+            totalProdutos: { $sum: 1 }
+        }
+    },
+    {
+        $addFields: {
+            mediaPreco: { $divide: ["$totalPreco", "$totalProdutos"] }
+        }
+    },
+    {
+        $project: {
+            _id: 0,
+            categoria: "$_id",
+            mediaPreco: 1
+        }
+    }
+])
+```
+Neste exemplo, estamos usando `$totalPreco` e `$totalProdutos` para armazenar os valores somados dos preços e a contagem total de produtos para cada categoria. Em seguida, usamos `$mediaPreco` para calcular a média, dividindo `$totalPreco` por `$totalProdutos`. Por fim, projetamos os resultados para tornar o formato de exibição mais amigável. 
+
 ## Ferramentas para Ingestão de Dados e Administração do Ambiente
 
 ### Importação de Dados

@@ -1,6 +1,7 @@
 # 1. Instruções:
-a)    Se estiver usando uma VM, conforme instruções fornecidas no README.md do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. 
-b)    Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
+
+a) Se estiver usando uma VM, conforme instruções fornecidas no README.md do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. 
+b) Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
 
 # 2. Levante o Ambiente Jupyter Notebook configurado com Spark e Python:
 
@@ -59,14 +60,8 @@ spark = SparkSession.builder.getOrCreate()
 ```python
 spark.stop()
 ```
+### Exemplo de uso com ferramentas externas 
 
-### Integração com outras ferramentas
 
-- Para conectar o seu Jupyter Notebook com Spark para operar com MongoDB e outras ferramentas, você pode usar bibliotecas e drivers específicos. Por exemplo, no caso do MongoDB, você poderia utilizar o PyMongo. Isso permite que você carregue dados diretamente do MongoDB para análise distribuída com o Spark. Essas técnicas são valiosas em ambientes de análise de dados e processamento de big data. Veremos isso em maiores detalhes nos laboratórios. 
 
-- Para facilitar a integração, tanto do MongoDB como de outras ferramentas, tais como uma API Flask, um banco de dados MySQL e outros serviços, pode ser necessário verificar o endereço IP dos contêineres e a rede virtual na qual estão conectados. Neste caso, utilize os comandos abaixo: 
-
-```bash
-docker inspect <CONTAINER_ID> | grep IPAddress
-docker network inspect <NETWORK_NAME>
-```
+Conecte-ao MongoDB, explore e analise dados. 
