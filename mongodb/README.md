@@ -265,7 +265,7 @@ No MongoDB, o operador `$` é usado para acessar as funcionalidades de consulta,
 ```javascript
 //Os operadores de comparação, como $eq, $ne, $gt, $lt, $gte e $lte, são usados em consultas para comparar valores em campos.
 
-db.Estudantes.find({ idade: { $gte: 18 } }) // Aqui estamos encontrando documentos cuja idade dos estudantes seja maior ou igual a 18.
+db.Estudantes.find({ idade: { $gte: 18 } }).pretty() // Aqui estamos encontrando documentos cuja idade dos estudantes seja maior ou igual a 18.
 ```
 
 ```javascript
@@ -285,9 +285,9 @@ db.Estudantes.aggregate([
 ```
 
 ```javascript
-//Ao trabalhar com arrays, podemos utilizar os operadores para referenciar os elementos. 
+//Ao trabalhar com arrays, podemos utilizar referenciar os elementos e usar operadores para refinar a consulta. 
 
-db.Estudantes.find({ notas: { $elemMatch: { disciplina: "matematica", nota: { $gte: 70 } } } })
+db.Estudantes.find({ "notas.algoritmos": { $gte: 80 } }).pretty() // Aqui estamos encontrando os estudantes que tiraram nota maior ou igual a 80 em Algoritmos e formatando a saída com o método Pretty(). 
 ```
 
 ```javascript
@@ -518,14 +518,14 @@ db.Vendas.aggregate([
 ])
 ```
 
-Suponha que você deseja calcular a média de preço por categoria de produto. Aqui está um exemplo de um pipeline de agregação que utiliza variáveis:
+Suponha que você deseja calcular a média de preço por categoria de produto. Aqui está um exemplo de um pipeline de agregação: 
 
 ```javascript
 db.Vendas.aggregate([
     {
         $group: {
             _id: "$categoria",
-            totalPreco: { $sum: "$preco" },
+            totalPreco: { $sum: "$valor" }, // Corrigir para "$valor" em vez de "$preco"
             totalProdutos: { $sum: 1 }
         }
     },
