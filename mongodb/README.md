@@ -14,9 +14,9 @@ O **MongoDB** é um sistema de gerenciamento de banco de dados (SGBD) amplamente
 
 - **Replicação e Tolerância a Falhas**: O MongoDB suporta replicação automática, proporcionando alta disponibilidade e tolerância a falhas. Isso é crucial para garantir que os dados estejam sempre disponíveis, mesmo em caso de problemas com a infraestrutura de servidores, tornando-o adequado para pipelines de dados que exigem confiabilidade.
 
-- **Indexação Avançada**: O MongoDB oferece recursos avançados de indexação, acelerando as consultas e melhorando o desempenho de leitura. Isso é especialmente valioso ao processar grandes volumes de dados em pipelines de dados. 
+- **Indexação Avançada**: O MongoDB oferece recursos avançados de indexação, acelerando as consultas e melhorando o desempenho de leitura, tais como índices compostos, geoespaciais, textuais, hashed, wildcard, TTL e array, que permitem indexar múltiplos tipos de campos, possibilitando consultas eficientes que envolvem várias condições. Isso é especialmente útil ao lidar com grandes volumes de dados em pipelines. 
 
-- **Flexibilidade de Esquema**: O MongoDB não impõe uma estrutura rígida para os dados. Cada documento pode ter campos diferentes, proporcionando flexibilidade no design do banco de dados. Isso é vantajoso para pipelines de dados, pois permite a evolução contínua do esquema à medida que novos requisitos surgem.
+- **Flexibilidade de Esquema**: O MongoDB não impõe uma estrutura rígida para os dados. Cada documento pode ter campos diferentes em uma mesma coleção, proporcionando flexibilidade no design do banco de dados. Isso é vantajoso para pipelines de dados, pois permite a evolução contínua do esquema à medida que novos requisitos surgem.
 
 ### MongoDB Aggregation Framework
 
@@ -34,11 +34,11 @@ O **MongoDB Aggregation Framework** (MAF) é uma ferramenta poderosa para análi
 
 - **Preparação de Dados**: facilita a preparação de dados para visualização ou análise posterior, tornando-os mais compreensíveis.
 
-- **Otimização de Consultas**: pode otimizar consultas complexas, melhorando o desempenho e a eficiência.
+- **Otimização de Consultas**: pode otimizar consultas complexas, melhorando seu desempenho. 
 
 - **Integração de Dados**: ajuda a integrar dados de várias fontes, unindo dados de diferentes coleções ou fontes durante o processo de análise.
 
-- **Análise de Dados**: é capaz de obter insights significativos para analisar dados em pipelines de dados, incluindo cálculos de estatísticas, médias e somas.
+- **Análise de Dados**: é capaz de obter insights significativos para analisar dados em pipelines de dados, incluindo expressões matemáticas.
 
 - **Relatórios Personalizados**: Permite gerar relatórios adaptados às necessidades específicas de análise de dados. 
 
@@ -91,9 +91,14 @@ docker-compose logs
 ```
 ## Acesso GUI: MongoDB Express 
 
-1. Acesse o MongoDB Express pelo navegador (`http:\\localhost:8081`). Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, clique em `Create Collection` e crie a coleção `Estudantes`. 
+1. Acesse o MongoDB Express pelo navegador (`http:\\localhost:8081`) e forneça as credenciais: 
 
-2. Clique na coleção `Estudantes` e depois em `Insert Document`. Insira um estudante com atributos como `nome`, `idade` e `curso`. Exemplo: 
+- **Usuário**: admin
+- **Senha**: pass
+  
+2. Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, clique em `Create Collection` e crie a coleção `Estudantes`. 
+
+3. Clique na coleção `Estudantes` e depois em `Insert Document`. Insira um estudante com atributos como `nome`, `idade` e `curso`. Exemplo: 
 
 ```json
     {
@@ -104,7 +109,7 @@ docker-compose logs
     }
 ```
 
-3. Insira mais um estudante. Exemplo: 
+4. Insira mais um estudante. Exemplo: 
 
 ```json
     {
@@ -115,9 +120,9 @@ docker-compose logs
     }
 ```
 
-4. Selecione um documento e clique em `Edit Document`. Altere algum campo. Por exemplo, mude a `idade` de um estudante. 
-5. Na parte inferior da tela, observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`. 
-6. Selecione um documento e clique em `Delete Document`. 
+6. Selecione um documento e clique em `Edit Document`. Altere algum campo. Por exemplo, mude a `idade` de um estudante. 
+6. Na parte inferior da tela, observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`. 
+7. Selecione um documento e clique em `Delete Document`. 
 
 ## Acesso CLI: MongoDB 
 
