@@ -65,7 +65,7 @@ O **MongoDB Aggregation Framework** (MAF) é uma ferramenta poderosa para análi
 
 O **MongoDB Express** é uma interface gráfica que facilita a administração, gerenciamento e visualização de dados armazenados em bancos de dados MongoDB. Ele oferece uma série de recursos úteis, tornando a realização do trabalho com documentos muito mais acessível. Alguns aspectos importantes do MongoDB Express incluem:
 
-- **Interface Gráfica Amigável**: oferece uma interface de usuário intuitiva que permite explorar e interagir com os dados de forma visual.
+- **Interface Amigável**: oferece uma interface gráfica intuitiva que permite explorar e interagir com os dados de forma muito mais amigável que na linha de comando.
 
 - **Gerenciamento de Coleções e Bancos de Dados**: é possível criar, editar e excluir coleções e bancos de dados, tornando o gerenciamento de documentos mais conveniente.
 
