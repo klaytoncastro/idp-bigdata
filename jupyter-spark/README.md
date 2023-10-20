@@ -1,6 +1,7 @@
 # 1. Instruções:
 
 a) Se estiver usando uma VM, conforme instruções fornecidas no README.md do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. 
+
 b) Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
 
 # 2. Levante o Ambiente Jupyter Notebook configurado com Spark e Python:
