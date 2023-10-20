@@ -20,7 +20,7 @@ O **MongoDB** é um sistema de gerenciamento de banco de dados (SGBD) amplamente
 
 ### Terminologia e Comandos Básicos
 
-O MongoDB é um banco de dados NoSQL orientado a documentos que adota uma terminologia própria. Abaixo, segue uma tabela comparativa entre os termos e comandos básicos do MongoDB e seus equivalentes nos bancos de dados relacionais:
+O MongoDB é um banco de dados NoSQL orientado a documentos que adota uma terminologia própria. Abaixo, segue tabela comparativa entre os termos e comandos básicos do MongoDB e seus equivalentes conceituais nos bancos de dados relacionais:
 
 |           MongoDB            | Banco de Dados Relacional   | Comando MQL                     | Comando SQL     |
 |------------------------------|-----------------------------|---------------------------------|-----------------|
