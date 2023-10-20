@@ -280,13 +280,15 @@ db.Estudantes.insertMany([
 No MongoDB, o operador `$` é usado para acessar as funcionalidades de consulta, atualização, projeção e agregação, ou seja, indica que determinada operação deve ser aplicada a um campo ou valor nos documentos. Seguem alguns exemplos de operadores frequentemente utilizados: 
 
 ```javascript
-//Os operadores de comparação, como $eq, $ne, $gt, $lt, $gte e $lte, são usados em consultas para comparar valores em campos.
+// Os operadores de comparação, como $eq, $ne, $gt, $lt, $gte e $lte, são usados em consultas para comparar valores em campos.
+// Neste exemplo, estamos encontrando documentos cuja idade dos estudantes seja maior ou igual a 18.
 
-db.Estudantes.find({ idade: { $gte: 18 } }).pretty() // Aqui estamos encontrando documentos cuja idade dos estudantes seja maior ou igual a 18.
+db.Estudantes.find({ idade: { $gte: 18 } }).pretty() 
 ```
 
 ```javascript
-//Os operadores de projeção são usados em operações de agregação para selecionar campos específicos para inclusão ou exclusão nos resultados. 
+// Os operadores de projeção são usados em operações de agregação para selecionar campos específicos para inclusão ou exclusão
+// nos resultados. 
 
 db.Estudantes.aggregate([
     { $project: { nome: 1, curso: 1, _id: 0 } } // Projeta (seleciona) apenas os campos 'nome' e 'curso'.
@@ -294,7 +296,7 @@ db.Estudantes.aggregate([
 ```
 
 ```javascript
-//Os operadores também podem ser usados para definir os campos de agrupamento.
+// Os operadores também podem ser usados para definir os campos de agrupamento.
 
 db.Estudantes.aggregate([
     { $group: { _id: "$curso", total: { $sum: 1 } } } // Agrupa documentos pelo campo 'curso'.
@@ -302,13 +304,15 @@ db.Estudantes.aggregate([
 ```
 
 ```javascript
-//Ao trabalhar com arrays, podemos utilizar referenciar os elementos e usar operadores para refinar a consulta. 
+// Ao trabalhar com arrays, podemos utilizar referenciar os elementos e usar operadores para refinar a consulta. 
+// Neste exemplo, estamos encontrando os estudantes que tiraram nota maior ou igual a 80 em Algoritmos e formatando a saída
+// com o método Pretty(). 
 
-db.Estudantes.find({ "notas.algoritmos": { $gte: 80 } }).pretty() // Aqui estamos encontrando os estudantes que tiraram nota maior ou igual a 80 em Algoritmos e formatando a saída com o método Pretty(). 
+db.Estudantes.find({ "notas.algoritmos": { $gte: 80 } }).pretty() 
 ```
 
 ```javascript
-//Ao trabalhar com atualização de documentos, podemos utilizar os operadores para modificar os campos desejados.  
+// Ao trabalhar com atualização de documentos, podemos utilizar os operadores para modificar os campos desejados.  
 
 db.Estudantes.updateOne({ nome: "Haroldo Ramos" }, { $set: { status: "Inativo" } })
 ```
@@ -317,59 +321,70 @@ A seguir, vamos praticar mais alguns comandos básicos do MongoDB, que permitem 
 
 ```javascript
 //Obter todos os registros
+
 db.Estudantes.find()
 ```
 
 ```javascript
 //Obter todos os registros formatados 
+
 db.Estudantes.find().pretty()
 ```
 
 ```javascript
 //Procurar registros por curso
+
 db.Estudantes.find({curso: 'Engenharia da Computação'}).pretty()
 ```
 
 ```javascript
 //Ordenar registros por nome, de forma ascendente
+
 db.Estudantes.find().sort({nome: 1}).pretty()
 ```
 
 ```javascript
 //Ordenar registros por nome, de forma descendente
+
 db.Estudantes.find().sort({nome: -1}).pretty()
 ```
 As variáveis desempenham um papel importante no MongoDB Aggregation Framework e permitem que você armazene valores intermediários durante a execução de uma operação. Elas podem ser declaradas e utilizadas para tornar mais legível a obtenção dos resultados. Seguem exemplos: 
 
 ```javascript
 // Contar Registros
+
 var count = db.Estudantes.find().count();
 print("Número de registros na coleção Estudantes: " + count);
 ```
 
 ```javascript
 // Contar Registros por curso
+
 var count = db.Estudantes.find({ curso: 'Engenharia da Computação' }).count();
 print("Número de registros na coleção Estudantes com curso 'Engenharia da Computação': " + count);
 ```
 
 ```javascript
 //Limitar exibição de linhas
+
 db.Estudantes.find().limit(2).pretty()
 ```
 
 ```javascript
 //Encadeamento
+
 db.Estudantes.find().limit(3).sort({nome: 1}).pretty()
 ```
 
 ```javascript
 //Para buscar estudantes com média acima de 80:
+
 db.Estudantes.find({ media: { $gt: 80 } }).pretty()
 ```
 
 ```javascript
 //Para atualizar a média de um estudante específico (por exemplo, "Deocleciano Oliveira"):
+
 db.Estudantes.update({ nome: "Deocleciano Oliveira" }, { $set: { media: 92 } })
 ```
 
