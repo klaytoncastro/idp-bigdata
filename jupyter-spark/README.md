@@ -212,7 +212,9 @@ docker exec -it mongo_service mongoimport --db inep --collection cursos --type c
 
 ## 4. Exploração e Análise de Dados
 
-A Análise Exploratória de Dados é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Tukey (1977) introduziu esse conceito como uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. A visualização de dados é um componente crucial da literacia de dados e da AED. Ela ajuda a comunicar informações complexas de maneira clara e eficaz, auxiliando na compreensão dos resultados da análise (Tufte, 2001). 
+A Análise Exploratória de Dados (AED) é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Tukey (1977) introduziu esse conceito como uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. A visualização de dados é um componente crucial da literacia de dados e da AED. Ela ajuda a comunicar informações complexas de maneira clara e eficaz, auxiliando na compreensão dos resultados da análise (Tufte, 2001). 
+
+A seguir, temos um código em Python, que deve ser executado no seu ambiente Jupyter Notebook. Como já importamos os dados, estamos nos conectando ao MongoDB e realizando consultas específicas para extrair informações relevantes e, posteriormente, utiliza essas informações para criar visualizações que ajudarão a ilustrar os padrões e as relações existentes nos dados. Execute cada bloco de código e entenda como esta análise dos dados básica foi conduzida. 
 
 ```python
 from pymongo import MongoClient
