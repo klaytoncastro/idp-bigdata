@@ -61,9 +61,11 @@ spark = SparkSession.builder.getOrCreate()
 ```python
 spark.stop()
 ```
-### Exemplo de uso com ferramentas externas 
+## Uso com ferramentas externas 
 
-Conecte-ao MongoDB, explore e analise dados. 
+### Conecte-ao MongoDB, explore e analise dados. 
+
+Baixe os contêineres, crie a rede e conecte-os à mesma rede. 
 
 ```bash
 docker-compose down
@@ -72,6 +74,7 @@ docker-compose down
 ```bash
 docker network create --driver bridge mybridge
 ```
+No arquivo docker-compose.yml, adicione a configuração de rede:
 
 ```yaml
     networks:
@@ -83,6 +86,8 @@ networks:
       name: mybridge
 ```
 
+Suba os contêineres e verifique os IPs:
+
 ```bash
 docker-compose up -d
 ```
@@ -90,6 +95,8 @@ docker-compose up -d
 ```bash
 docker network inspect mybridge
 ```
+
+No Jupyter, teste a conexão: 
 
 ```python
 from pymongo import MongoClient
@@ -104,23 +111,49 @@ except ConnectionFailure:
     print("Falha na conexão ao servidor MongoDB")
 ```
 
-### Exemplos: 
+### Dataset Exemplo: 
+
+Explore o Kaggle e pratique com datasets de exemplo
 
 [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)
 
+### Tarefa: Limpeza, Preparação e Importação de Dados
+
 [INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos)
 
-### Limpeza de Dados e Importação
+Antes de importar os dados para o MongoDB, é necessário realizar uma limpeza e preparação dos dados.
+
+### Remover aspas duplas e substituir ponto e vírgula por vírgula:
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_ED_SUP_IES_2022.CSV > MICRODADOS_ED_SUP_IES_2022_corrigido.csv
+```
 
+### Checar encoding do dataset
+
+```bash
+file -i MICRODADOS_ED_SUP_IES_2022_corrigido.csv
+```
+
+### Converter encoding de ISO-8859-1 para UTF-8:
+
+```bash
 iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
+```
 
+### Substituir caracteres especiais:
+
+```bash
 sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ/aaaaaeeeeiiiiooooouuuucnAAAAAEEEEIIIIOOOOOUUUUCN/' MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
+```
 
+### Importação para o MongoDB
+
+```bash
 docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
+
+### Repita o processo da collection 'ies' para a collection 'cursos'
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_CADASTRO_CURSOS_2022.CSV > MICRODADOS_CADASTRO_CURSOS_2022_corrigido.CSV
