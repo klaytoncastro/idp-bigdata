@@ -1,37 +1,37 @@
-# 1. Instruções:
+# Prática de Análise e Exploração de Dados
+
+## 1. Levante o ambiente Jupyter Notebook com Spark e Python:
 
 a) Se estiver usando uma VM, conforme instruções fornecidas no README.md do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. 
 
 b) Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
 
-# 2. Levante o Ambiente Jupyter Notebook configurado com Spark e Python:
-
-### a) Em seu terminal ou console, execute o seguinte comando para clonar o repositório:
+c) Em seu terminal ou console, execute o seguinte comando para clonar o repositório:
 
 ```bash
 git clone https://github.com/klaytoncastro/idp-bigdata 
 ```
-### b) Navegue até a subpasta jupyter-spark dentro do diretório clonado. Exemplo:
+d) Navegue até a subpasta jupyter-spark dentro do diretório clonado. Exemplo:
 
 ```bash
 cd /opt/idp-bigdata/jupyter-spark 
 ```
 
-### c) Execute o script para mapeamento das permissões dos volumes externos ao contêiner:
+e) Execute o script para mapeamento das permissões dos volumes externos ao contêiner:
 
 ```bash
 chmod +x permissions.sh
 ./permissions.sh
 ```
 
-### d) Construa e execute os serviços usando o Docker Compose:
+f) Construa e execute os serviços usando o Docker Compose:
 
 ```bash
 docker-compose build 
 docker-compose up -d 
 ```
 
-### e) Acesse o Jupyter Notebook:
+g) Acesse o Jupyter Notebook:
 
 Execute o comando a seguir para visualizar os logs e identificar o token do Jupyter Notebook para realizar o primeiro acesso: 
 
@@ -61,7 +61,7 @@ spark = SparkSession.builder.getOrCreate()
 ```python
 spark.stop()
 ```
-## Uso com ferramentas externas 
+## 2. Uso do Jupyter com ferramentas externas 
 
 ### Conecte-ao MongoDB, explore e analise dados. 
 
@@ -110,18 +110,18 @@ try:
 except ConnectionFailure:
     print("Falha na conexão ao servidor MongoDB")
 ```
-
 ### Dataset Exemplo: 
 
 Explore o Kaggle e pratique com datasets de exemplo
 
 [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)
 
-### Tarefa: Limpeza, Preparação e Importação de Dados
+## 3. Limpeza, Preparação e Importação de Dados
+
+
+Antes de importar os dados para o MongoDB, é necessário realizar uma limpeza e preparação dos dados. Usaremos o Censo 2022 do INEP como exemplo. 
 
 [INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos)
-
-Antes de importar os dados para o MongoDB, é necessário realizar uma limpeza e preparação dos dados.
 
 ### Remover aspas duplas e substituir ponto e vírgula por vírgula:
 
@@ -165,7 +165,7 @@ sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌ
 docker exec -it mongo_service mongoimport --db inep --collection cursos --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_CADASTRO_CURSOS_2022_corrigido_UTF8.CSV --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
 
-### Análise de Dados
+## 4. Análise de Dados
 
 ```python
 from pymongo import MongoClient
