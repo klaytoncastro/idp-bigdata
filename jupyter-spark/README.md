@@ -1,39 +1,47 @@
-# Prática de Análise e Exploração de Dados
+# Prática de Exploração e Análise de Dados
 
-## 1. Levante o ambiente Jupyter Notebook com Spark e Python:
+## 1. Introdução
 
-a) Se estiver usando uma VM, conforme instruções fornecidas no README.md do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. 
+Jupyter é uma IDE (Ambiente de Desenvolvimento Integrado) open-source que suporta várias linguagens de programação, incluindo Julia, Python e R. É amplamente utilizado por pesquisadores, educadores, cientistas, analistas e engenheiros de dados para criar e compartilhar documentos que contêm código, equações, visualizações e texto narrativo.
 
-b) Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
+No contexto do Jupyter, o termo 'notebook' é a representação de um documento interativo que permite a escrita e execução de código de modo interativo, bem como adicionar texto formatado, equações, imagens, e visualizações. Os notebooks são uma ferramenta poderosa para explorar dados, realizar análises, e documentar processos de trabalho de forma clara e compreensível. Eles são salvos com a extensão .ipynb e podem ser facilmente compartilhados e visualizados por outras pessoas, mesmo que elas não tenham o Jupyter instalado.
 
-c) Em seu terminal ou console, execute o seguinte comando para clonar o repositório:
+No Jupyter, você pode criar um novo notebook, abrir um existente, e executar células de código individualmente. Os resultados das execuções são exibidos diretamente abaixo da célula de código correspondente, facilitando o acompanhamento do fluxo de trabalho e dos resultados. Essa abordagem visa construir um ambiente interativo para exploração e análise de dados, com suporte à criação de gráficos e visualizações. Também permite a prototipagem rápida de soluções e a exploração de diferentes abordagens de análise. 
+
+## 2. Construa o ambiente 
+
+Ao longo do curso, integraremos nosso ecossistema de ferramentas de Big Data e NoSQL por meio de notebooks Jupyter. O contêiner que preparamos para nosso ambiente de desenvolvimento já vem com o Apache Spark configurado no modo standalone, permitindo que você tire proveito dos recursos deste poderoso framework de processamento distribuído. O Spark é amplamente utilizado para análises de Big Data e aprendizado de máquina, e poderá ser acessado diretamente a partir dos seus notebooks. Siga as instruções abaixo para preparar seu ambiente: 
+
+a) Se estiver usando uma VM, conforme instruções fornecidas no [README.md](https://github.com/klaytoncastro/idp-bigdata) do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
+
+b) Navegue até a subpasta do repositório, por exemplo: `cd /opt/idp-bigdata`. 
+
+c) Se ainda não tiver clonado o repositório, execute o seguinte comando em seu terminal ou console:
 
 ```bash
 git clone https://github.com/klaytoncastro/idp-bigdata 
 ```
-d) Navegue até a subpasta jupyter-spark dentro do diretório clonado. Exemplo:
 
-```bash
-cd /opt/idp-bigdata/jupyter-spark 
-```
-
-e) Execute o script para mapeamento das permissões dos volumes externos ao contêiner:
+d) Caso esta seja a primeira clonagem do repositório, execute o script para mapeamento das permissões dos volumes externos ao contêiner:
 
 ```bash
 chmod +x permissions.sh
 ./permissions.sh
 ```
 
-f) Construa e execute os serviços usando o Docker Compose:
+e) Caso já tenha clonado o repositório, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
+
+```bash
+git clone https://github.com/klaytoncastro/idp-bigdata 
+```
+f) Navegue até a subpasta jupyter-spark dentro do diretório clonado, por exemplo: `cd /opt/idp-bigdata/jupyter-spark`. Construa e execute os serviços usando o Docker Compose:
 
 ```bash
 docker-compose build 
 docker-compose up -d 
 ```
 
-g) Acesse o Jupyter Notebook:
-
-Execute o comando a seguir para visualizar os logs e identificar o token do Jupyter Notebook para realizar o primeiro acesso: 
+g) Execute o comando a seguir para visualizar os logs e identificar o token do Jupyter Notebook para realizar o primeiro acesso: 
 
 ```bash
 docker-compose logs | grep 'token='
@@ -41,62 +49,70 @@ docker-compose logs | grep 'token='
 
 ### Via GUI
 
-Com o token identificado no passo anterior, acesse o Jupyter Notebook em seu navegador usando o [link](http://localhost:8888) e configure a nova senha. 
+Com o token identificado no passo anterior, acesse o Jupyter Notebook em seu navegador usando o [link](http://localhost:8888), insira o token e configure uma nova senha. 
 
 ### Via CLI
+
+Caso deseje alterar a senha via CLI, execute o script abaixo: 
 
 ```bash
 docker exec -it <nome_do_contêiner> /bin/bash
 jupyter config password
 ```
 
-### Inicialize e teste o Spark
+### Inicialize e teste a integração com Spark
+
+h) Quando o Apache Spark está em execução, ele disponibiliza uma interface web na porta `4040` para o usuário acompanhar e analisar a execução de suas aplicações. Essa interface é conhecida como Spark Application UI. Acesse a URL `http://localhost:4040` e observe que esta interface só estará disponível após a inicialização do ambiente Spark. 
+
+i) A partir de um novo arquivo notebook, teste seu ambiente Spark inicializando uma sessão: 
 
 ```python
 from pyspark.sql import SparkSession
-
 spark = SparkSession.builder.getOrCreate()
 ```
+
+Acesse novamente a URL `http://localhost:4040` e observe que esta interface agora está disponível. 
+
+j) Encerre a sessão Spark e, depois perceba que a interface http://localhost:4040 não estará mais disponível. 
 
 ```python
 spark.stop()
 ```
-## 2. Uso do Jupyter com ferramentas externas 
+## 2. Uso do Jupyter com ferramentas externas
 
-### Conecte-ao MongoDB, explore e analise dados. 
+### Conecte-se ao MongoDB, explore e analise dados
 
-Baixe os contêineres, crie a rede e conecte-os à mesma rede. 
+Para conectar o Jupyter ao MongoDB e explorar dados, siga os passos a seguir:
+
+a) Baixe os contêineres do Jupyter-Spark e MongoDB nas respectivas pastas dos projetos.
 
 ```bash
 docker-compose down
-```
-
-```bash
 docker network create --driver bridge mybridge
+
 ```
-No arquivo docker-compose.yml, adicione a configuração de rede:
+b) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, atualizamos nosso arquivo `docker-compose.yml`, adicionando a configuração de rede conforme descrito abaixo: 
 
 ```yaml
+# Definindo as redes que serão usadas pelos serviços.
     networks:
-      - mybridge
+      - mybridge # Nome da rede que será usada.
 
+# Configuração das redes que serão usadas no docker-compose.
 networks:
-  mybridge:
-    external:
-      name: mybridge
+  mybridge: # Nome da rede.
+    external: # Indica que a rede é externa e já foi criada anteriormente.
+      name: mybridge # Nome da rede externa que será usada.
 ```
 
-Suba os contêineres e verifique os IPs:
+c) Suba os contêineres e verifique os IPs atribuídos ao Jupyter e, especialmente ao MongoDB (pois será referenciado na string de conexão ao banco posteriormente):
 
 ```bash
 docker-compose up -d
-```
-
-```bash
 docker network inspect mybridge
 ```
 
-No Jupyter, teste a conexão: 
+d) A partir de um arquivo notebook no Jupyter, teste a conexão: 
 
 ```python
 from pymongo import MongoClient
@@ -110,11 +126,10 @@ try:
 except ConnectionFailure:
     print("Falha na conexão ao servidor MongoDB")
 ```
-### Dataset Exemplo: 
+### Dataset Exemplo 
 
-Explore o Kaggle e pratique com datasets de exemplo
+Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python em um ambiente Jupyter. 
 
-[MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)
 
 ## 3. Limpeza, Preparação e Importação de Dados
 
