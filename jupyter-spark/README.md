@@ -4,13 +4,13 @@
 
 Jupyter é uma IDE (Ambiente de Desenvolvimento Integrado) open-source que suporta várias linguagens de programação, incluindo Julia, Python e R. É amplamente utilizado por pesquisadores, educadores, cientistas, analistas e engenheiros de dados para criar e compartilhar documentos que contêm código, equações, visualizações e texto narrativo.
 
-No contexto do Jupyter, o termo 'notebook' é a representação de um documento interativo que permite a escrita e execução de código de modo interativo, bem como adicionar texto formatado, equações, imagens, e visualizações. Os notebooks são uma ferramenta poderosa para explorar dados, realizar análises, e documentar processos de trabalho de forma clara e compreensível. Eles são salvos com a extensão .ipynb e podem ser facilmente compartilhados e visualizados por outras pessoas, mesmo que elas não tenham o Jupyter instalado.
+No contexto do Jupyter, o termo 'notebook' é a representação de um documento interativo que permite a escrita e execução de código, bem como a inservação de texto formatado com propósito de documentar equações, imagens e visualizações. Os notebooks são uma ferramenta poderosa para explorar dados, realizar análises, e documentar processos de trabalho de forma clara e compreensível. Eles são salvos com a extensão .ipynb e podem ser baixados e facilmente compartilhados e visualizados por outras pessoas, mesmo que elas não tenham o Jupyter instalado. 
 
 No Jupyter, você pode criar um novo notebook, abrir um existente, e executar células de código individualmente. Os resultados das execuções são exibidos diretamente abaixo da célula de código correspondente, facilitando o acompanhamento do fluxo de trabalho e dos resultados. Essa abordagem visa construir um ambiente interativo para exploração e análise de dados, com suporte à criação de gráficos e visualizações. Também permite a prototipagem rápida de soluções e a exploração de diferentes abordagens de análise. 
 
-## 2. Construa o ambiente 
+## 2. Construção do Ambiente de Desenvolvimento
 
-Ao longo do curso, integraremos nosso ecossistema de ferramentas de Big Data e NoSQL por meio de notebooks Jupyter. O contêiner que preparamos para nosso ambiente de desenvolvimento já vem com o Apache Spark configurado no modo standalone, permitindo que você tire proveito dos recursos deste poderoso framework de processamento distribuído. O Spark é amplamente utilizado para análises de Big Data e aprendizado de máquina, e poderá ser acessado diretamente a partir dos seus notebooks. Siga as instruções abaixo para preparar seu ambiente: 
+Ao longo do curso, integraremos nosso ecossistema de ferramentas de Big Data e NoSQL por meio de notebooks Jupyter. O contêiner que preparamos para nosso ambiente de desenvolvimento já vem com o Apache Spark configurado no modo standalone, permitindo que você tire proveito dos recursos deste poderoso framework de processamento de dados. O Spark é amplamente utilizado para análises de Big Data e Machine Learning, e poderá ser acionado diretamente a partir de seus notebooks. Siga as instruções abaixo para preparar seu ambiente: 
 
 a) Se estiver usando uma VM, conforme instruções fornecidas no [README.md](https://github.com/klaytoncastro/idp-bigdata) do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
 
@@ -41,7 +41,7 @@ docker-compose build
 docker-compose up -d 
 ```
 
-g) Execute o comando a seguir para visualizar os logs e identificar o token do Jupyter Notebook para realizar o primeiro acesso: 
+g) Execute o comando a seguir para visualizar os logs e identificar o token do Jupyter Notebook para realizar seu primeiro acesso: 
 
 ```bash
 docker-compose logs | grep 'token='
@@ -62,7 +62,7 @@ jupyter config password
 
 ### Inicialize e teste a integração com Spark
 
-h) Quando o Apache Spark está em execução, ele disponibiliza uma interface web na porta `4040` para o usuário acompanhar e analisar a execução de suas aplicações. Essa interface é conhecida como Spark Application UI. Acesse a URL `http://localhost:4040` e observe que esta interface só estará disponível após a inicialização do ambiente Spark. 
+h) Quando o Apache Spark está em execução, ele disponibiliza uma interface web na porta `4040` para o usuário acompanhar e analisar a execução de suas aplicações. Acesse a URL `http://localhost:4040` e observe que esta interface só se tornará disponível após a inicialização do ambiente Spark. 
 
 i) A partir de um novo arquivo notebook, teste seu ambiente Spark inicializando uma sessão: 
 
@@ -70,26 +70,19 @@ i) A partir de um novo arquivo notebook, teste seu ambiente Spark inicializando 
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 ```
-
-Acesse novamente a URL `http://localhost:4040` e observe que esta interface agora está disponível. 
-
-j) Encerre a sessão Spark e, depois perceba que a interface http://localhost:4040 não estará mais disponível. 
+j) Acesse novamente a URL `http://localhost:4040` e observe que a Spark Application UI agora está disponível. Agora encerre a sessão Spark e observe que a interface http://localhost:4040 não estará mais disponível após a execução do comando abaixo: 
 
 ```python
 spark.stop()
 ```
-## 2. Uso do Jupyter com ferramentas externas
+## 3. Integração do Jupyter com ferramentas externas
 
-### Conecte-se ao MongoDB, explore e analise dados
+### Conecte-se ao MongoDB
 
-Para conectar o Jupyter ao MongoDB e explorar dados, siga os passos a seguir:
-
-a) Baixe os contêineres do Jupyter-Spark e MongoDB nas respectivas pastas dos projetos.
+a) Baixe os contêineres do Jupyter-Spark e MongoDB nas respectivas subpastas do repositório.
 
 ```bash
 docker-compose down
-docker network create --driver bridge mybridge
-
 ```
 b) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, atualizamos nosso arquivo `docker-compose.yml`, adicionando a configuração de rede conforme descrito abaixo: 
 
@@ -105,14 +98,20 @@ networks:
       name: mybridge # Nome da rede externa que será usada.
 ```
 
-c) Suba os contêineres e verifique os IPs atribuídos ao Jupyter e, especialmente ao MongoDB (pois será referenciado na string de conexão ao banco posteriormente):
+c) Crie a rede virtual `mybridge` no Docker: 
+
+```bash
+docker network create --driver bridge mybridge
+```
+
+d) Agora suba os contêineres novamente e verifique os IPs atribuídos ao Jupyter e, especialmente ao MongoDB (pois será referenciado na string de conexão ao banco de dados a partir de seus notebooks):
 
 ```bash
 docker-compose up -d
 docker network inspect mybridge
 ```
 
-d) A partir de um arquivo notebook no Jupyter, teste a conexão: 
+e) A partir de um arquivo notebook no Jupyter, teste a conexão: 
 
 ```python
 from pymongo import MongoClient
@@ -126,17 +125,15 @@ try:
 except ConnectionFailure:
     print("Falha na conexão ao servidor MongoDB")
 ```
-### Dataset Exemplo 
+### Prática com Dataset Exemplo 
 
-Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python em um ambiente Jupyter. 
+Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python, compatível com nosso ambiente Jupyter. 
 
+## 4. Atividade de Limpeza, Preparação e Importação de Dados
 
-## 3. Limpeza, Preparação e Importação de Dados
+Antes de dar início ao processo de análise dos dados de um dataset real, é crucial dedicar um tempo para a preparação, limpeza e importação. A preparação e limpeza de dados são etapas essenciais em qualquer processo de análise de dados. A qualidade dos dados é fundamental para obter resultados confiáveis e precisos. A literatura destaca a importância da preparação de dados como uma etapa que pode consumir até 80% do tempo total de um projeto de análise de dados (Dasu & Johnson, 2003).
 
-
-Antes de importar os dados para o MongoDB, é necessário realizar uma limpeza e preparação dos dados. Usaremos o Censo 2022 do INEP como exemplo. 
-
-[INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos)
+Dessa forma, antes de importar os dados para o MongoDB e realizar a exploração e análise, é fundamental realizar uma limpeza e preparação prévia para garantir a integridade e qualidade dos dados. Nesta atividade, utilizaremos o dataset do Censo da Educação Superior de 2022, disponibilizado pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), que pode ser acessado através do link: [INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). 
 
 ### Remover aspas duplas e substituir ponto e vírgula por vírgula:
 
@@ -180,7 +177,9 @@ sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌ
 docker exec -it mongo_service mongoimport --db inep --collection cursos --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_CADASTRO_CURSOS_2022_corrigido_UTF8.CSV --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
 
-## 4. Análise de Dados
+## 4. Exploração e Análise de Dados
+
+A Análise Exploratória de Dados é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Tukey (1977) introduziu esse conceito como uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. A visualização de dados é um componente crucial da literacia de dados e da AED. Ela ajuda a comunicar informações complexas de maneira clara e eficaz, auxiliando na compreensão dos resultados da análise (Tufte, 2001). 
 
 ```python
 from pymongo import MongoClient
