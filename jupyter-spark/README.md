@@ -32,7 +32,7 @@ chmod +x permissions.sh
 e) Caso já tenha clonado o repositório, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
 
 ```bash
-git clone https://github.com/klaytoncastro/idp-bigdata 
+git pull origin main
 ```
 f) Navegue até a subpasta jupyter-spark dentro do diretório clonado, por exemplo: `cd /opt/idp-bigdata/jupyter-spark`. Construa e execute os serviços usando o Docker Compose:
 
@@ -131,23 +131,53 @@ Para praticar a análise de dados com Python e MongoDB, sugerimos que você expl
 
 ## 4. Limpeza, Preparação e Importação de Dados
 
-Antes de dar início ao processo de análise e exploração de um dataset real, é fundamental compreender a importância do processo de preparação, limpeza e importação de dados. A preparação e limpeza de dados são etapas essenciais para garantir a qualidade dos dados, sendo fundamentais para obtenção de resultados confiáveis e precisos. A literatura destaca que estas etapas costumam consumir até 80% do tempo total de um projeto de análise de dados (Dasu & Johnson, 2003).
+Nesta atividade, utilizaremos o dataset do Censo da Educação Superior de 2022, disponibilizado pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), que pode ser acessado através do link: [INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). Uma das principais ações do INEP é a realização do Censo da Educação Superior, um levantamento anual que coleta informações detalhadas sobre as instituições de ensino superior (IES), seus cursos, alunos, docentes, entre outros aspectos. 
 
-Dessa forma, antes de importar os dados para o MongoDB e realizar a exploração e análise, é fundamental realizar uma limpeza e preparação prévia para garantir a integridade e qualidade dos dados. Nesta atividade, utilizaremos o dataset do Censo da Educação Superior de 2022, disponibilizado pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), que pode ser acessado através do link: [INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). 
+O Censo da Educação Superior (CES) é a principal fonte de informações sobre o ensino superior no Brasil e tem um papel fundamental para entender a dinâmica do setor, identificar desafios e oportunidades e subsidiar a tomada de decisões por parte de gestores, pesquisadores e formuladores de políticas educacionais. Estes dados são cruciais para compreender a realidade do ensino superior no Brasil, identificar tendências e padrões, e contribuir para a elaboração de políticas educacionais mais eficazes e alinhadas com as necessidades do país. O banco de dados do INEP, que é utilizado para armazenar as informações coletadas pelo CES, contém uma vasta quantidade de dados, incluindo:
+
+- Dados sobre as instituições de ensino superior, como nome, localização, tipo de instituição (pública ou privada), entre outros.
+- Informações sobre os cursos oferecidos, como nome do curso, área de conhecimento, modalidade de ensino, entre outros.
+- Dados sobre os alunos, como quantidade de alunos matriculados, quantidade de alunos concluintes, perfil dos alunos, entre outros.
+- Informações sobre os docentes, como quantidade de docentes, perfil dos docentes, carga horária de trabalho, entre outros.
+
+Antes de dar início ao processo de análise e exploração deste dataset real, é fundamental compreender a importância do processo de preparação, limpeza e importação de dados. A preparação e limpeza de dados são etapas essenciais para garantir a qualidade dos dados, sendo fundamentais para obtenção de resultados confiáveis e precisos. A literatura destaca que estas etapas costumam consumir até 80% do tempo total de um projeto de análise de dados (Dasu & Johnson, 2003). Dessa forma, antes de importar os dados para o MongoDB, vamos demonstrar a realização de uma limpeza básica e preparação prévia dos dado, conforme explicitado nas técnicas abaixo. 
 
 ### Remoção de aspas duplas e substituir ponto e vírgula por vírgula:
+
+O `sed` (stream editor) é uma poderosa ferramenta de processamento de texto, disponível em sistemas baseados em Linux. Ela é bastante utilizada para analisar e transformar textos, bem como para operar em fluxos de dados para executar operações básicas e avançadas de edição, como substituição, deleção, inserção, dentre outras. Ele lida com expressões regulares, o que o torna muito flexível para encontrar e substituir padrões de texto. O `sed` também costuma ser combinado com outras ferramentas de CLI, como `awk`, `grep`, e `cut`, para criar soluções poderosas para processamento de dados. Abaixo, seguem alguns exemplos de uso: 
+
+a) Substituir texto em um arquivo: 
+
+```bash
+sed 's/antigo/novo/g' arquivo.txt
+```
+
+b) Deletar linhas que contêm um certo padrão: 
+
+```bash
+sed '/padrão/d' arquivo.txt
+```
+c) Inserir texto antes ou depois de um padrão:
+
+```bash
+sed '/padrão/i Novo Texto' arquivo.txt
+sed '/padrão/a Novo Texto' arquivo.txt
+```
+d) Aplicando a funcionalidade de substituição de texto para tratar nosso dataset, o `;` é utilizado para separar comandos dentro do `sed`. O primeiro trecho `s/\"//g` está removendo todas as aspas duplas do arquivo. O segundo trecho `s/;/,/g` está substituindo todos os ponto e vírgula por vírgulas. Estas medidas foram necessárias para corrigir os dados apresentados e torná-los compatíveis para importação no MongoDB. 
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_ED_SUP_IES_2022.CSV > MICRODADOS_ED_SUP_IES_2022_corrigido.csv
 ```
 
-### Verificação de encoding do dataset
+### Verificação de encoding do dataset e conversão de ISO-8859-1 para UTF-8:
+
+O comando `file` é útil para mostrar informações sobre o tipo do arquivo. A opção `-i` solicita a apresentação do padrão de codificação do arquivo. Segue comando para verificar a codificação do dataset:
 
 ```bash
 file -i MICRODADOS_ED_SUP_IES_2022_corrigido.csv
 ```
 
-### Conversão de encoding de ISO-8859-1 para UTF-8:
+O utilitário `iconv` é utilizado para converter a codificação de caracteres de um arquivo. O trecho `-f` `ISO-8859-1` indica a codificação original do arquivo, e -t `UTF-8` indica a codificação desejada. No comando abaixo estamos convertendo o formato de ANSI/ISO para UTF-8, que é utilizado no MongoDB. 
 
 ```bash
 iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
@@ -155,11 +185,15 @@ iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODAD
 
 ### Substituição de caracteres especiais:
 
+A expressão abaixo utiliza novamente o `sed` para substituir caracteres especiais por seus equivalentes sem acentuação. A opção `-i` indica que a modificação será feita diretamente no arquivo, sem a necessidade de criar um novo. 
+
 ```bash
 sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ/aaaaaeeeeiiiiooooouuuucnAAAAAEEEEIIIIOOOOOUUUUCN/' MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
 ### Importação para o MongoDB para a collection 'ies'
+
+O comando abaixo é utilizado para executar o utilitário `mongoimport` dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV (Comma Separated Values). A opção `--file` especifica o caminho para o arquivo de entrada. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
 
 ```bash
 docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
@@ -179,9 +213,6 @@ docker exec -it mongo_service mongoimport --db inep --collection cursos --type c
 ## 4. Exploração e Análise de Dados
 
 A Análise Exploratória de Dados é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Tukey (1977) introduziu esse conceito como uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. A visualização de dados é um componente crucial da literacia de dados e da AED. Ela ajuda a comunicar informações complexas de maneira clara e eficaz, auxiliando na compreensão dos resultados da análise (Tufte, 2001). 
-
-
-
 
 ```python
 from pymongo import MongoClient
@@ -342,4 +373,53 @@ plt.ylabel('Número de Docentes')
 plt.title('Número de Docentes por Raça/Cor')
 plt.xticks(rotation=45)
 plt.show()
+
+#Análise Multivariada: Query para calcular o número de docentes por região e grau acadêmico
+result = collection.aggregate([
+    {'$group': {
+        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Graduação'},
+        'count': {'$sum': '$QT_DOC_EX_GRAD'},
+    }},
+    {'$group': {
+        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Especialização'},
+        'count': {'$sum': '$QT_DOC_EX_ESP'},
+    }},
+    {'$group': {
+        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Mestrado'},
+        'count': {'$sum': '$QT_DOC_EX_MEST'},
+    }},
+    {'$group': {
+        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Doutorado'},
+        'count': {'$sum': '$QT_DOC_EX_DOUT'},
+    }}
+])
+
+# Convertendo o resultado para um dataframe
+import pandas as pd
+
+data = []
+for r in result:
+    data.append({
+        'regiao': r['_id']['regiao'],
+        'grau': r['_id']['grau'],
+        'count': r['count'],
+    })
+
+df = pd.DataFrame(data)
+
+# Realizando a análise de correlação
+corr = df.corr()
+
+# Plotando o mapa de calor da correlação
+import seaborn as sns
+
+plt.figure(figsize=(10, 8))
+sns.heatmap(corr, annot=True, cmap='coolwarm')
+plt.title('Correlação entre Região e Grau Acadêmico dos Docentes')
+plt.show()
+
+# Análise dos Resultados:
+# O mapa de calor de correlação mostrará a relação entre as diferentes regiões e graus acadêmicos dos docentes.
+# Valores próximos a 1 ou -1 indicam uma forte correlação positiva ou negativa, respectivamente.
+# Valores próximos a 0 indicam que não há uma correlação significativa entre as variáveis.
 ```
