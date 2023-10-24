@@ -177,7 +177,7 @@ O comando `file` é útil para mostrar informações sobre o tipo do arquivo. A 
 file -i MICRODADOS_ED_SUP_IES_2022_corrigido.csv
 ```
 
-O utilitário `iconv` é utilizado para converter a codificação de caracteres de um arquivo. O trecho `-f` `ISO-8859-1` indica a codificação original do arquivo, e -t `UTF-8` indica a codificação desejada. No comando abaixo estamos convertendo o formato de ANSI/ISO para UTF-8, que é utilizado no MongoDB. 
+O utilitário `iconv` é utilizado para converter a codificação de caracteres de um arquivo. O trecho `-f ISO-8859-1` indica a codificação original do arquivo, e `-t UTF-8` indica a codificação desejada. No comando abaixo estamos convertendo o formato de ANSI/ISO para UTF-8, que é o padrão utilizado no MongoDB. 
 
 ```bash
 iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
