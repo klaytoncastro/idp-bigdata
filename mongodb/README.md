@@ -6,17 +6,36 @@
 
 O **MongoDB** é um sistema de gerenciamento de banco de dados (SGBD) amplamente utilizado, sendo um dos representantes mais populares da categoria NoSQL (Not-only Structured Query Language) baseada em documentos. Diferentemente dos bancos de dados relacionais tradicionais, o MongoDB se destaca por sua abordagem flexível para o armazenamento de dados. Vamos explorar algumas das características-chave do MongoDB e como elas podem ser vantajosas em diferentes contextos, incluindo Big Data e Pipelines de Dados.
 
-- **Modelagem de Dados Orientada a Documentos**: O MongoDB é projetado para trabalhar com dados semi-estruturados e não estruturados, como registros JSON (JavaScript Object Notation), dados de sensores IoT (Internet of Things) e muito mais. Isso o torna ideal para aplicações que lidam com dados variados, incluindo Big Data.
+- **Modelagem Orientada a Documentos**: O MongoDB é projetado para trabalhar com a inserção de dados semi-estruturados e não estruturados, na forma de registros JSON (JavaScript Object Notation). Isso o torna ideal para aplicações que lidam com dados variados, incluindo Big Data. O MongoDB também é comumente utilizado para ingestão de dados de sensores IoT (Internet of Things), catalogação de produtos, serviços e dispositivos. Também é indicado para o armazenamento de metadados, registros de logs e conteúdo gerado por usuários, como posts, comentários e chats. 
 
-- **Armazenamento BSON**: O MongoDB armazena dados em um formato chamado BSON (Binary JSON), uma extensão do formato JSON. Isso torna o armazenamento e a recuperação de dados extremamente eficiente e compatível com muitas linguagens de programação.
+- **Flexibilidade de Esquema**: O MongoDB não impõe uma estrutura rígida para os dados. Cada documento pode ter campos diferentes em uma mesma coleção, proporcionando flexibilidade no design do banco de dados. Isso é vantajoso para pipelines de dados, pois permite a evolução contínua do esquema à medida que novos requisitos surgem e novas informações precisam ser acrescentadas. 
 
-- **Escalabilidade Horizontal**: Uma das vantagens mais significativas do MongoDB é a escalabilidade horizontal, que permite adicionar mais instâncias para lidar com cargas de trabalho crescentes de modo distribuído. Isso é particularmente benéfico para projetos de Big Data, onde a capacidade de armazenamento e processamento deve ser escalonada dinamicamente para acomodar volumes massivos de dados.
+- **Indexação Avançada**: O MongoDB oferece recursos avançados de indexação, acelerando as consultas e melhorando o desempenho de leitura, tais como índices compostos, geoespaciais, textuais, hashed, wildcard, TTL e array, que permitem indexar múltiplos tipos de campos, possibilitando consultas eficientes que envolvem várias condições. Isso é especialmente útil ao lidar com grandes volumes de dados em pipelines. 
 
-- **Replicação e Tolerância a Falhas**: O MongoDB suporta replicação automática, proporcionando alta disponibilidade e tolerância a falhas. Isso é crucial para garantir que os dados estejam sempre disponíveis, mesmo em caso de problemas com a infraestrutura de servidores, tornando-o adequado para pipelines de dados que exigem confiabilidade.
+- **Armazenamento BSON**: No MongoDB, quando inserimos dados em formato JSON, eles são automaticamente convertidos e armazenados no formato BSON (Binary JSON), uma representação binária do JSON. Esta otimização torna a recuperação de dados extremamente eficiente, visto que o JSON, sendo um formato de texto, tornaria o processamento de dados mais lento e oneroso computacionalmente. Ao mesmo tempo, a inserção em formato JSON é compatível com muitas linguagens de programação e é bastante amigável, facilitando a ingestão de dados. O BSON também suporta tipos de dados não são suportados pelo JSON, como registros de timestamp e binários, ampliando as possibilidades de uso. 
 
-- **Indexação Avançada**: O MongoDB oferece recursos avançados de indexação, acelerando as consultas e melhorando o desempenho de leitura. Isso é especialmente valioso ao processar grandes volumes de dados em pipelines de dados. 
+- **Escalabilidade Horizontal**: Uma das vantagens mais significativas do MongoDB é a escalabilidade horizontal, que permite adicionar mais instâncias para lidar com cargas de trabalho crescentes de modo distribuído. Para isso, o MongoDB utiliza o conceito de "sharding", que particiona os dados em diferentes servidores. Isso é particularmente útil para projetos de Big Data, onde a capacidade de armazenamento e processamento deve ser escalonada dinamicamente para acomodar volumes massivos de dados.
 
-- **Flexibilidade de Esquema**: O MongoDB não impõe uma estrutura rígida para os dados. Cada documento pode ter campos diferentes, proporcionando flexibilidade no design do banco de dados. Isso é vantajoso para pipelines de dados, pois permite a evolução contínua do esquema à medida que novos requisitos surgem.
+- **Replicação e Tolerância a Falhas**: O MongoDB suporta replicação automática, proporcionando alta disponibilidade e tolerância a falhas. Isso é crucial para garantir que os dados estejam sempre disponíveis, mesmo em caso de problemas com a infraestrutura, tornando-o adequado para pipelines de dados que exigem confiabilidade. Um conjunto de réplicas é um grupo de servidores que mantêm cópias dos mesmos dados. Um servidor no conjunto é o primário, que recebe todas as gravações, e os outros são secundários, que replicam os dados do primário. Se o servidor primário falhar, um dos secundários é promovido a primário.
+
+### Terminologia e Comandos Básicos
+
+O MongoDB é um banco de dados NoSQL orientado a documentos que adota uma terminologia própria. Abaixo, segue tabela comparativa entre os termos e comandos básicos do MongoDB e seus equivalentes conceituais nos bancos de dados relacionais:
+
+|           MongoDB            | Banco de Dados Relacional   | Comando MQL                     | Comando SQL     |
+|------------------------------|-----------------------------|---------------------------------|-----------------|
+| Campo                        | Coluna                      | -                               | -               |
+| ObjectId / _id               | Chave Primária              | -                               | -               |
+| Incorporação de Documentos   | Normalização                | -                               | -               |
+| Oplog                        | Log de Transações           | -                               | -               |
+| WiredTiger                   | Engine de Armazenamento     | -                               | -               |
+| Coleção                      | Tabela                      | `db.createCollection()`         | `CREATE TABLE`  |
+| Documento                    | Registro / Linha / Tupla    | `db.collection.insert()`        | `INSERT INTO`   |
+| Agregação                    | Join                        | `db.collection.aggregate()`     | `JOIN`          |
+| MongoDB Query Language (MQL) | SQL                         | `db.collection.find()`          | `SELECT`        |
+| Sharding                     | Particionamento             | `sh.shardCollection()`          | `PARTITION BY`  |
+| Replica Set                  | Clustering / Replicação     | `rs.initiate()`                 | `CREATE CLUSTER`|
+| Índice                       | Índice                      | `db.collection.createIndex()`   | `CREATE INDEX`  |
 
 ### MongoDB Aggregation Framework
 
@@ -24,21 +43,21 @@ O **MongoDB Aggregation Framework** (MAF) é uma ferramenta poderosa para análi
 
 - **Agrupamento de Dados**: você pode agrupar documentos com base em um ou mais campos-chave, útil para obter resumos e agregações em pipelines de dados.
 
+- **Preparação de Dados**: facilita a preparação de dados para visualização ou análise posterior, tornando-os mais compreensíveis.
+
 - **Filtragem de Dados**: permite filtrar dados com base em critérios específicos, permitindo a seleção dos dados relevantes para análise.
 
 - **Projeção de Campos**: é possível projetar (selecionar) campos específicos dos documentos, criando novos documentos com as informações desejadas.
 
-- **Ordenação de Dados**: permite classificar documentos em estágios de agregação, facilitando a análise ordenada dos dados.
+- **Ordenação de Dados**: permite classificar documentos em estágios de agregação, facilitando a análise ordenada dos dados. 
 
 - **Cálculos e Expressões**: oferece operadores para realizar cálculos e expressões matemáticas em dados, essenciais para análises em pipelines de dados.
 
-- **Preparação de Dados**: facilita a preparação de dados para visualização ou análise posterior, tornando-os mais compreensíveis.
-
-- **Otimização de Consultas**: pode otimizar consultas complexas, melhorando o desempenho e a eficiência.
-
 - **Integração de Dados**: ajuda a integrar dados de várias fontes, unindo dados de diferentes coleções ou fontes durante o processo de análise.
 
-- **Análise de Dados**: é capaz de obter insights significativos para analisar dados em pipelines de dados, incluindo cálculos de estatísticas, médias e somas.
+- **Otimização de Consultas**: pode otimizar consultas complexas, melhorando seu desempenho. 
+
+- **Análise de Dados**: é capaz de obter insights significativos para analisar dados em pipelines de dados, incluindo expressões matemáticas.
 
 - **Relatórios Personalizados**: Permite gerar relatórios adaptados às necessidades específicas de análise de dados. 
 
@@ -46,9 +65,9 @@ O **MongoDB Aggregation Framework** (MAF) é uma ferramenta poderosa para análi
 
 O **MongoDB Express** é uma interface gráfica que facilita a administração, gerenciamento e visualização de dados armazenados em bancos de dados MongoDB. Ele oferece uma série de recursos úteis, tornando a realização do trabalho com documentos muito mais acessível. Alguns aspectos importantes do MongoDB Express incluem:
 
-- **Interface Gráfica Amigável**: oferece uma interface de usuário intuitiva que permite explorar e interagir com os dados de forma visual.
+- **Interface Amigável**: oferece uma interface gráfica intuitiva que permite explorar e interagir com os dados de forma muito mais amigável que na linha de comando.
 
-- **Gerenciamento de Coleções e Bancos de Dados**: é possível criar, editar e excluir coleções e bancos de dados, tornando o gerenciamento de dados mais conveniente.
+- **Gerenciamento de Coleções e Bancos de Dados**: é possível criar, editar e excluir coleções e bancos de dados, tornando o gerenciamento de documentos mais conveniente.
 
 - **Consultas Interativas**: os usuários podem realizar consultas interativas aos dados sem a necessidade de escrever consultas manualmente.
 
@@ -91,9 +110,14 @@ docker-compose logs
 ```
 ## Acesso GUI: MongoDB Express 
 
-1. Acesse o MongoDB Express pelo navegador (`http:\\localhost:8081`). Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, clique em `Create Collection` e crie a coleção `Estudantes`. 
+1. Acesse o MongoDB Express pelo navegador (`http:\\localhost:8081`) e forneça as credenciais: 
 
-2. Clique na coleção `Estudantes` e depois em `Insert Document`. Insira um estudante com atributos como `nome`, `idade` e `curso`. Exemplo: 
+- **Usuário**: admin
+- **Senha**: pass
+  
+2. Clique em `Create Database` e crie uma base de dados chamada `AulaDemo`. Dentro da base de dados `AulaDemo`, clique em `Create Collection` e crie a coleção `Estudantes`. 
+
+3. Clique na coleção `Estudantes` e depois em `Insert Document`. Insira um estudante com atributos como `nome`, `idade` e `curso`. Exemplo: 
 
 ```json
     {
@@ -104,7 +128,7 @@ docker-compose logs
     }
 ```
 
-3. Insira mais um estudante. Exemplo: 
+4. Insira mais um estudante. Exemplo: 
 
 ```json
     {
@@ -115,9 +139,9 @@ docker-compose logs
     }
 ```
 
-4. Selecione um documento e clique em `Edit Document`. Altere algum campo. Por exemplo, mude a `idade` de um estudante. 
-5. Na parte inferior da tela, observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`. 
-6. Selecione um documento e clique em `Delete Document`. 
+6. Selecione um documento e clique em `Edit Document`. Altere algum campo. Por exemplo, mude a `idade` de um estudante. 
+6. Na parte inferior da tela, observe o índice padrão `_id`. Crie um novo índice, por exemplo, para o campo `nome`. 
+7. Selecione um documento e clique em `Delete Document`. 
 
 ## Acesso CLI: MongoDB 
 
@@ -275,13 +299,15 @@ db.Estudantes.insertMany([
 No MongoDB, o operador `$` é usado para acessar as funcionalidades de consulta, atualização, projeção e agregação, ou seja, indica que determinada operação deve ser aplicada a um campo ou valor nos documentos. Seguem alguns exemplos de operadores frequentemente utilizados: 
 
 ```javascript
-//Os operadores de comparação, como $eq, $ne, $gt, $lt, $gte e $lte, são usados em consultas para comparar valores em campos.
+// Os operadores de comparação, como $eq, $ne, $gt, $lt, $gte e $lte, são usados em consultas para comparar valores em campos.
+// Neste exemplo, estamos encontrando documentos cuja idade dos estudantes seja maior ou igual a 18.
 
-db.Estudantes.find({ idade: { $gte: 18 } }).pretty() // Aqui estamos encontrando documentos cuja idade dos estudantes seja maior ou igual a 18.
+db.Estudantes.find({ idade: { $gte: 18 } }).pretty() 
 ```
 
 ```javascript
-//Os operadores de projeção são usados em operações de agregação para selecionar campos específicos para inclusão ou exclusão nos resultados. 
+// Os operadores de projeção são usados em operações de agregação para selecionar campos específicos para inclusão ou exclusão
+// nos resultados. 
 
 db.Estudantes.aggregate([
     { $project: { nome: 1, curso: 1, _id: 0 } } // Projeta (seleciona) apenas os campos 'nome' e 'curso'.
@@ -289,7 +315,7 @@ db.Estudantes.aggregate([
 ```
 
 ```javascript
-//Os operadores também podem ser usados para definir os campos de agrupamento.
+// Os operadores também podem ser usados para definir os campos de agrupamento.
 
 db.Estudantes.aggregate([
     { $group: { _id: "$curso", total: { $sum: 1 } } } // Agrupa documentos pelo campo 'curso'.
@@ -297,13 +323,15 @@ db.Estudantes.aggregate([
 ```
 
 ```javascript
-//Ao trabalhar com arrays, podemos utilizar referenciar os elementos e usar operadores para refinar a consulta. 
+// Ao trabalhar com arrays, podemos utilizar referenciar os elementos e usar operadores para refinar a consulta. 
+// Neste exemplo, estamos encontrando os estudantes que tiraram nota maior ou igual a 80 em Algoritmos e formatando a saída
+// com o método Pretty(). 
 
-db.Estudantes.find({ "notas.algoritmos": { $gte: 80 } }).pretty() // Aqui estamos encontrando os estudantes que tiraram nota maior ou igual a 80 em Algoritmos e formatando a saída com o método Pretty(). 
+db.Estudantes.find({ "notas.algoritmos": { $gte: 80 } }).pretty() 
 ```
 
 ```javascript
-//Ao trabalhar com atualização de documentos, podemos utilizar os operadores para modificar os campos desejados.  
+// Ao trabalhar com atualização de documentos, podemos utilizar os operadores para modificar os campos desejados.  
 
 db.Estudantes.updateOne({ nome: "Haroldo Ramos" }, { $set: { status: "Inativo" } })
 ```
@@ -312,59 +340,70 @@ A seguir, vamos praticar mais alguns comandos básicos do MongoDB, que permitem 
 
 ```javascript
 //Obter todos os registros
+
 db.Estudantes.find()
 ```
 
 ```javascript
 //Obter todos os registros formatados 
+
 db.Estudantes.find().pretty()
 ```
 
 ```javascript
 //Procurar registros por curso
+
 db.Estudantes.find({curso: 'Engenharia da Computação'}).pretty()
 ```
 
 ```javascript
 //Ordenar registros por nome, de forma ascendente
+
 db.Estudantes.find().sort({nome: 1}).pretty()
 ```
 
 ```javascript
 //Ordenar registros por nome, de forma descendente
+
 db.Estudantes.find().sort({nome: -1}).pretty()
 ```
 As variáveis desempenham um papel importante no MongoDB Aggregation Framework e permitem que você armazene valores intermediários durante a execução de uma operação. Elas podem ser declaradas e utilizadas para tornar mais legível a obtenção dos resultados. Seguem exemplos: 
 
 ```javascript
 // Contar Registros
+
 var count = db.Estudantes.find().count();
 print("Número de registros na coleção Estudantes: " + count);
 ```
 
 ```javascript
 // Contar Registros por curso
+
 var count = db.Estudantes.find({ curso: 'Engenharia da Computação' }).count();
 print("Número de registros na coleção Estudantes com curso 'Engenharia da Computação': " + count);
 ```
 
 ```javascript
 //Limitar exibição de linhas
+
 db.Estudantes.find().limit(2).pretty()
 ```
 
 ```javascript
 //Encadeamento
+
 db.Estudantes.find().limit(3).sort({nome: 1}).pretty()
 ```
 
 ```javascript
 //Para buscar estudantes com média acima de 80:
+
 db.Estudantes.find({ media: { $gt: 80 } }).pretty()
 ```
 
 ```javascript
 //Para atualizar a média de um estudante específico (por exemplo, "Deocleciano Oliveira"):
+
 db.Estudantes.update({ nome: "Deocleciano Oliveira" }, { $set: { media: 92 } })
 ```
 
