@@ -129,43 +129,42 @@ except ConnectionFailure:
 
 Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python, compatível com nosso ambiente Jupyter. 
 
-## 4. Atividade de Limpeza, Preparação e Importação de Dados
+## 4. Limpeza, Preparação e Importação de Dados
 
-Antes de dar início ao processo de análise dos dados de um dataset real, é crucial dedicar um tempo para a preparação, limpeza e importação. A preparação e limpeza de dados são etapas essenciais em qualquer processo de análise de dados. A qualidade dos dados é fundamental para obter resultados confiáveis e precisos. A literatura destaca a importância da preparação de dados como uma etapa que pode consumir até 80% do tempo total de um projeto de análise de dados (Dasu & Johnson, 2003).
+Antes de dar início ao processo de análise e exploração de um dataset real, é fundamental compreender a importância do processo de preparação, limpeza e importação de dados. A preparação e limpeza de dados são etapas essenciais para garantir a qualidade dos dados, sendo fundamentais para obtenção de resultados confiáveis e precisos. A literatura destaca que estas etapas costumam consumir até 80% do tempo total de um projeto de análise de dados (Dasu & Johnson, 2003).
 
 Dessa forma, antes de importar os dados para o MongoDB e realizar a exploração e análise, é fundamental realizar uma limpeza e preparação prévia para garantir a integridade e qualidade dos dados. Nesta atividade, utilizaremos o dataset do Censo da Educação Superior de 2022, disponibilizado pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), que pode ser acessado através do link: [INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). 
 
-### Remover aspas duplas e substituir ponto e vírgula por vírgula:
+### Remoção de aspas duplas e substituir ponto e vírgula por vírgula:
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_ED_SUP_IES_2022.CSV > MICRODADOS_ED_SUP_IES_2022_corrigido.csv
 ```
 
-### Checar encoding do dataset
+### Verificação de encoding do dataset
 
 ```bash
 file -i MICRODADOS_ED_SUP_IES_2022_corrigido.csv
 ```
 
-### Converter encoding de ISO-8859-1 para UTF-8:
+### Conversão de encoding de ISO-8859-1 para UTF-8:
 
 ```bash
 iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
-### Substituir caracteres especiais:
+### Substituição de caracteres especiais:
 
 ```bash
 sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ/aaaaaeeeeiiiiooooouuuucnAAAAAEEEEIIIIOOOOOUUUUCN/' MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
-### Importação para o MongoDB
+### Importação para o MongoDB para a collection 'ies'
 
 ```bash
 docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
-
-### Repita o processo da collection 'ies' para a collection 'cursos'
+### Repetição do processo para a collection 'cursos'
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_CADASTRO_CURSOS_2022.CSV > MICRODADOS_CADASTRO_CURSOS_2022_corrigido.CSV
@@ -180,6 +179,9 @@ docker exec -it mongo_service mongoimport --db inep --collection cursos --type c
 ## 4. Exploração e Análise de Dados
 
 A Análise Exploratória de Dados é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Tukey (1977) introduziu esse conceito como uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. A visualização de dados é um componente crucial da literacia de dados e da AED. Ela ajuda a comunicar informações complexas de maneira clara e eficaz, auxiliando na compreensão dos resultados da análise (Tufte, 2001). 
+
+
+
 
 ```python
 from pymongo import MongoClient
