@@ -2,89 +2,35 @@
 
 ## 1. Introdução
 
-Jupyter é uma IDE (Ambiente de Desenvolvimento Integrado) open-source que suporta várias linguagens de programação, incluindo Julia, Python e R. É amplamente utilizado por pesquisadores, educadores, cientistas, analistas e engenheiros de dados para criar e compartilhar documentos que contêm código, equações, visualizações e texto narrativo.
-
-No contexto do Jupyter, o termo 'notebook' é a representação de um documento interativo que permite a escrita e execução de código, bem como a inservação de texto formatado com propósito de documentar equações, imagens e visualizações. Os notebooks são uma ferramenta poderosa para explorar dados, realizar análises, e documentar processos de trabalho de forma clara e compreensível. Eles são salvos com a extensão .ipynb e podem ser baixados e facilmente compartilhados e visualizados por outras pessoas, mesmo que elas não tenham o Jupyter instalado. 
-
-No Jupyter, você pode criar um novo notebook, abrir um existente, e executar células de código individualmente. Os resultados das execuções são exibidos diretamente abaixo da célula de código correspondente, facilitando o acompanhamento do fluxo de trabalho e dos resultados. Essa abordagem visa construir um ambiente interativo para exploração e análise de dados, com suporte à criação de gráficos e visualizações. Também permite a prototipagem rápida de soluções e a exploração de diferentes abordagens de análise. 
+Jupyter é uma IDE open-source que suporta várias linguagens de programação, incluindo Julia, Python e R, usada por pesquisadores, educadores, engenheiros e analistas para criar documentos com código, equações, visualizações e texto. Na ferramenta, um 'notebook' é um documento interativo que permite a execução de código, documentação de equações e inclusão de imagens, sendo útil para explorar dados e documentar processos de forma clara. Assim, é possível criar e abrir notebooks, executar células de código individualmente, com os resultados exibidos diretamente abaixo, facilitando a análise de dados e prototipagem de soluções. Os notebooks são salvos com a extensão .ipynb e podem ser compartilhados facilmente.
 
 ## 2. Construção do Ambiente de Desenvolvimento
 
-Ao longo do curso, integraremos nosso ecossistema de ferramentas de Big Data e NoSQL por meio de notebooks Jupyter. O contêiner que preparamos para nosso ambiente de desenvolvimento já vem com o Apache Spark configurado no modo standalone, permitindo que você tire proveito dos recursos deste poderoso framework de processamento de dados. O Spark é amplamente utilizado para análises de Big Data e Machine Learning, e poderá ser acionado diretamente a partir de seus notebooks. Siga as instruções abaixo para preparar seu ambiente: 
+Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. O contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark configurado em modo standalone, possibilitando também o uso deste framework para análises de Big Data e Machine Learning diretamente pela interface do Jupyter. Siga as instruções abaixo para configurar seu ambiente: 
 
-a) Se estiver usando uma VM, conforme instruções fornecidas no [README.md](https://github.com/klaytoncastro/idp-bigdata) do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker e o Docker Compose corretamente instalados.  
+a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker, Docker Compose e o utilitário `sed` corretamente instalados.  
 
-b) Navegue até a subpasta do repositório, por exemplo: `cd /opt/idp-bigdata`. 
+b) Navegue até a pasta do repositório, por exemplo: `cd /opt/idp-bigdata`. 
 
-c) Se ainda não tiver clonado o repositório, execute o seguinte comando em seu terminal ou console:
-
-```bash
-git clone https://github.com/klaytoncastro/idp-bigdata 
-```
-
-d) Caso esta seja a primeira clonagem do repositório, execute o script para mapeamento das permissões dos volumes externos ao contêiner:
+c) Caso esta seja a primeira clonagem do repositório, execute os comandos abaixo em seu terminal:
 
 ```bash
+git clone https://github.com/klaytoncastro/idp-bigdata
 chmod +x permissions.sh
 ./permissions.sh
 ```
-
-e) Caso já tenha clonado o repositório, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
+d) Caso já tenha clonado o repositório anteriomente, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
 
 ```bash
 git pull origin main
 ```
-f) Navegue até a subpasta jupyter-spark dentro do diretório clonado, por exemplo: `cd /opt/idp-bigdata/jupyter-spark`. Construa e execute os serviços usando o Docker Compose:
+
+e) Crie a rede virtual `mybridge` no Docker: 
 
 ```bash
-docker-compose build 
-docker-compose up -d 
+docker network create --driver bridge mybridge
 ```
-
-g) Execute o comando a seguir para visualizar os logs e identificar o token do Jupyter Notebook para realizar seu primeiro acesso: 
-
-```bash
-docker-compose logs | grep 'token='
-```
-
-### Via GUI
-
-Com o token identificado no passo anterior, acesse o Jupyter Notebook em seu navegador usando o [link](http://localhost:8888), insira o token e configure uma nova senha. 
-
-### Via CLI
-
-Caso deseje alterar a senha via CLI, execute o script abaixo: 
-
-```bash
-docker exec -it <nome_do_contêiner> /bin/bash
-jupyter config password
-```
-
-### Inicialize e teste a integração com Spark
-
-h) Quando o Apache Spark está em execução, ele disponibiliza uma interface web na porta `4040` para o usuário acompanhar e analisar a execução de suas aplicações. Acesse a URL `http://localhost:4040` e observe que esta interface só se tornará disponível após a inicialização do ambiente Spark. 
-
-i) A partir de um novo arquivo notebook, teste seu ambiente Spark inicializando uma sessão: 
-
-```python
-from pyspark.sql import SparkSession
-spark = SparkSession.builder.getOrCreate()
-```
-j) Acesse novamente a URL `http://localhost:4040` e observe que a Spark Application UI agora está disponível. Agora encerre a sessão Spark e observe que a interface http://localhost:4040 não estará mais disponível após a execução do comando abaixo: 
-
-```python
-spark.stop()
-```
-## 3. Integração do Jupyter com ferramentas externas
-
-### Conecte-se ao MongoDB
-
-a) Baixe os contêineres do Jupyter-Spark e MongoDB nas respectivas subpastas do repositório.
-
-```bash
-docker-compose down
-```
-b) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, atualizamos nosso arquivo `docker-compose.yml`, adicionando a configuração de rede conforme descrito abaixo: 
+f) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. Para explicar o que fizemos, seguem as alterações implementadas: 
 
 ```yaml
 # Definindo as redes que serão usadas pelos serviços.
@@ -98,20 +44,55 @@ networks:
       name: mybridge # Nome da rede externa que será usada.
 ```
 
-c) Crie a rede virtual `mybridge` no Docker: 
+g) Agora acesse as respectivas subpastas em nosso repositório (`/opt/idp-bigdata/mongodb` e `/opt/idp-bigdata/jupyter-spark`) e suba os contêineres do MongoDB e Jupyter-Spark em cada uma delas com os comandos abaixo: 
 
 ```bash
-docker network create --driver bridge mybridge
+docker-compose build 
+docker-compose up -d 
+```
+h) Caso seja o seu primeiro acesso ao Jupyter, execute o comando a seguir para visualizar os logs e identificar o token para utilizar o ambiente: 
+
+```bash
+docker-compose logs | grep 'token='
 ```
 
-d) Agora suba os contêineres novamente e verifique os IPs atribuídos ao Jupyter e, especialmente ao MongoDB (pois será referenciado na string de conexão ao banco de dados a partir de seus notebooks):
+### Via GUI
+
+Copie o token identificado no passo anterior e acesse o Jupyter em seu navegador usando o [link](http://localhost:8888). Insira o token de acesso e configure uma nova senha. A partir de então, a autenticação por token não será mais necessária, mesmo que você desligue e ligue novamente o ambiente do Jupyter. 
+
+### Via CLI
+
+Caso deseje alterar a senha via CLI, execute o script abaixo: 
 
 ```bash
-docker-compose up -d
+docker exec -it <nome_do_contêiner> /bin/bash
+jupyter config password
+```
+
+### Inicialize e teste a integração com Spark
+
+i) Quando o Apache Spark está em execução, ele disponibiliza uma interface web para viabilizar o acompanhamento das tarefas designadas por sua aplicação. A Spark Application UI (`http://localhost:4040`) só se tornará disponível após a inicialização de uma sessão Spark por uma aplicação. Crie um notebook Python 3 (ipykernel), e teste seu ambiente inicializando uma sessão Spark: 
+
+```python
+from pyspark.sql import SparkSession
+spark = SparkSession.builder.getOrCreate()
+```
+j) Em seu navegador, acesse a URL `http://localhost:4040` e observe que a interface agora está disponível. Por meio da execução do código designado abaixo em seu notebook Jupyter, encerre a sessão Spark e observe que a interface http://localhost:4040 não estará mais acessível. 
+
+```python
+spark.stop()
+```
+## 3. Integração do Jupyter com ferramentas externas
+
+### Conecte os contêineres à mesma rede virtual
+
+a) Verifique o IP atribuído ao contêiner do MongoDB (pois ele deverá ser referenciado na string de conexão ao banco de dados a partir de seus notebooks):
+
+```bash
 docker network inspect mybridge
 ```
 
-e) A partir de um arquivo notebook no Jupyter, teste a conexão: 
+b) A partir de um notebook no Jupyter, teste a conexão com o código abaixo: 
 
 ```python
 from pymongo import MongoClient
@@ -127,24 +108,41 @@ except ConnectionFailure:
 ```
 ### Prática com Dataset Exemplo 
 
-Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python, compatível com nosso ambiente Jupyter. 
+c) Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. 
 
-## 4. Limpeza, Preparação e Importação de Dados
+d) Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python, compatível com nosso ambiente Jupyter. Realize as atividades nele propostas para se ambientar. 
 
-Nesta atividade, utilizaremos o dataset do Censo da Educação Superior de 2022, disponibilizado pelo Instituto Nacional de Estudos e Pesquisas Educacionais Anísio Teixeira (INEP), que pode ser acessado através do link: [INEP - Dados Abertos](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). Uma das principais ações do INEP é a realização do Censo da Educação Superior, um levantamento anual que coleta informações detalhadas sobre as instituições de ensino superior (IES), seus cursos, alunos, docentes, entre outros aspectos. 
+## 4. Limpeza, Preparação e Importação de Dados Reais
 
-O Censo da Educação Superior (CES) é a principal fonte de informações sobre o ensino superior no Brasil e tem um papel fundamental para entender a dinâmica do setor, identificar desafios e oportunidades e subsidiar a tomada de decisões por parte de gestores, pesquisadores e formuladores de políticas educacionais. Estes dados são cruciais para compreender a realidade do ensino superior no Brasil, identificar tendências e padrões, e contribuir para a elaboração de políticas educacionais mais eficazes e alinhadas com as necessidades do país. O banco de dados do INEP, que é utilizado para armazenar as informações coletadas pelo CES, contém uma vasta quantidade de dados, incluindo:
+Agora utilizaremos o dataset do Censo da Educação Superior de 2022 realizado pelo INEP (Instituto Nacional de Ensino e Pesquisa), disponível [aqui](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). O Censo é um levantamento anual que coleta informações detalhadas sobre instituições de ensino superior (IES) do Brasil, cursos, alunos e docentes, sendo essencial para compreender a dinâmica do ensino superior no país, identificar desafios e oportunidades para embasar decisões de gestores de políticas educacionais. O banco de dados do INEP contém:
 
-- Dados sobre as instituições de ensino superior, como nome, localização, tipo de instituição (pública ou privada), entre outros.
-- Informações sobre os cursos oferecidos, como nome do curso, área de conhecimento, modalidade de ensino, entre outros.
-- Dados sobre os alunos, como quantidade de alunos matriculados, quantidade de alunos concluintes, perfil dos alunos, entre outros.
-- Informações sobre os docentes, como quantidade de docentes, perfil dos docentes, carga horária de trabalho, entre outros.
+- Dados sobre as IES, como nome, localização e tipo de instituição.
+- Informações sobre os cursos oferecidos.
+- Dados sobre alunos, como quantidade de matriculados e concluintes.
+- Informações sobre os docentes.
 
-Antes de dar início ao processo de análise e exploração deste dataset real, é fundamental compreender a importância do processo de preparação, limpeza e importação de dados. A preparação e limpeza de dados são etapas essenciais para garantir a qualidade dos dados, sendo fundamentais para obtenção de resultados confiáveis e precisos. A literatura destaca que estas etapas costumam consumir até 80% do tempo total de um projeto de análise de dados (Dasu & Johnson, 2003). Dessa forma, antes de importar os dados para o MongoDB, vamos demonstrar a realização de uma limpeza básica e preparação prévia dos dado, conforme explicitado nas técnicas abaixo. 
+Antes de qualquer análise, é importante destacar que precisamos realizar as etapas de limpeza e preparação de dados. Segundo a literatura especializada, estes passos costumam consumir até 80% do tempo em um projeto de análise de dados. Assim, antes de importar o dataset para o MongoDB, demonstraremos como realizar uma limpeza básica e preparação prévia dos dados disponibilizados pelo INEP.
 
-### Remoção de aspas duplas e substituir ponto e vírgula por vírgula:
+### Preparando a estrutura de importação
 
-O `sed` (stream editor) é uma poderosa ferramenta de processamento de texto, disponível em sistemas baseados em Linux. Ela é bastante utilizada para analisar e transformar textos, bem como para operar em fluxos de dados para executar operações básicas e avançadas de edição, como substituição, deleção, inserção, dentre outras. Ele lida com expressões regulares, o que o torna muito flexível para encontrar e substituir padrões de texto. O `sed` também costuma ser combinado com outras ferramentas de CLI, como `awk`, `grep`, e `cut`, para criar soluções poderosas para processamento de dados. Abaixo, seguem alguns exemplos de uso: 
+a) Em seu terminal, baixe e descompacte o arquivo do dataset utilizando os comandos abaixo: 
+
+```bash
+cd /opt/idp-bigdata/mongodb/datasets
+wget https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2022.zip --no-check-certificate
+unzip microdados_censo_da_educacao_superior_2022.zip
+```
+b) Como precisaremos apenas dos arquivos CSVs com as IES e Cursos por elas disponibilizados, organize a subpasta `datasets` executando os comandos abaixo. 
+
+```bash
+rm microdados_censo_da_educacao_superior_2022.zip && mv microdados_educaЗ╞o_superior_2022 inep
+mv inep/dados/*.CSV inep
+rm -rf inep/dados && rm -rf inep/Anexos && rm -rf inep/leia-me
+```
+
+### Entendendo o Processamento Básico de Texto
+
+O `sed` (stream editor) é uma ferramenta de processamento de texto disponível em sistemas Linux, usada para analisar, transformar textos e operar em fluxos de dados, realizando operações como substituição, deleção e inserção. Sua flexibilidade vem do uso de expressões regulares, permitindo encontrar e substituir padrões de texto. O `sed` é frequentemente usado em conjunto com outras ferramentas de CLI, como `awk`, `grep` e `cut`, para criar soluções robustas de processamento de textos. Veja alguns exemplos de uso:
 
 a) Substituir texto em um arquivo: 
 
@@ -163,29 +161,41 @@ c) Inserir texto antes ou depois de um padrão:
 sed '/padrão/i Novo Texto' arquivo.txt
 sed '/padrão/a Novo Texto' arquivo.txt
 ```
-d) Aplicando a funcionalidade de substituição de texto para tratar nosso dataset, o `;` é utilizado para separar comandos dentro do `sed`. O primeiro trecho `s/\"//g` está removendo todas as aspas duplas do arquivo. O segundo trecho `s/;/,/g` está substituindo todos os ponto e vírgula por vírgulas. Estas medidas foram necessárias para corrigir os dados apresentados e torná-los compatíveis para importação no MongoDB. 
+### Remoção e substituição de caracteres indesejados 
+
+a) Precisaremos realizar a remoção e substituição de caracteres indesejados para viabilizar a correta importação do dataset. No comando abaixo, o `;` é utilizado para separar comandos na sintaxe do `sed`. O primeiro trecho `s/\"//g` está removendo todas as aspas duplas do arquivo. O segundo trecho `s/;/,/g` está substituindo todos os ponto e vírgula por vírgulas: 
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_ED_SUP_IES_2022.CSV > MICRODADOS_ED_SUP_IES_2022_corrigido.csv
 ```
 
-### Verificação de encoding do dataset e conversão de ISO-8859-1 para UTF-8:
+b) Estas medidas são necessárias para corrigir os dados apresentados e torná-los compatíveis para importação no MongoDB, especialmente no que se refere aos campos de endereço das IES, visto que alguns deles possuem `"` de forma inadvertida, e que o dataset possui campos separados por `;`, o que provocaria erros no processo de importação. 
 
-O comando `file` é útil para mostrar informações sobre o tipo do arquivo. A opção `-i` solicita a apresentação do padrão de codificação do arquivo. Segue comando para verificar a codificação do dataset:
+### Verificação de encoding e conversão do dataset
+
+a) Padrões de codificação de texto são conjuntos de mapeamentos de caracteres que definem como eles são representados em bytes para armazenamento e processamento em um computador. 
+
+b) O padrão de codificação ISO 8859-1, também conhecido como Latin-1, é um conjunto de caracteres que inclui os caracteres comuns do ASCII (American Standard Code for Information Interchange) e os adicionais usados por várias línguas do oeste europeu, como acento e cedilha da língua portuguesa.
+
+c) Nos sistemas Linux, o comando `file` é útil para mostrar informações sobre a tipagem do arquivo. A opção `-i` solicita a apresentação do padrão de codificação. Ambos utilizam o padrão ISO 8859-1. Seguem os comandos para verificar a codificação aplicada aos arquivos:
 
 ```bash
 file -i MICRODADOS_ED_SUP_IES_2022_corrigido.csv
+file -i MICRODADOS_CADASTRO_CURSOS_2022.CSV
 ```
-
-O utilitário `iconv` é utilizado para converter a codificação de caracteres de um arquivo. O trecho `-f ISO-8859-1` indica a codificação original do arquivo, e `-t UTF-8` indica a codificação desejada. No comando abaixo estamos convertendo o formato de ANSI/ISO para UTF-8, que é o padrão utilizado no MongoDB. 
+d) Nos sistemas Linux, o utilitário `iconv` é utilizado para converter a codificação de caracteres de determinado arquivo. O trecho `-f ISO-8859-1` indica a codificação original do arquivo e o trecho `-t UTF-8` indica a codificação desejada (conversão). Assim, com o comando abaixo podemos converter os arquivos do formato ISO 8859-1 para UTF-8 requerido por nosso ambiente MongoDB: 
 
 ```bash
 iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
-### Substituição de caracteres especiais:
+### Normalização de Texto e Substituição de Caracteres: 
 
-A expressão abaixo utiliza novamente o `sed` para substituir caracteres especiais por seus equivalentes sem acentuação. A opção `-i` indica que a modificação será feita diretamente no arquivo, sem a necessidade de criar um novo. 
+a) Acentos e caracteres especiais podem causar problemas de codificação, especialmente quando os dados são transferidos entre diferentes sistemas ou plataformas. A substituição desses caracteres ajuda a evitar esses problemas de compatibilidade, como acentos e cedilhas, é uma prática comum em análises de Big Data para evitar problemas de incompatibilidade ou inconsistência. Além disso, as consultas aos bancos de dados podem ser dificultadas pela presença de caracteres especiais. 
+
+b) A normalização de texto, incluindo a substituição de caracteres especiais, é crucial para obter resultados precisos e consistentes em análises de texto e aplicações de processamento de linguagem natural. Isso garante um grau mínimo de padronização e evita discrepâncias estatísticas causadas por variações na acentuação de palavras. No contexto de Machine Learning e Modelos de Linguagem de Grande Escala (LLM), técnicas como stemming são empregadas para reduzir palavras à sua forma base, facilitando a agrupação de palavras com o mesmo significado, mas com formas diferentes devido a conjugação verbal, pluralização, entre outros.
+
+c) Para tratar nosso dataset, o comando abaixo utiliza novamente o `sed`, agora para substituir caracteres especiais por seus equivalentes sem acentuação. A opção `-i` indica que a modificação será feita diretamente no arquivo, sem a necessidade de criar um novo:
 
 ```bash
 sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ/aaaaaeeeeiiiiooooouuuucnAAAAAEEEEIIIIOOOOOUUUUCN/' MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
