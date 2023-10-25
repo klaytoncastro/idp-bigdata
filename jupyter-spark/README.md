@@ -6,9 +6,9 @@ Jupyter é uma IDE open-source que suporta várias linguagens de programação, 
 
 ## 2. Construção do Ambiente de Desenvolvimento
 
-Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. O contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark configurado em modo standalone, possibilitando também o uso deste framework para análises de Big Data e Machine Learning diretamente pela interface do Jupyter. Siga as instruções abaixo para configurar seu ambiente: 
+Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. O contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark configurado em modo standalone, possibilitando também o uso deste framework para análises de Big Data e Machine Learning diretamente pela interface do Jupyter. Siga as instruções abaixo para configurá-lo: 
 
-a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker, Docker Compose e o utilitário `sed` corretamente instalados.  
+a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker, Docker Compose e os utilitários de processamento e conversão de textos apropriados. 
 
 b) Navegue até a pasta do repositório, por exemplo: `cd /opt/idp-bigdata`. 
 
