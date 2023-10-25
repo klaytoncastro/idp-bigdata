@@ -189,7 +189,7 @@ d) Nos sistemas Linux, o utilitário `iconv` é utilizado para converter a codif
 iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
-### Normalização de Texto e Substituição de Caracteres: 
+### Entendendo o Processo de Normalização de Texto
 
 a) Acentos e caracteres especiais podem causar problemas de codificação, especialmente quando os dados são transferidos entre diferentes sistemas ou plataformas. A substituição desses caracteres ajuda a evitar esses problemas de compatibilidade, como acentos e cedilhas, é uma prática comum em análises de Big Data para evitar problemas de incompatibilidade ou inconsistência. Além disso, as consultas aos bancos de dados podem ser dificultadas pela presença de caracteres especiais. 
 
@@ -202,6 +202,8 @@ sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌ
 ```
 
 ### Importação para o MongoDB para a collection 'ies'
+
+a) Considerando a limpeza e preparação básica que realizamos em nosso dataset, agora estamos prontos para realizar a importação no MongoDB. 
 
 O comando abaixo é utilizado para executar o utilitário `mongoimport` dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV (Comma Separated Values). A opção `--file` especifica o caminho para o arquivo de entrada. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
 
