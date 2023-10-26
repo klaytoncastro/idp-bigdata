@@ -2,35 +2,31 @@
 
 ## 1. Introdução
 
-Jupyter é uma IDE open-source que suporta várias linguagens de programação, incluindo Julia, Python e R, usada por pesquisadores, educadores, engenheiros e analistas para criar documentos com código, equações, visualizações e texto. Na ferramenta, um 'notebook' é um documento interativo que permite a execução de código, documentação de equações e inclusão de imagens, sendo útil para explorar dados e documentar processos de forma clara. Assim, é possível criar e abrir notebooks, executar células de código individualmente, com os resultados exibidos diretamente abaixo, facilitando a análise de dados e prototipagem de soluções. Os notebooks são salvos com a extensão .ipynb e podem ser compartilhados facilmente.
+Jupyter é uma IDE open-source que suporta várias linguagens de programação, incluindo Julia, Python e R, muito utilizada por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos com código, equações, visualizações e texto. Na ferramenta Jupyter, o notebook é um documento interativo que permite a execução de código, documentação de equações e inclusão de imagens, sendo útil para explorar dados e documentar processos de trabalho. No Jupyter, é possível criar e executar notebooks, além de rodar células de código individualmente, cujos resultados são exibidos diretamente abaixo do código, facilitando a prototipagem de soluções. Estes notebooks podem ser salvos com a extensão .ipynb e compartilhados facilmente. 
 
 ## 2. Construção do Ambiente de Desenvolvimento
 
-Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. O contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark configurado em modo standalone, possibilitando também o uso deste framework para análises de Big Data e Machine Learning diretamente pela interface do Jupyter. Siga as instruções abaixo para configurá-lo: 
+Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. Além do Jupyter, o contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark implementado em modo standalone, possibilitando também o uso deste framework para análises de Big Data e Machine Learning. Siga as instruções abaixo para configurar seu ambiente: 
 
 a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker, Docker Compose e os utilitários de processamento e conversão de textos apropriados. 
 
 b) Navegue até a pasta do repositório, por exemplo: `cd /opt/idp-bigdata`. 
 
-c) Caso esta seja a primeira clonagem do repositório, execute os comandos abaixo em seu terminal:
+c) Caso já tenha clonado o repositório anteriomente, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
+
+```bash
+git pull origin main
+```
+
+d) Caso esta seja a primeira clonagem do repositório, execute os comandos abaixo em seu terminal. 
 
 ```bash
 git clone https://github.com/klaytoncastro/idp-bigdata
 chmod +x permissions.sh
 ./permissions.sh
 ```
-d) Caso já tenha clonado o repositório anteriomente, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
 
-```bash
-git pull origin main
-```
-
-e) Crie a rede virtual `mybridge` no Docker: 
-
-```bash
-docker network create --driver bridge mybridge
-```
-f) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. Para explicar o que fizemos, seguem as alterações implementadas: 
+e) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. Para explicar o que fizemos, seguem as alterações promovidas: 
 
 ```yaml
 # Definindo as redes que serão usadas pelos serviços.
@@ -44,10 +40,18 @@ networks:
       name: mybridge # Nome da rede externa que será usada.
 ```
 
-g) Agora acesse as respectivas subpastas em nosso repositório (`/opt/idp-bigdata/mongodb` e `/opt/idp-bigdata/jupyter-spark`) e suba os contêineres do MongoDB e Jupyter-Spark em cada uma delas com os comandos abaixo: 
+f) Agora crie a rede virtual `mybridge` no Docker: 
 
 ```bash
-docker-compose build 
+docker network create --driver bridge mybridge
+```
+g) Acesse as respectivas subpastas em nosso repositório (`/opt/idp-bigdata/mongodb` e `/opt/idp-bigdata/jupyter-spark`) e suba os contêineres do MongoDB e Jupyter-Spark em cada uma delas: 
+
+```bash
+cd /opt/idp-bigdata/mongodb 
+docker-compose up -d 
+cd /opt/idp-bigdata/jupyter-spark
+docker-compose build
 docker-compose up -d 
 ```
 h) Caso seja o seu primeiro acesso ao Jupyter, execute o comando a seguir para visualizar os logs e identificar o token para utilizar o ambiente: 
@@ -71,13 +75,13 @@ jupyter config password
 
 ### Inicialize e teste a integração com Spark
 
-i) Quando o Apache Spark está em execução, ele disponibiliza uma interface web para viabilizar o acompanhamento das tarefas designadas por sua aplicação. A Spark Application UI (`http://localhost:4040`) só se tornará disponível após a inicialização de uma sessão Spark por uma aplicação. Crie um notebook Python 3 (ipykernel), e teste seu ambiente inicializando uma sessão Spark: 
+a) Quando o Apache Spark está em execução, ele disponibiliza uma interface web para viabilizar o acompanhamento das tarefas designadas por sua aplicação. A Spark Application UI (`http://localhost:4040`) só se tornará disponível após a inicialização de uma sessão Spark por uma aplicação. Crie um notebook Python 3 (ipykernel), e teste seu ambiente inicializando uma sessão Spark: 
 
 ```python
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 ```
-j) Em seu navegador, acesse a URL `http://localhost:4040` e observe que a interface agora está disponível. Por meio da execução do código designado abaixo em seu notebook Jupyter, encerre a sessão Spark e observe que a interface http://localhost:4040 não estará mais acessível. 
+b) Em seu navegador, acesse a URL `http://localhost:4040` e observe que a interface agora está disponível. Por meio da execução do código designado abaixo em seu notebook Jupyter, encerre a sessão Spark e observe que a interface http://localhost:4040 não estará mais acessível. 
 
 ```python
 spark.stop()
@@ -114,7 +118,7 @@ d) Uma excelente referência para começar é o notebook [MongoDB w/ Python](htt
 
 ## 4. Limpeza, Preparação e Importação de Dados Reais
 
-Agora utilizaremos o dataset do Censo da Educação Superior de 2022 realizado pelo INEP (Instituto Nacional de Ensino e Pesquisa), disponível [aqui](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). O Censo é um levantamento anual que coleta informações detalhadas sobre instituições de ensino superior (IES) do Brasil, cursos, alunos e docentes, sendo essencial para compreender a dinâmica do ensino superior no país, identificar desafios e oportunidades para embasar decisões de gestores de políticas educacionais. O banco de dados do INEP contém:
+Utilizaremos o dataset do Censo da Educação Superior de 2022 realizado pelo INEP (Instituto Nacional de Ensino e Pesquisa), disponível [aqui](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). O Censo é um levantamento anual que coleta informações detalhadas sobre instituições de ensino superior (IES) do Brasil, cursos, alunos e docentes, sendo essencial para compreender a dinâmica do ensino superior no país, identificar desafios e oportunidades para embasar decisões de gestores de políticas educacionais. O banco de dados do INEP contém:
 
 - Dados sobre as IES, como nome, localização e tipo de instituição.
 - Informações sobre os cursos oferecidos.
@@ -201,16 +205,18 @@ c) Para tratar nosso dataset, o comando abaixo utiliza novamente o `sed`, agora 
 sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ/aaaaaeeeeiiiiooooouuuucnAAAAAEEEEIIIIOOOOOUUUUCN/' MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
-### Importação para o MongoDB para a collection 'ies'
+### Importação da collection 'ies' para o MongoDB 
 
 a) Considerando a limpeza e preparação básica que realizamos em nosso dataset, agora estamos prontos para realizar a importação no MongoDB. 
 
-O comando abaixo é utilizado para executar o utilitário `mongoimport` dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV (Comma Separated Values). A opção `--file` especifica o caminho para o arquivo de entrada. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
+b) O comando abaixo é utilizado para executar o utilitário `mongoimport`, dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV (Comma Separated Values). A opção `--file` especifica o caminho para o arquivo de entrada. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
 
 ```bash
 docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
-### Repetição do processo para a collection 'cursos'
+### Importação da collection 'cursos'
+
+Aqui estamos repetindo o processo para a collection `cursos`: 
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_CADASTRO_CURSOS_2022.CSV > MICRODADOS_CADASTRO_CURSOS_2022_corrigido.CSV
