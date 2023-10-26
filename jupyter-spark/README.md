@@ -112,9 +112,9 @@ except ConnectionFailure:
 ```
 ### Prática com Dataset Exemplo 
 
-c) Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. 
+a) Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. 
 
-d) Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python, compatível com nosso ambiente Jupyter. Realize as atividades nele propostas para se ambientar. 
+b) Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python, compatível com nosso ambiente Jupyter. Este notebook abrange a criação de banco de dados e coleções, inserção, busca, atualização e exclusão de documentos, além de operações como ordenação e limitação de resultados. Realize as atividades nele propostas para se ambientar ao Jupyter e MongoDB. 
 
 ## 4. Limpeza, Preparação e Importação de Dados Reais
 
