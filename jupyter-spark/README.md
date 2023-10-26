@@ -444,3 +444,4 @@ plt.show()
 
 ## Conclusão 
 
+Este guia apresentou o processo de preparação, limpeza, importação, análise e exploração de dados reais. Utilizamos as ferramentas Jupyter, MongoDB o dataset do Censo da Educação Superior de 2022. A análise exploratória de dados demonstrada no código Python ajuda a obter as primeiras informações a partir dos dados e serve como base para análises mais aprofundadas e investigações adicionais acerca da educação superior no Brasil. 
