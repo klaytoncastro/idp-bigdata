@@ -218,7 +218,7 @@ a) Uma vez que realizamos uma limpeza e preparação básicas, agora estamos pro
 b) O comando abaixo é utilizado para executar a ferramenta `mongoimport`, dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV. A opção `--file` especifica o caminho para o arquivo de entrada, no caso, o arquivo base de IES do dataset. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
 
 ```bash
-docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
+docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
 c) Agora vamos repetir todo o processo de preparação, limpeza e importação para o arquivo que irá alimentar a collection `cursos`: 
 
@@ -229,7 +229,7 @@ iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_CADASTRO_CURSOS_2022_corrigido.CSV > MIC
 
 sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ/aaaaaeeeeiiiiooooouuuucnAAAAAEEEEIIIIOOOOOUUUUCN/' MICRODADOS_CADASTRO_CURSOS_2022_corrigido_UTF8.CSV
 
-docker exec -it mongo_service mongoimport --db inep --collection cursos --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_CADASTRO_CURSOS_2022_corrigido_UTF8.CSV --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
+docker exec -it mongo_service mongoimport --db inep --collection cursos --type csv --file /datasets/inep/MICRODADOS_CADASTRO_CURSOS_2022_corrigido_UTF8.CSV --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
 
 ## 4. Exploração e Análise de Dados
@@ -446,4 +446,4 @@ plt.show()
 
 ## Conclusão 
 
-Este guia apresentou o processo de preparação, limpeza, importação, análise e exploração de dados reais. Utilizamos as ferramentas Jupyter, MongoDB o dataset do Censo da Educação Superior de 2022. A análise exploratória de dados demonstrada no código Python ajuda a obter as primeiras informações a partir dos dados e serve como base para análises mais aprofundadas e investigações adicionais acerca da educação superior no Brasil. 
+Este guia apresentou o processo de preparação, limpeza, importação, análise e exploração de dados reais. Utilizamos as ferramentas Jupyter, MongoDB o dataset do Censo da Educação Superior de 2022. A análise exploratória de dados demonstrada no código Python ajuda a obter as primeiras informações a partir dos dados e serve como base para análises mais aprofundadas e investigações adicionais acerca da educação superior no Brasil. Lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
