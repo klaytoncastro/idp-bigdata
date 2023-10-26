@@ -118,7 +118,7 @@ b) Uma excelente referência para começar é o notebook [MongoDB w/ Python](htt
 
 ## 4. Limpeza, Preparação e Importação de Dados Reais
 
-Utilizaremos o dataset do Censo da Educação Superior de 2022 realizado pelo INEP (Instituto Nacional de Ensino e Pesquisa), disponível [aqui](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). O Censo é um levantamento anual que coleta informações detalhadas sobre instituições de ensino superior (IES) do Brasil, cursos, alunos e docentes, sendo essencial para compreender a dinâmica do ensino superior no país, identificar desafios e oportunidades para embasar decisões de gestores de políticas educacionais. O banco de dados do INEP contém:
+Nesta atividade, utilizaremos o dataset do Censo da Educação Superior de 2022 realizado pelo INEP (Instituto Nacional de Ensino e Pesquisa), disponível [aqui](https://www.gov.br/inep/pt-br/acesso-a-informacao/dados-abertos). O Censo é um levantamento anual que coleta informações detalhadas sobre instituições de ensino superior (IES) do Brasil, cursos, alunos e docentes, sendo essencial para compreender a dinâmica do ensino superior no país, identificar desafios e oportunidades para embasar decisões de gestores de políticas educacionais. O banco de dados do INEP contém:
 
 - Dados sobre as IES, como nome, localização e tipo de instituição.
 - Informações sobre os cursos oferecidos.
@@ -136,7 +136,7 @@ cd /opt/idp-bigdata/mongodb/datasets
 wget https://download.inep.gov.br/microdados/microdados_censo_da_educacao_superior_2022.zip --no-check-certificate
 unzip microdados_censo_da_educacao_superior_2022.zip
 ```
-b) Como precisaremos apenas dos arquivos CSVs com as IES e Cursos por elas disponibilizados, organize a subpasta `datasets` executando os comandos abaixo. 
+b) Como precisaremos apenas dos arquivos CSVs (Comma Separated Values) com as IES e Cursos por elas disponibilizados, organize a subpasta `datasets` executando os comandos abaixo para manter apenas a estrutura de pastas e dados estritamente necessários. 
 
 ```bash
 rm microdados_censo_da_educacao_superior_2022.zip && mv microdados_educaЗ╞o_superior_2022 inep
@@ -144,7 +144,7 @@ mv inep/dados/*.CSV inep
 rm -rf inep/dados && rm -rf inep/Anexos && rm -rf inep/leia-me
 ```
 
-### Entendendo o Processamento Básico de Texto
+### Entendendo o processamento de texto
 
 O `sed` (stream editor) é uma ferramenta de processamento de texto disponível em sistemas Linux, usada para analisar, transformar textos e operar em fluxos de dados, realizando operações como substituição, deleção e inserção. Sua flexibilidade vem do uso de expressões regulares, permitindo encontrar e substituir padrões de texto. O `sed` é frequentemente usado em conjunto com outras ferramentas de CLI, como `awk`, `grep` e `cut`, para criar soluções robustas de processamento de textos. Veja alguns exemplos de uso:
 
@@ -167,13 +167,15 @@ sed '/padrão/a Novo Texto' arquivo.txt
 ```
 ### Remoção e substituição de caracteres indesejados 
 
-a) Precisaremos realizar a remoção e substituição de caracteres indesejados para viabilizar a correta importação do dataset. No comando abaixo, o `;` é utilizado para separar comandos na sintaxe do `sed`. O primeiro trecho `s/\"//g` está removendo todas as aspas duplas do arquivo. O segundo trecho `s/;/,/g` está substituindo todos os ponto e vírgula por vírgulas: 
+a) Precisaremos realizar a remoção e substituição de caracteres indesejados para viabilizar a correta importação do dataset. Vá até a subpasta do dataset (`cd /opt/idp-bigdata/mongodb/inep`) e execute o comando abaixo:
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_ED_SUP_IES_2022.CSV > MICRODADOS_ED_SUP_IES_2022_corrigido.csv
 ```
 
-b) Estas medidas são necessárias para corrigir os dados apresentados e torná-los compatíveis para importação no MongoDB, especialmente no que se refere aos campos de endereço das IES, visto que alguns deles possuem `"` de forma inadvertida, e que o dataset possui campos separados por `;`, o que provocaria erros no processo de importação. 
+b) O `;` é utilizado para separar instruções na sintaxe do `sed`. O primeiro trecho `s/\"//g` está removendo todas as aspas duplas do arquivo. O segundo trecho `s/;/,/g` está substituindo todos os ponto e vírgula do texto por vírgulas. 
+
+c) Estas medidas são necessárias para corrigir os dados e torná-los compatíveis para importação no MongoDB, especialmente no que se refere aos campos de endereço das IES, visto que alguns deles possuem `"` de forma inadvertida. Além disso, o dataset original possui campos separados por `;`, o que provocaria erros no processo de importação e não segmentaria os atributos para inserção na base de dados. 
 
 ### Verificação de encoding e conversão do dataset
 
@@ -193,30 +195,30 @@ d) Nos sistemas Linux, o utilitário `iconv` é utilizado para converter a codif
 iconv -f ISO-8859-1 -t UTF-8 MICRODADOS_ED_SUP_IES_2022_corrigido.csv > MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
-### Entendendo o Processo de Normalização de Texto
+### Processo de normalização de texto
 
-a) Acentos e caracteres especiais podem causar problemas de codificação, especialmente quando os dados são transferidos entre diferentes sistemas ou plataformas. A substituição desses caracteres ajuda a evitar esses problemas de compatibilidade, como acentos e cedilhas, é uma prática comum em análises de Big Data para evitar problemas de incompatibilidade ou inconsistência. Além disso, as consultas aos bancos de dados podem ser dificultadas pela presença de caracteres especiais. 
+a) A presença de acentos e caracteres especiais no texto pode causar problemas de inconsistência de codificação e interpretação, especialmente quando há transferência de dados entre diferentes sistemas ou plataformas. Além disso, as consultas aos bancos de dados podem ser dificultadas pela presença de caracteres especiais. Assim, a substituição desses caracteres ajuda a evitar problemas de compatibilidade e consistência. 
 
-b) A normalização de texto, incluindo a substituição de caracteres especiais, é crucial para obter resultados precisos e consistentes em análises de texto e aplicações de processamento de linguagem natural. Isso garante um grau mínimo de padronização e evita discrepâncias estatísticas causadas por variações na acentuação de palavras. No contexto de Machine Learning e Modelos de Linguagem de Grande Escala (LLM), técnicas como stemming são empregadas para reduzir palavras à sua forma base, facilitando a agrupação de palavras com o mesmo significado, mas com formas diferentes devido a conjugação verbal, pluralização, entre outros.
+b) Dessa forma, a normalização de texto, incluindo a substituição de caracteres especiais, é uma prática comum ao empreender análises de Big Data, sendo crucial para obter resultados mais assertivos em análises de texto. Isso garante um grau mínimo de padronização e evita discrepâncias estatísticas causadas por variações na acentuação de palavras. 
 
-c) Para tratar nosso dataset, o comando abaixo utiliza novamente o `sed`, agora para substituir caracteres especiais por seus equivalentes sem acentuação. A opção `-i` indica que a modificação será feita diretamente no arquivo, sem a necessidade de criar um novo:
+c) Adicionalmente, no contexto de Machine Learning, especialmente nas aplicações envolvendo o processamento de linguagem natural e modelos de linguagem de grande escala (LLM), costuma-se empregar técnicas de stemming para reduzir palavras à sua forma base, facilitando o agrupamento semântico de palavras com mesmo radical, mas que apresentam formas diferentes devido à conjugação verbal, pluralização, dentre outros motivos. 
+
+d) No nosso dataset faremos algo mais simples neste primeiro momento, apenas reduzindo eventuais discrepâncias causadas por acentuações e cedilhas. O comando abaixo utiliza novamente o `sed`, agora para substituir caracteres especiais por seus equivalentes sem acentuação. A opção `-i` indica que a modificação será feita diretamente no arquivo, sem a necessidade de criar um novo:
 
 ```bash
 sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌÎÏÓÒÕÔÖÚÙÛÜÇÑ/aaaaaeeeeiiiiooooouuuucnAAAAAEEEEIIIIOOOOOUUUUCN/' MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv
 ```
 
-### Importação da collection 'ies' para o MongoDB 
+### Importação para o MongoDB 
 
-a) Considerando a limpeza e preparação básica que realizamos em nosso dataset, agora estamos prontos para realizar a importação no MongoDB. 
+a) Uma vez que realizamos uma limpeza e preparação básicas, agora estamos prontos para efetuar a importação de dados para o MongoDB. Utilizaremos o `mongoimport`, uma ferramenta CLI que faz parte do MongoDB e é usada para importar dados no formato JSON, CSV ou TSV em uma coleção. 
 
-b) O comando abaixo é utilizado para executar o utilitário `mongoimport`, dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV (Comma Separated Values). A opção `--file` especifica o caminho para o arquivo de entrada. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
+b) O comando abaixo é utilizado para executar a ferramenta `mongoimport`, dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV. A opção `--file` especifica o caminho para o arquivo de entrada, no caso, o arquivo base de IES do dataset. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
 
 ```bash
 docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep_censo_ies_2022/dados/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
-### Importação da collection 'cursos'
-
-Aqui estamos repetindo o processo para a collection `cursos`: 
+c) Agora vamos repetir todo o processo de preparação, limpeza e importação para o arquivo que irá alimentar a collection `cursos`: 
 
 ```bash
 sed 's/\"//g; s/;/,/g' MICRODADOS_CADASTRO_CURSOS_2022.CSV > MICRODADOS_CADASTRO_CURSOS_2022_corrigido.CSV
@@ -230,9 +232,9 @@ docker exec -it mongo_service mongoimport --db inep --collection cursos --type c
 
 ## 4. Exploração e Análise de Dados
 
-A Análise Exploratória de Dados (AED) é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Tukey (1977) introduziu esse conceito como uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. A visualização de dados é um componente crucial da literacia de dados e da AED. Ela ajuda a comunicar informações complexas de maneira clara e eficaz, auxiliando na compreensão dos resultados da análise (Tufte, 2001). 
+A Análise Exploratória de Dados (AED) é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Trata-se de uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. Nesse contexto, a visualização de dados é um componente crucial e ajuda a comunicar informações complexas de maneira mais clara, auxiliando na compreensão dos resultados da análise. 
 
-A seguir, temos um código em Python, que deve ser executado no seu ambiente Jupyter Notebook. Como já importamos os dados, estamos nos conectando ao MongoDB e realizando consultas específicas para extrair informações relevantes e, posteriormente, utiliza essas informações para criar visualizações que ajudarão a ilustrar os padrões e as relações existentes nos dados. Execute cada bloco de código e entenda como esta análise dos dados básica foi conduzida. 
+A seguir, temos um código em Python, que deve ser executado no seu ambiente Jupyter Notebook. Como já realizamos a preparação, limpeza e importação de dados, vamos conectar o Jupyter ao MongoDB e realizar consultas específicas para extrair informações relevantes e, posteriormente, utilizar essas informações para criar visualizações e ilustrar padrões e relações existentes nos dados. Execute cada bloco de código em células do seu Jupyter notebook e entenda como esta análise foi conduzida. Lembre-se de verificar e alterar o endereço IP correspondente ao seu contêiner MongoDB. 
 
 ```python
 from pymongo import MongoClient
@@ -296,7 +298,6 @@ plt.axis('equal')
 plt.title('Proporção de Docentes por Gênero')
 plt.show()
 
-
 # Query para contar o número de instituições por estado
 result = collection.aggregate([
     {'$group': {'_id': '$NO_UF_IES', 'count': {'$sum': 1}}}
@@ -313,7 +314,6 @@ plt.ylabel('Número de Instituições')
 plt.title('Número de Instituições por Estado')
 plt.xticks(rotation=90)
 plt.show()
-
 
 # Query para calcular o número de docentes por faixa etária
 result = collection.aggregate([
@@ -343,7 +343,6 @@ plt.ylabel('Número de Docentes')
 plt.title('Número de Docentes por Faixa Etária')
 plt.show()
 
-
 # Query para calcular o número de docentes por grau acadêmico
 result = collection.aggregate([
     {'$group': {
@@ -365,7 +364,6 @@ plt.figure(figsize=(10,5))
 plt.pie(counts, labels=degrees, autopct='%1.1f%%', startangle=90)
 plt.title('Proporção de Docentes por Grau Acadêmico')
 plt.show()
-
 
 # Query para calcular o número de docentes por raça/cor
 result = collection.aggregate([
@@ -442,4 +440,35 @@ plt.show()
 # O mapa de calor de correlação mostrará a relação entre as diferentes regiões e graus acadêmicos dos docentes.
 # Valores próximos a 1 ou -1 indicam uma forte correlação positiva ou negativa, respectivamente.
 # Valores próximos a 0 indicam que não há uma correlação significativa entre as variáveis.
+```
+
+## Análise de Dados com PySpark 
+
+O Apache Spark é um framework open-source para processamento distribuído de dados em larga escala. O PySpark é uma biblioteca Python para usar o Spark, que fornece uma API de alto nível para processar dados de maneira eficiente. O PySpark oferece suporte a transformações e ações em RDDs (Resilient Distributed Datasets) e DataFrames, que são abstrações para trabalhar com dados distribuídos. Vamos usar o PySpark para realizar uma análise simples dos dados que importamos para o MongoDB. 
+
+a) No Jupyter, crie um novo notebook Python 3 (ipykernel) e insira o seguinte código para criar uma sessão Spark:
+
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("Análise de Dados do Censo da Educação Superior") \
+    .config("spark.mongodb.input.uri", "mongodb://172.22.0.3:27017/inep.ies") \
+    .getOrCreate()
+```
+b) Carregue os dados do MongoDB para um DataFrame Spark:
+
+```python
+df = spark.read.format("com.mongodb.spark.sql.DefaultSource").load()
+```
+c) Realize análises e transformações nos dados para se habituar com as funcionalidades do PySpark. Por exemplo, para contar o número de instituições de ensino superior por estado:
+
+```python
+df.groupBy("UF").count().show()
+```
+
+d) Quando terminar a análise, lembre-se de encerrar a sessão Spark:
+
+```python
+spark.stop()
 ```
