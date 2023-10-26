@@ -454,7 +454,7 @@ A análise exploratória dos dados (AED), demonstrada no código Python acima, p
 
 - Número de Instituições por Região: a região Sudeste se destaca com a maior concentração de instituições de ensino superior, seguida pelas regiões Nordeste, Sul, Centro-Oeste e Norte. Essa distribuição reflete tanto a densidade populacional quanto o desenvolvimento econômico de cada região.
 
-- Número de Instituições por Estado: ão Paulo, Minas Gerais e Rio de Janeiro, todos situados na região Sudeste, possuem a maior quantidade de instituições de ensino superior, o que corrobora os dados apresentados anteriormente.
+- Número de Instituições por Estado: São Paulo, Minas Gerais e Rio de Janeiro, todos situados na região Sudeste, possuem a maior quantidade de instituições de ensino superior, o que corrobora os dados apresentados anteriormente.
 
 - Número de Docentes por Faixa Etária:A maioria dos docentes se encontra nas faixas etárias de 35 a 59 anos, evidenciando um corpo docente experiente e consolidado. No entanto, essa concentração de profissionais mais experientes pode sinalizar uma potencial falta de renovação do corpo docente, com um número reduzido de professores mais jovens ingressando na carreira acadêmica. Uma investigação mais aprofundada é necessária para compreender as causas e implicações dessa tendência.
 
