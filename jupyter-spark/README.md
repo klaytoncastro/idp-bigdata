@@ -1,12 +1,14 @@
-# Prática de Exploração e Análise de Dados
+# Análise e Exploração de Dados com Jupyter
 
 ## 1. Introdução
 
-Jupyter é uma IDE open-source que suporta várias linguagens de programação, incluindo Julia, Python e R, muito utilizada por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos com código, equações, visualizações e texto. Na ferramenta Jupyter, o notebook é um documento interativo que permite a execução de código, documentação de equações e inclusão de imagens, sendo útil para explorar dados e documentar processos de trabalho. No Jupyter, é possível criar e executar notebooks, além de rodar células de código individualmente, cujos resultados são exibidos diretamente abaixo do código, facilitando a prototipagem de soluções. Estes notebooks podem ser salvos com a extensão .ipynb e compartilhados facilmente. 
+Jupyter é uma IDE open-source que suporta várias linguagens de programação, incluindo Julia, Python e R, muito utilizada por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos com código, equações, visualizações e texto. No contexto do Jupyter, o notebook é um documento interativo que permite a execução de código, documentação de equações e inclusão de imagens, sendo útil para explorar dados e documentar processos de trabalho. Assim, é possível criar e executar notebooks, além de rodar células de código individualmente, facilitando a prototipagem de soluções. Os notebooks podem ser salvos e compartilhados com a extensão `.ipynb`. 
 
-## 2. Construção do Ambiente de Desenvolvimento
+Este guia descreve o processo de limpeza, preparação e importação de dados reais para o MongoDB, incluindo a remoção de caracteres indesejados, conversão de codificação e normalização de texto. Após a importação dos dados para o MongoDB, apresentaremos um código em Python que demonstra como realizar a análise exploratória de dados (AED) desses dados utilizando o ambiente do Jupyter. 
 
-Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. Além do Jupyter, o contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark implementado em modo standalone, possibilitando também o uso deste framework para análises de Big Data e Machine Learning. Siga as instruções abaixo para configurar seu ambiente: 
+## 2. Ambiente de Desenvolvimento
+
+Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. Além do Jupyter, o contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark implementado em modo standalone, possibilitando o uso deste framework para análises de Big Data e Machine Learning. Siga as instruções abaixo para configurar seu ambiente: 
 
 a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker, Docker Compose e os utilitários de processamento e conversão de textos apropriados. 
 
@@ -73,7 +75,7 @@ docker exec -it <nome_do_contêiner> /bin/bash
 jupyter config password
 ```
 
-### Inicialize e teste a integração com Spark
+### Inicialize e teste o Spark
 
 a) Quando o Apache Spark está em execução, ele disponibiliza uma interface web para viabilizar o acompanhamento das tarefas designadas por sua aplicação. A Spark Application UI (`http://localhost:4040`) só se tornará disponível após a inicialização de uma sessão Spark por uma aplicação. Crie um notebook Python 3 (ipykernel), e teste seu ambiente inicializando uma sessão Spark: 
 
