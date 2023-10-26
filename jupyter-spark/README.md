@@ -2,13 +2,13 @@
 
 ## 1. Introdução
 
-Jupyter é uma IDE open-source que suporta várias linguagens de programação, incluindo Julia, Python e R, muito utilizada por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos com código, equações, visualizações e texto. No contexto do Jupyter, o notebook é um documento interativo que permite a execução de código, documentação de equações e inclusão de imagens, sendo útil para explorar dados e documentar processos de trabalho. Assim, é possível criar e executar notebooks, além de rodar células de código individualmente, facilitando a prototipagem de soluções. Os notebooks podem ser salvos e compartilhados com a extensão `.ipynb`. 
+Jupyter é um ambiente de desenvolvimento integrado (IDE) que suporta várias linguagens de programação, como Julia, Python e R, sendo amplamente utilizado por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos que integram texto, código, equações e visualizações. No Jupyter, o notebook é um documento interativo que pode ser salvo e compartilhado no formato .ipynb, facilitando a execução individual de células de código, documentação de equações, inserção de imagens, depuração e prototipagem de soluções que envolvem exploração de dados e outros processos de trabalho.
 
-Este guia descreve o processo de limpeza, preparação e importação de dados reais para o MongoDB, incluindo a remoção de caracteres indesejados, conversão de codificação e normalização de texto. Após a importação dos dados para o MongoDB, apresentaremos um código em Python que demonstra como realizar a análise exploratória de dados (AED) desses dados utilizando o ambiente do Jupyter. 
+Este guia detalha o processo de limpeza, preparação e importação de dados reais para o MongoDB, abordando a remoção de caracteres indesejados, conversão de codificação e normalização de texto. Além disso, será apresentado um código em Python para demonstrar como realizar a análise exploratória de dados (AED) desses dados no ambiente Jupyter.
 
 ## 2. Ambiente de Desenvolvimento
 
-Durante o curso, integraremos nossas ferramentas de Big Data e NoSQL ao Jupyter. Além do Jupyter, o contêiner do nosso ambiente de desenvolvimento já possui o Apache Spark implementado em modo standalone, possibilitando o uso deste framework para análises de Big Data e Machine Learning. Siga as instruções abaixo para configurar seu ambiente: 
+No decorrer do curso, realizaremos a integração de nossas ferramentas de Big Data e NoSQL com o Jupyter. Vale ressaltar que o contêiner do nosso ambiente de desenvolvimento já vem equipado com o Apache Spark configurado em modo standalone, o que permite a utilização desse framework para análises de Big Data e Machine Learning. Siga as instruções abaixo para configurar seu ambiente: 
 
 a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker, Docker Compose e os utilitários de processamento e conversão de textos apropriados. 
 
@@ -19,7 +19,6 @@ c) Caso já tenha clonado o repositório anteriomente, execute o comando a segui
 ```bash
 git pull origin main
 ```
-
 d) Caso esta seja a primeira clonagem do repositório, execute os comandos abaixo em seu terminal. 
 
 ```bash
@@ -64,11 +63,11 @@ docker-compose logs | grep 'token='
 
 ### Via GUI
 
-Copie o token identificado no passo anterior e acesse o Jupyter em seu navegador usando o [link](http://localhost:8888). Insira o token de acesso e configure uma nova senha. A partir de então, a autenticação por token não será mais necessária, mesmo que você desligue e ligue novamente o ambiente do Jupyter. 
+- Copie o token identificado no passo anterior e acesse o Jupyter em seu navegador usando o [link](http://localhost:8888). Insira o token de acesso e configure uma nova senha. A partir de então, a autenticação por token não será mais necessária, mesmo que você desligue e ligue novamente o ambiente do Jupyter. 
 
 ### Via CLI
 
-Caso deseje alterar a senha via CLI, execute o script abaixo: 
+- Caso deseje alterar a senha via CLI, execute o script abaixo: 
 
 ```bash
 docker exec -it <nome_do_contêiner> /bin/bash
@@ -441,11 +440,28 @@ plt.title('Correlação entre Região e Grau Acadêmico dos Docentes')
 plt.show()
 
 # Análise dos Resultados:
+
 # O mapa de calor de correlação mostrará a relação entre as diferentes regiões e graus acadêmicos dos docentes.
 # Valores próximos a 1 ou -1 indicam uma forte correlação positiva ou negativa, respectivamente.
 # Valores próximos a 0 indicam que não há uma correlação significativa entre as variáveis.
 ```
 
+Finalizada a análise preliminar, lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
+
+### Discussão dos Resultados
+
+A análise exploratória dos dados (AED), demonstrada no código Python acima, proporcionou insights preliminares sobre a situação da educação superior no Brasil, servindo como ponto de partida para investigações mais detalhadas e análises mais profundas. Observamos os seguintes resultados:
+
+- Número de Instituições por Região: a região Sudeste se destaca com a maior concentração de instituições de ensino superior, seguida pelas regiões Nordeste, Sul, Centro-Oeste e Norte. Essa distribuição reflete tanto a densidade populacional quanto o desenvolvimento econômico de cada região.
+
+- Número de Instituições por Estado: ão Paulo, Minas Gerais e Rio de Janeiro, todos situados na região Sudeste, possuem a maior quantidade de instituições de ensino superior, o que corrobora os dados apresentados anteriormente.
+
+- Número de Docentes por Faixa Etária:A maioria dos docentes se encontra nas faixas etárias de 35 a 59 anos, evidenciando um corpo docente experiente e consolidado. No entanto, essa concentração de profissionais mais experientes pode sinalizar uma potencial falta de renovação do corpo docente, com um número reduzido de professores mais jovens ingressando na carreira acadêmica. Uma investigação mais aprofundada é necessária para compreender as causas e implicações dessa tendência.
+
+- Proporção de Docentes por Grau Acadêmico: A maioria dos docentes possui doutorado, seguido por mestrado, especialização e graduação, indicando um alto nível de qualificação. Embora o Ministério da Educação (MEC) estabeleça normas preferenciais para docentes com títulos de mestre ou doutor no ensino superior, seria interessante analisar de maneira mais refinada os dados para entender o percentual de docentes com apenas graduação ou especialização e buscar políticas públicas que incentivem a qualificação em nível de pós-graduação stricto sensu.
+
+- Número de Docentes por Raça, Cor e Gênero: A maioria dos docentes se autodeclara branca, seguida por pardos, pretos, amarelos, indígenas e não declarados. Essa distribuição reflete a realidade racial do país, mas também pode indicar uma falta de diversidade racial entre os docentes. Quanto ao gênero, há um equilíbrio entre docentes femininos e masculinos, com uma leve predominância feminina, refletindo a distribuição populacional do Brasil.
+
 ## Conclusão 
 
-Este guia apresentou o processo de preparação, limpeza, importação, análise e exploração de dados reais. Utilizamos as ferramentas Jupyter, MongoDB o dataset do Censo da Educação Superior de 2022. A análise exploratória de dados demonstrada no código Python ajuda a obter as primeiras informações a partir dos dados e serve como base para análises mais aprofundadas e investigações adicionais acerca da educação superior no Brasil. Lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
+Este guia apresentou uma AED do Censo da Educação Superior de 2022, adotando soluções como Jupyter e MongoDB, com intuito de oferecer uma experiência prática abrangente, englobando desde os processos iniciais de preparação e limpeza dos dados até as etapas finais de importação, análise e exploração. Assim, ao mesmo tempo que promovemos o desenvolvimento de competências alinhadas às abordagens modernas de Big Data e bancos de dados NoSQL, buscamos facilitar a compreensão acerca da realidade da educação superior no Brasil.
