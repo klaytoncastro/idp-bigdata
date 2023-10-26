@@ -83,11 +83,13 @@ a) Quando o Apache Spark está em execução, ele disponibiliza uma interface we
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.getOrCreate()
 ```
-b) Em seu navegador, acesse a URL `http://localhost:4040` e observe que a interface agora está disponível. Por meio da execução do código designado abaixo em seu notebook Jupyter, encerre a sessão Spark e observe que a interface http://localhost:4040 não estará mais acessível. 
+b) Em seu navegador, acesse a URL da [Spark Application UI](http://localhost:4040) e observe que agora ela está disponível. Execute o código abaixo em seu notebook Jupyter para encerrar sua sessão Spark: 
 
 ```python
 spark.stop()
 ```
+c) Atualize o navegador e observe que a interface http://localhost:4040 não estará mais acessível após encerrarmos a sessão. 
+
 ## 3. Integração com ferramentas externas
 
 ### Conecte os contêineres à mesma rede virtual
@@ -98,7 +100,7 @@ a) Verifique o IP atribuído ao contêiner do MongoDB (pois ele deverá ser refe
 docker network inspect mybridge
 ```
 
-b) A partir de um notebook no Jupyter, teste a conexão com o código abaixo: 
+b) Teste a conexão ao MongoDB com o código abaixo: 
 
 ```python
 from pymongo import MongoClient
@@ -218,7 +220,7 @@ a) Uma vez que realizamos uma limpeza e preparação básicas, agora estamos pro
 b) O comando abaixo é utilizado para executar a ferramenta `mongoimport`, dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV. A opção `--file` especifica o caminho para o arquivo de entrada, no caso, o arquivo base de IES do dataset. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
 
 ```bash
-docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
+docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /opt/idp-bigdata/datasets/inep/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
 c) Agora vamos repetir todo o processo de preparação, limpeza e importação para o arquivo que irá alimentar a collection `cursos`: 
 
