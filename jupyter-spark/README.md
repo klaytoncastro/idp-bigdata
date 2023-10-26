@@ -127,7 +127,7 @@ Nesta atividade, utilizaremos o dataset do Censo da Educação Superior de 2022 
 - Dados sobre alunos, como quantidade de matriculados e concluintes.
 - Informações sobre os docentes.
 
-Antes de qualquer análise, é importante destacar que precisamos realizar as etapas de limpeza e preparação de dados. Segundo a literatura especializada, estes passos costumam consumir até 80% do tempo em um projeto de análise de dados. Assim, antes de importar o dataset para o MongoDB, demonstraremos como realizar uma limpeza básica e preparação prévia dos dados disponibilizados pelo INEP.
+Antes de qualquer análise, é importante realizar as etapas de limpeza e preparação de dados. Segundo a literatura especializada, estes passos costumam consumir até 80% do tempo em um projeto de análise de dados. Assim, antes de importar o dataset para o MongoDB, demonstraremos como realizar uma limpeza básica e preparação dos dados disponibilizados pelo INEP.
 
 ### Preparando a estrutura de importação
 
