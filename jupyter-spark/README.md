@@ -88,11 +88,11 @@ b) Em seu navegador, acesse a URL `http://localhost:4040` e observe que a interf
 ```python
 spark.stop()
 ```
-## 3. Integração do Jupyter com ferramentas externas
+## 3. Integração com ferramentas externas
 
 ### Conecte os contêineres à mesma rede virtual
 
-a) Verifique o IP atribuído ao contêiner do MongoDB (pois ele deverá ser referenciado na string de conexão ao banco de dados a partir de seus notebooks):
+a) Verifique o IP atribuído ao contêiner do MongoDB (pois ele deverá ser referenciado na string de conexão ao banco de dados a partir de seus notebooks Jupyter):
 
 ```bash
 docker network inspect mybridge
