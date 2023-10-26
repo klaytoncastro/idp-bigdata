@@ -2,7 +2,7 @@
 
 ## 1. Introdução
 
-Jupyter é um ambiente de desenvolvimento integrado (IDE) que suporta várias linguagens de programação, como Julia, Python e R, sendo amplamente utilizado por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos que integram texto, código, equações e visualizações. No Jupyter, o notebook é um documento interativo que pode ser salvo e compartilhado no formato .ipynb, facilitando a execução individual de células de código, documentação de equações, inserção de imagens, depuração e prototipagem de soluções que envolvem exploração de dados e outros processos de trabalho.
+Jupyter é um ambiente de desenvolvimento integrado (IDE) que suporta várias linguagens de programação, como Julia, Python e R, sendo amplamente utilizado por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos que integram texto, código, equações e visualizações. No Jupyter, o notebook é um documento interativo que pode ser salvo e compartilhado no formato `.ipynb`, facilitando a execução individual de células de código, documentação de equações, inserção de imagens, depuração e prototipagem de soluções que envolvem exploração de dados e outros processos de trabalho.
 
 Este guia detalha o processo de limpeza, preparação e importação de dados reais para o MongoDB, abordando a remoção de caracteres indesejados, conversão de codificação e normalização de texto. Além disso, será apresentado um código em Python para demonstrar como realizar a análise exploratória de dados (AED) desses dados no ambiente Jupyter.
 
@@ -219,7 +219,7 @@ a) Uma vez que realizamos uma limpeza e preparação básicas, agora estamos pro
 b) O comando abaixo é utilizado para executar a ferramenta `mongoimport`, dentro do contêiner do MongoDB. As opções `--db` e `--collection` especificam o banco de dados e a coleção onde os dados serão importados, respectivamente. O parâmetro `--type csv` indica que o arquivo de entrada é um CSV. A opção `--file` especifica o caminho para o arquivo de entrada, no caso, o arquivo base de IES do dataset. O parâmetro `--headerline` indica que a primeira linha do arquivo contém os nomes das colunas. A opção `--ignoreBlanks` ignora campos em branco. Por fim, `--username`, `--password`, e `--authenticationDatabase` são utilizados para autenticação preliminar no MongoDB.
 
 ```bash
-docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /opt/idp-bigdata/datasets/inep/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
+docker exec -it mongo_service mongoimport --db inep --collection ies --type csv --file /datasets/inep/MICRODADOS_ED_SUP_IES_2022_corrigido_UTF8.csv --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
 c) Agora vamos repetir todo o processo de preparação, limpeza e importação para o arquivo que irá alimentar a collection `cursos`: 
 
