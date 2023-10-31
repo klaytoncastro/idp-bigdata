@@ -51,6 +51,10 @@ O Cassandra Query Language (CQL) permite que você consulte, atualize e manipule
 -- Mostrar todos os keyspaces (equivalente a bancos de dados)
 DESCRIBE KEYSPACES;
 
+-- Criar Keyspace
+CREATE KEYSPACE AulaDemo
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
 
 -- Selecionar um keyspace
 USE AulaDemo;
