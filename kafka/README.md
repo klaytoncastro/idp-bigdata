@@ -2,7 +2,7 @@
 
 O Apache Kafka é uma plataforma de streaming de dados distribuída e de código aberto que foi originalmente desenvolvida pelo LinkedIn e posteriormente doada à Apache Software Foundation, tornando-se um projeto de código aberto. A arquitetura do Apache Kafka é projetada para lidar com a ingestão, o armazenamento e o processamento de dados em tempo real em larga escala. Pode ser usado para criar aplicativos de streaming em tempo real para operacionalizar fluxos de dados, transformar ou deduzir alguma inteligência deles, provendo: 
 
-- Escalabilidade: Capaz de lidar com a escalabilidade em todas as quatro dimensões (produtores de eventos, processadores de eventos, consumidores de eventos e conectores de eventos.
+- Escalabilidade: Capaz de lidar com a escalabilidade em todas as quatro dimensões (produtores de eventos, processadores de eventos, consumidores de eventos e conectores de eventos).
 - Alto Volume: Capaz de trabalhar com enorme volume de fluxos de dados.
 - Transformações de Dados: Capaz de derivar novos fluxos de dados usando os fluxos de dados dos produtores.
 - Baixa latência: Capaz de atender casos de uso tradicionais de mensagens, que requerem baixa latência.

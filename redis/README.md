@@ -211,10 +211,7 @@ Para ver as mensagens de log em tempo real, você pode abrir um terminal e execu
 docker-compose logs -f
 ```
 
-Isso mostrará um fluxo contínuo de logs de todos os serviços definidos no seu docker-compose.yml, incluindo tanto o Flask quanto o Redis.
-
-### Utilizar Ferramentas de Interface de Usuário
-Se você quiser uma abordagem mais visual, pode usar ferramentas de interface de usuário para Docker como o Portainer ou o Kitematic. Essas ferramentas fornecem uma interface gráfica para gerenciar containers e visualizar logs, tornando mais fácil para os alunos acompanharem o que está acontecendo.
+Isso mostrará um fluxo contínuo de logs de todos os serviços definidos no seu `docker-compose.yml`, incluindo tanto o Flask quanto o Redis.
 
 ### Demonstrações Interativas
 Outra forma eficaz de demonstrar é criar rotas Flask específicas para diferentes operações do Redis (como definir um valor, obter um valor, listar valores de uma fila, etc.) e acessar estas rotas através do navegador ou usando uma ferramenta como Postman. Isso permite uma interação direta e visual com a aplicação e o Redis.
