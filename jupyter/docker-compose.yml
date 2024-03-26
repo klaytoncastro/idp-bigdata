@@ -1,0 +1,19 @@
+version: '3.3'
+
+services:
+  jupyter:
+    build:
+      context: .
+    ports:
+      - "8888:8888"  # Porta padrão da interface web do Jupyter Notebook
+        #      - "4040:4040"  # Porta padrão da interface web do Spark
+    volumes:
+      - ./notebooks:/home/jovyan/work
+      - ./data:/home/jovyan/data
+      - ./config:/home/jovyan/.jupyter
+
+volumes:
+  notebooks:
+  data:
+  config:          
+
