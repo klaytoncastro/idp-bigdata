@@ -243,7 +243,7 @@ sed -i 'y/áàãâäéèêëíìîïóòõôöúùûüçñÁÀÃÂÄÉÈÊËÍÌ
 docker exec -it mongo_service mongoimport --db inep --collection cursos --type csv --file /datasets/inep/MICRODADOS_CADASTRO_CURSOS_2022_corrigido_UTF8.CSV --headerline --ignoreBlanks --username root --password mongo --authenticationDatabase admin
 ```
 
-## 4. Exploração e Análise de Dados
+## 5. Exploração e Análise de Dados
 
 A Análise Exploratória de Dados (AED) é um método estatístico que busca identificar padrões, relações e anomalias nos dados. Trata-se de uma abordagem para explorar dados de maneira flexível e visual, antes de aplicar métodos estatísticos mais rigorosos. Nesse contexto, a visualização de dados é um componente crucial e ajuda a comunicar informações complexas de maneira mais clara, auxiliando na compreensão dos resultados da análise. 
 
@@ -456,8 +456,6 @@ plt.show()
 # Valores próximos a 0 indicam que não há uma correlação significativa entre as variáveis.
 ```
 
-Finalizada a análise preliminar, lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
-
 ### Discussão dos Resultados
 
 A análise exploratória dos dados (AED), demonstrada no código Python acima, proporcionou insights preliminares sobre a situação da educação superior no Brasil, servindo como ponto de partida para investigações mais detalhadas e análises mais profundas. Observamos os seguintes resultados:
@@ -474,4 +472,4 @@ A análise exploratória dos dados (AED), demonstrada no código Python acima, p
 
 ## Conclusão 
 
-Este guia apresentou uma AED do Censo da Educação Superior de 2022, adotando soluções como Jupyter e MongoDB, com intuito de oferecer uma experiência prática abrangente, englobando desde os processos iniciais de preparação e limpeza dos dados até as etapas finais de importação, análise e exploração. Assim, ao mesmo tempo que promovemos o desenvolvimento de competências alinhadas às abordagens modernas de Big Data e bancos de dados NoSQL, buscamos facilitar a compreensão acerca da realidade da educação superior no Brasil.
+Este guia apresentou uma AED do Censo da Educação Superior de 2022, adotando soluções como Jupyter e MongoDB, com intuito de oferecer uma experiência prática abrangente, englobando desde os processos iniciais de preparação e limpeza dos dados até as etapas finais de importação, análise e exploração. Assim, ao mesmo tempo que promovemos o desenvolvimento de competências alinhadas às abordagens modernas de Big Data e bancos de dados NoSQL, buscamos facilitar a compreensão acerca da realidade da educação superior no Brasil. Finalizada a análise preliminar, lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
