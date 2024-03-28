@@ -14,12 +14,12 @@ a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do 
 
 b) Navegue até a pasta do repositório, por exemplo: `cd /opt/idp-bigdata`. 
 
-c) Caso já tenha clonado o repositório anteriomente, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
+c) Caso **já tenha clonado** o repositório anteriomente, **mas não realizou nenhuma tarefa**, execute o comando a seguir para garantir que seu ambiente esteja com as atualizações mais recentes: 
 
 ```bash
 git pull origin main
 ```
-d) Caso esta seja a primeira clonagem do repositório, execute os comandos abaixo em seu terminal. 
+d) Caso esta seja a **primeira clonagem** do repositório ou **já tenha realizado alguma operação**, como a importação de dados, execute os comandos abaixo em seu terminal. 
 
 ```bash
 git clone https://github.com/klaytoncastro/idp-bigdata
@@ -27,7 +27,9 @@ chmod +x permissions.sh
 ./permissions.sh
 ```
 
-e) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. Para explicar o que fizemos, seguem as alterações promovidas: 
+e) Caso queira aproveitar o trabalho anterior, basta renomear a pasta idp-bigdata já clonada e fazer o `git clone` ou `git pull` novamente. 
+
+f) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. Para explicar o que fizemos, seguem as alterações promovidas: 
 
 ```yaml
 # Definindo as redes que serão usadas pelos serviços.
@@ -74,6 +76,8 @@ docker exec -it <nome_do_contêiner> /bin/bash
 jupyter config password
 ```
 
+
+<!--
 ### Inicialize e teste o Spark
 
 a) Quando o Apache Spark está em execução, ele disponibiliza uma interface web para viabilizar o acompanhamento das tarefas designadas por sua aplicação. A Spark Application UI (`http://localhost:4040`) só se tornará disponível após a inicialização de uma sessão Spark por uma aplicação. Crie um notebook Python 3 (ipykernel), e teste seu ambiente inicializando uma sessão Spark: 
@@ -88,6 +92,8 @@ b) Em seu navegador, acesse a URL da [Spark Application UI](http://localhost:404
 spark.stop()
 ```
 c) Atualize o navegador e observe que a interface http://localhost:4040 não estará mais acessível após encerrarmos a sessão. 
+
+-->
 
 ## 3. Integração com ferramentas externas
 
