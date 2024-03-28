@@ -1,0 +1,10 @@
+version: '3.3'
+services:
+  streamlit-app:
+    build:
+      context: .  # Use o diretório atual como contexto para encontrar o Dockerfile
+    ports:
+      - "8501:8501"  # Mapeie a porta do container para a porta do host
+    volumes:
+      - ./app.py:/app/app.py  # Mapeie o arquivo app.py local diretamente para o diretório de trabalho no container
+
