@@ -29,7 +29,11 @@ chmod +x permissions.sh
 
 e) Caso queira aproveitar o trabalho anterior, basta renomear a pasta idp-bigdata já clonada e fazer o `git clone` ou `git pull` novamente. 
 
-f) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. Para explicar o que fizemos, seguem as alterações promovidas: 
+f) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. 
+<!--
+Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. 
+-->
+Para explicar o que fizemos, seguem as alterações promovidas: 
 
 ```yaml
 # Definindo as redes que serão usadas pelos serviços.
