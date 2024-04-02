@@ -4,11 +4,11 @@
 
 Jupyter é um ambiente de desenvolvimento integrado (IDE) que suporta várias linguagens de programação, como Julia, Python e R, sendo amplamente utilizado por pesquisadores, educadores, engenheiros, analistas e cientistas de dados para criar documentos que integram texto, código, equações e visualizações. No Jupyter, o notebook é um documento interativo que pode ser salvo e compartilhado no formato `.ipynb`, facilitando a execução individual de células de código, documentação de equações, inserção de imagens, depuração e prototipagem de soluções que envolvem exploração de dados e outros processos de trabalho.
 
-Este guia detalha o processo de limpeza, preparação e importação de dados reais para o MongoDB, abordando a remoção de caracteres indesejados, conversão de codificação e normalização de texto. Além disso, será apresentado um código em Python para demonstrar como realizar a análise exploratória de dados (AED) desses dados no ambiente Jupyter.
+Este guia detalha o processo de limpeza, preparação e importação de dados reais para o MongoDB, abordando a remoção de caracteres indesejados, conversão de codificação e normalização de texto. Além disso, será apresentado um código em Python para demonstrar uma análise exploratória de dados (AED) no ambiente Jupyter.
 
 ## 2. Ambiente de Desenvolvimento
 
-No decorrer do curso, realizaremos a integração de nossas ferramentas de Big Data e NoSQL com o Jupyter. Vale ressaltar que o contêiner do nosso ambiente de desenvolvimento já vem equipado com o Apache Spark configurado em modo standalone, o que permite a utilização desse framework para análises de Big Data e Machine Learning. Siga as instruções abaixo para configurar seu ambiente: 
+No decorrer do curso, realizaremos a integração de nossas ferramentas de Big Data e NoSQL com o Jupyter. Siga as instruções abaixo para configurar seu ambiente: 
 
 a) Se estiver usando uma VM, conforme instruções fornecidas no `README.md` do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata), certifique-se de que a VM está executando e que você pode acessá-la via SSH. Caso tenha optado por hospedar os contêineres diretamente em sua máquina, certifique-se de ter o Git, Docker, Docker Compose e os utilitários de processamento e conversão de textos apropriados. 
 
@@ -26,14 +26,14 @@ git clone https://github.com/klaytoncastro/idp-bigdata
 chmod +x permissions.sh
 ./permissions.sh
 ```
-
 e) Caso queira aproveitar o trabalho anterior, basta renomear a pasta idp-bigdata já clonada e fazer o `git clone` ou `git pull` novamente. 
 
 f) Para permitir a comunicação entre os contêineres do Jupyter e MongoDB, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge` que você. 
 <!--
 Os arquivos `docker-compose` foram recentemente atualizados para contemplar este requisito. Como você já clonou o repositório em sua última versão ou realizou o `git pull origin main`, as alterações descritas abaixo já devem estar implementadas, então você não precisa editar os arquivos manualmente. 
 -->
-Para explicar o que fizemos, seguem as alterações promovidas: 
+
+- Para explicar o que fizemos, seguem as alterações promovidas: 
 
 ```yaml
 # Definindo as redes que serão usadas pelos serviços.
@@ -47,12 +47,12 @@ networks:
       name: mybridge # Nome da rede externa que será usada.
 ```
 
-f) Agora crie a rede virtual `mybridge` no Docker: 
+g) Agora crie a rede virtual `mybridge` no Docker: 
 
 ```bash
 docker network create --driver bridge mybridge
 ```
-g) Acesse as respectivas subpastas em nosso repositório (`/opt/idp-bigdata/mongodb` e `/opt/idp-bigdata/jupyter-spark`) e suba os contêineres do MongoDB e Jupyter-Spark em cada uma delas: 
+h) Acesse as respectivas subpastas em nosso repositório (`/opt/idp-bigdata/mongodb` e `/opt/idp-bigdata/jupyter-spark`) e suba os contêineres do MongoDB e Jupyter-Spark em cada uma delas: 
 
 ```bash
 cd /opt/idp-bigdata/mongodb 
@@ -61,7 +61,7 @@ cd /opt/idp-bigdata/jupyter-spark
 docker-compose build
 docker-compose up -d 
 ```
-h) Caso seja o seu primeiro acesso ao Jupyter, execute o comando a seguir para visualizar os logs e identificar o token para utilizar o ambiente: 
+i) Caso seja o seu primeiro acesso ao Jupyter, execute o comando a seguir para visualizar os logs e identificar o token para utilizar o ambiente: 
 
 ```bash
 docker-compose logs | grep 'token='
@@ -69,17 +69,16 @@ docker-compose logs | grep 'token='
 
 ### Via GUI
 
-- Copie o token identificado no passo anterior e acesse o Jupyter em seu navegador usando o [link](http://localhost:8888). Insira o token de acesso e configure uma nova senha. A partir de então, a autenticação por token não será mais necessária, mesmo que você desligue e ligue novamente o ambiente do Jupyter. 
+- Copie o token identificado no passo anterior e acesse o Jupyter em seu navegador usando o [link](http://localhost:8888). Role ao final da página, insira o token de acesso e configure uma nova senha. A partir de então, a autenticação por token não será mais necessária, mesmo que você desligue e ligue novamente o ambiente do Jupyter. 
 
 ### Via CLI
 
-- Caso deseje alterar a senha via CLI, execute o script abaixo: 
+- Posteriormente, caso deseje alterar a senha via CLI, execute o script abaixo: 
 
 ```bash
 docker exec -it <nome_do_contêiner> /bin/bash
 jupyter config password
 ```
-
 
 <!--
 ### Inicialize e teste o Spark
@@ -125,9 +124,9 @@ except ConnectionFailure:
 ```
 ### Prática com Dataset Exemplo 
 
-a) Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de aprendizado de máquina. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. 
+a) Para praticar a análise de dados com Python e MongoDB, sugerimos que você explore datasets de exemplo disponíveis no [Kaggle](https://www.kaggle.com/). O Kaggle é uma plataforma online amplamente utilizada por cientistas de dados, pesquisadores e entusiastas de machine learning. Ele oferece um ambiente onde os usuários podem colaborar, compartilhando e aprendendo uns com os outros, além de ter acesso a uma vasta quantidade de datasets e competições de aprendizado de máquina. 
 
-b) Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python, compatível com nosso ambiente Jupyter. Este notebook abrange a criação de banco de dados e coleções, inserção, busca, atualização e exclusão de documentos, além de operações como ordenação e limitação de resultados. Realize as atividades nele propostas para se ambientar ao Jupyter e MongoDB. 
+b) Uma excelente referência para começar é o notebook [MongoDB w/ Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python), que apresenta um exemplo prático de como utilizar o MongoDB junto com Python. Este notebook abrange a criação de banco de dados e coleções, inserção, busca, atualização e exclusão de documentos, além de operações como ordenação e limitação de resultados. Realize as atividades nele propostas para se ambientar ao Jupyter e MongoDB. 
 
 ## 4. Limpeza, Preparação e Importação de Dados Reais
 
@@ -250,9 +249,13 @@ A Análise Exploratória de Dados (AED) é um método estatístico que busca ide
 A seguir, temos um código em Python, que deve ser executado no seu ambiente Jupyter Notebook. Como já realizamos a preparação, limpeza e importação de dados, vamos conectar o Jupyter ao MongoDB e realizar consultas específicas para extrair informações relevantes e, posteriormente, utilizar essas informações para criar visualizações e ilustrar padrões e relações existentes nos dados. Execute cada bloco de código em células do seu Jupyter notebook e entenda como esta análise foi conduzida. Lembre-se de verificar e alterar o endereço IP correspondente ao seu contêiner MongoDB. 
 
 ```python
+#pip install pymongo
 from pymongo import MongoClient
 from pymongo.errors import ConnectionFailure
+```
 
+```python
+#Altere o IP do contêiner do MongoDB após verificação com o comando docker network inspect mybridge.  
 try:
     client = MongoClient("mongodb://root:mongo@172.22.0.3:27017/", serverSelectionTimeoutMS=5000)
     client.server_info()  # Isso lançará uma exceção se não puder se conectar ao servidor.
@@ -260,23 +263,36 @@ try:
 
 except ConnectionFailure:
     print("Falha na conexão ao servidor MongoDB")
+```
 
+```python
 # Selecionar o banco de dados
 db = client['inep']
+```
 
+```python
 # Selecionar a coleção
 collection = db['ies']
+```
 
-# Query para contar o número de instituições por região
-import matplotlib.pyplot as plt
+```python
+#Importe o Matplotlib
+import matplotlib.pyplot as plt 
+```
 
+```python
+# Execute a query para contar o número de instituições por região
 result = collection.aggregate([
     {'$group': {'_id': '$NO_REGIAO_IES', 'count': {'$sum': 1}}}
 ])
+```
 
+```python
 # Converter o resultado para listas
 regions, counts = zip(*[(r['_id'], r['count']) for r in result])
+```
 
+```python
 # Plotar o gráfico
 plt.figure(figsize=(10,5))
 plt.bar(regions, counts)
@@ -284,7 +300,9 @@ plt.xlabel('Região')
 plt.ylabel('Número de Instituições')
 plt.title('Número de Instituições por Região')
 plt.show()
+```
 
+```python
 # Query para calcular a proporção de docentes por gênero
 result = collection.aggregate([
     {'$group': {
@@ -293,12 +311,16 @@ result = collection.aggregate([
         'total_masc': {'$sum': '$QT_DOC_EX_MASC'}
     }}
 ])
+```
 
+```python
 # Converter o resultado para valores
 result = next(result)
 total_fem = result['total_fem']
 total_masc = result['total_masc']
+```
 
+```python
 # Plotar o gráfico
 labels = ['Feminino', 'Masculino']
 sizes = [total_fem, total_masc]
@@ -310,15 +332,21 @@ plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%',
 plt.axis('equal')
 plt.title('Proporção de Docentes por Gênero')
 plt.show()
+```
 
+```python
 # Query para contar o número de instituições por estado
 result = collection.aggregate([
     {'$group': {'_id': '$NO_UF_IES', 'count': {'$sum': 1}}}
 ])
+```
 
+```python
 # Converter o resultado para listas
 states, counts = zip(*sorted([(r['_id'], r['count']) for r in result], key=lambda x: x[1], reverse=True))
+```
 
+```python
 # Plotar o gráfico
 plt.figure(figsize=(10,5))
 plt.bar(states, counts)
@@ -327,7 +355,9 @@ plt.ylabel('Número de Instituições')
 plt.title('Número de Instituições por Estado')
 plt.xticks(rotation=90)
 plt.show()
+```
 
+```python
 # Query para calcular o número de docentes por faixa etária
 result = collection.aggregate([
     {'$group': {
@@ -342,12 +372,16 @@ result = collection.aggregate([
         '60+': {'$sum': '$QT_DOC_EX_60_MAIS'},
     }}
 ])
+```
 
-# Converter o resultado para valores
+```python
+# Converter o resultado segmentado para faixas etárias
 result = next(result)
 ages = ['0-29', '30-34', '35-39', '40-44', '45-49', '50-54', '55-59', '60+']
 counts = [result[age] for age in ages]
+```
 
+```python
 # Plotar o gráfico
 plt.figure(figsize=(10,5))
 plt.bar(ages, counts)
@@ -355,7 +389,9 @@ plt.xlabel('Faixa Etária')
 plt.ylabel('Número de Docentes')
 plt.title('Número de Docentes por Faixa Etária')
 plt.show()
+```
 
+```python
 # Query para calcular o número de docentes por grau acadêmico
 result = collection.aggregate([
     {'$group': {
@@ -366,18 +402,24 @@ result = collection.aggregate([
         'Doutorado': {'$sum': '$QT_DOC_EX_DOUT'},
     }}
 ])
+```
 
-# Converter o resultado para valores
+```python
+# Converter o resultado para categorias de formação
 result = next(result)
 degrees = ['Graduação', 'Especialização', 'Mestrado', 'Doutorado']
 counts = [result[degree] for degree in degrees]
+```
 
+```python
 # Plotar o gráfico
 plt.figure(figsize=(10,5))
 plt.pie(counts, labels=degrees, autopct='%1.1f%%', startangle=90)
 plt.title('Proporção de Docentes por Grau Acadêmico')
 plt.show()
+```
 
+```python
 # Query para calcular o número de docentes por raça/cor
 result = collection.aggregate([
     {'$group': {
@@ -390,12 +432,16 @@ result = collection.aggregate([
         'Não declarada': {'$sum': '$QT_DOC_EX_COR_ND'},
     }}
 ])
+```
 
-# Converter o resultado para valores
+```python
+# Converter o resultado para etnias
 result = next(result)
 races = ['Branca', 'Preta', 'Parda', 'Amarela', 'Indígena', 'Não declarada']
 counts = [result[race] for race in races]
+```
 
+```python
 # Plotar o gráfico
 plt.figure(figsize=(10,5))
 plt.bar(races, counts)
@@ -404,7 +450,9 @@ plt.ylabel('Número de Docentes')
 plt.title('Número de Docentes por Raça/Cor')
 plt.xticks(rotation=45)
 plt.show()
+```
 
+```python
 #Análise Multivariada: Query para calcular o número de docentes por região e grau acadêmico
 result = collection.aggregate([
     {'$group': {
@@ -424,8 +472,11 @@ result = collection.aggregate([
         'count': {'$sum': '$QT_DOC_EX_DOUT'},
     }}
 ])
+```
 
+```python
 # Convertendo o resultado para um dataframe
+# pip install pandas
 import pandas as pd
 
 data = []
@@ -437,11 +488,16 @@ for r in result:
     })
 
 df = pd.DataFrame(data)
+```
 
+```python
 # Realizando a análise de correlação
 corr = df.corr()
+```
 
+```python
 # Plotando o mapa de calor da correlação
+# pip install seaborn
 import seaborn as sns
 
 plt.figure(figsize=(10, 8))
@@ -458,7 +514,7 @@ plt.show()
 
 ### Discussão dos Resultados
 
-A análise exploratória dos dados (AED), demonstrada no código Python acima, proporcionou insights preliminares sobre a situação da educação superior no Brasil, servindo como ponto de partida para investigações mais detalhadas e análises mais profundas. Observamos os seguintes resultados:
+A análise exploratória dos dados (AED) proporcionou alguns insights preliminares sobre a situação da educação superior no Brasil, servindo como ponto de partida para investigações mais detalhadas e aprofundamento posterio. Observamos os seguinte:
 
 - Número de Instituições por Região: a região Sudeste se destaca com a maior concentração de instituições de ensino superior, seguida pelas regiões Nordeste, Sul, Centro-Oeste e Norte. Essa distribuição reflete tanto a densidade populacional quanto o desenvolvimento econômico de cada região.
 
@@ -472,4 +528,4 @@ A análise exploratória dos dados (AED), demonstrada no código Python acima, p
 
 ## Conclusão 
 
-Este guia apresentou uma AED do Censo da Educação Superior de 2022, adotando soluções como Jupyter e MongoDB, com intuito de oferecer uma experiência prática abrangente, englobando desde os processos iniciais de preparação e limpeza dos dados até as etapas finais de importação, análise e exploração. Assim, ao mesmo tempo que promovemos o desenvolvimento de competências alinhadas às abordagens modernas de Big Data e bancos de dados NoSQL, buscamos facilitar a compreensão acerca da realidade da educação superior no Brasil. Finalizada a análise preliminar, lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
+Este guia apresentou uma AED do Censo da Educação Superior de 2022, empregando Jupyter e MongoDB, com intuito de oferecer uma experiência prática abrangente, englobando desde os processos iniciais de preparação e limpeza dos dados até as etapas finais de importação, análise e exploração. Assim, ao mesmo tempo que promovemos o desenvolvimento de competências alinhadas às abordagens modernas de Big Data e bancos de dados NoSQL, buscamos facilitar a compreensão acerca da realidade da educação superior no Brasil. Finalizada a análise preliminar, lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
