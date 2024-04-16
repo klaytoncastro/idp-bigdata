@@ -5,18 +5,24 @@ services:
     container_name: cassandra-container
     ports:
       - "9042:9042"
-    environment:
-      - MAX_HEAP_SIZE=256M
-      - HEAP_NEWSIZE=100M
+    networks:
+      - cassandra-net
 
   cassandra-web:
-    image: strate/cassandra-web
+    image: ipushc/cassandra-web
     container_name: cassandra-web-container
     ports:
-      - "3000:3000"
+      - "3000:80"  # Mapeia a porta 3000 do host para a porta 80 do container
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
     environment:
-      - CASSANDRA_HOSTS=cassandra
+      - HOST_PORT=:80
+      - READ_ONLY=false
+      - CASSANDRA_HOST=cassandra
       - CASSANDRA_PORT=9042
+      - CASSANDRA_USERNAME=cassandra  
+      - CASSANDRA_PASSWORD=cassandra  
+    command: ["/wait-for-it.sh", "cassandra:9042", "--", "./service", "-c", "config.yaml"]  # Supondo que o config.yaml esteja correto e disponível
     depends_on:
       - cassandra
     networks:
@@ -24,3 +30,5 @@ services:
 
 networks:
   cassandra-net:
+    driver: bridge
+
