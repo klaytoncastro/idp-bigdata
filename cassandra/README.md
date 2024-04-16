@@ -89,10 +89,11 @@ O Apache Cassandra oferece níveis de consistência que permitem controlar o equ
 Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação. Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas, mas com um risco maior de inconsistências temporárias.
 
 
-## Acesso à Interface Web do Apache Cassandra
-Abra um navegador da web e acesse `http://localhost:3000` para acessar o Cassandra Web, uma interface web adicional que foi disponibilizada em nosso `docker-compose.yml`.
+## Acesso à GUI 
 
-## Acesso ao CLI do Apache Cassandra
+Abra um navegador da web e acesse `http://localhost:3000/#/main` para vistualizar o Cassandra Web, uma interface web adicional que foi disponibilizada como GUI em nosso `docker-compose.yml`.
+
+## Acesso ao CLI 
 
 Você também pode interagir com o Cassandra por meio do comando-line (CLI). Aqui estão os passos para acessar o CLI do Cassandra: 
 
@@ -122,8 +123,29 @@ USE AulaDemo;
 
 ```sql
 -- Criar um keyspace
-CREATE KEYSPACE IF NOT EXISTS AulaDemo2 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+CREATE KEYSPACE IF NOT EXISTS AulaDemo WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 ```
+
+<!--
+
+Em um ambiente de produção, você geralmente deseja uma estratégia de replicação mais robusta para garantir alta disponibilidade e tolerância a falhas. Uma estratégia comum é usar o NetworkTopologyStrategy em vez da SimpleStrategy, especialmente em um ambiente de vários datacenters.
+
+Aqui está um exemplo de como você poderia definir um keyspace em produção com o NetworkTopologyStrategy:
+
+```sql
+CREATE KEYSPACE IF NOT EXISTS AulaDemo2 
+WITH replication = {'class': 'NetworkTopologyStrategy', 'DC1': 3, 'DC2': 2};
+```
+
+Neste exemplo:
+
+NetworkTopologyStrategy é a estratégia de replicação usada.
+'DC1': 3 indica que os dados devem ser replicados em três réplicas dentro do datacenter chamado 'DC1'.
+'DC2': 2 indica que os dados também devem ser replicados em duas réplicas dentro do datacenter chamado 'DC2'.
+Essa configuração é mais robusta porque espalha as réplicas por vários datacenters, proporcionando maior redundância e tolerância a falhas em comparação com a SimpleStrategy. No entanto, é importante adaptar a configuração de replicação de acordo com os requisitos específicos de disponibilidade e desempenho do seu aplicativo e com a arquitetura do seu ambiente de produção.
+
+-->
+
 
 ```sql
 -- Mostrar todas as tabelas em um keyspace
