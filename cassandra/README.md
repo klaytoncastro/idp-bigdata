@@ -107,21 +107,30 @@ O Cassandra Query Language (CQL) permite que você consulte, atualize e manipule
 ```sql
 -- Mostrar todos os keyspaces (equivalente a bancos de dados)
 DESCRIBE KEYSPACES;
+```
 
+```sql
 -- Criar Keyspace
 CREATE KEYSPACE AulaDemo
 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+```
 
-
+```sql
 -- Selecionar um keyspace
 USE AulaDemo;
+```
 
+```sql
 -- Criar um keyspace
 CREATE KEYSPACE IF NOT EXISTS AulaDemo2 WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+```
 
+```sql
 -- Mostrar todas as tabelas em um keyspace
 DESCRIBE TABLES;
+```
 
+```sql
 -- Criar uma tabela chamada "Estudantes"
 CREATE TABLE IF NOT EXISTS Estudantes (
     id UUID PRIMARY KEY,
@@ -130,50 +139,77 @@ CREATE TABLE IF NOT EXISTS Estudantes (
     curso TEXT,
     email TEXT
 );
+```
 
+```sql
 -- Inserir um registro na tabela "Estudantes"
 INSERT INTO Estudantes (id, nome, idade, curso, email) VALUES (uuid(), 'João Leite', 22, 'Engenharia da Computação', 'joao.leite@email.com');
+```
 
+```sql
 -- Inserir vários registros na tabela "Estudantes"
 INSERT INTO Estudantes (id, nome, idade, curso, email) VALUES (uuid(), 'Domitila Canto', 22, 'Letras', 'domitila.canto@email.com');
+```
 
+```sql
 -- Selecionar todos os registros da tabela "Estudantes"
 SELECT * FROM Estudantes;
+```
 
+```sql
 -- Atualizar um registro na tabela "Estudantes"
 UPDATE Estudantes SET idade = 23 WHERE nome = 'João Leite';
+```
 
+```sql
 -- Apagar um registro na tabela "Estudantes"
 DELETE FROM Estudantes WHERE nome = 'Domitila Canto';
+```
 
+```sql
 -- Consultar todos os registros na tabela "estudantes"
 SELECT * FROM estudantes;
+```
 
+```sql
 -- Consultar estudantes com idade maior ou igual a 18
 SELECT * FROM estudantes WHERE idade >= 18;
+```
 
+```sql
 -- Consultar estudantes pelo nome
 SELECT * FROM estudantes WHERE nome = 'João Leite';
+```
 
+```sql
 -- Inserir um novo estudante na tabela "estudantes"
 INSERT INTO estudantes (id, nome, idade, curso, email) VALUES (uuid(), 'João Leite', 22, 'Engenharia da Computação', 'joao.leite@email.com');
+```
 
+```sql
 -- Inserir um novo estudante na tabela "estudantes" com um identificador gerado automaticamente
 INSERT INTO estudantes (nome, idade, curso, email) VALUES ('Domitila Canto', 22, 'Letras', 'domitila.canto@email.com');
+```
 
+```sql
 -- Atualizar a idade de um estudante com base no nome
 UPDATE estudantes SET idade = 23 WHERE nome = 'João Leite';
+```
 
+```sql
 -- Atualizar o curso de um estudante com base no nome
 UPDATE estudantes SET curso = 'Ciência da Computação' WHERE nome = 'Domitila Canto';
+```
 
+```sql
 -- Excluir um estudante com base no nome
 DELETE FROM estudantes WHERE nome = 'João Leite';
+```
 
+```sql
 -- Excluir todos os estudantes com idade menor que 20
 DELETE FROM estudantes WHERE idade < 20;
 ```
-
 
 <!--
 
@@ -186,9 +222,9 @@ DROP KEYSPACE IF EXISTS AulaDemo;
 
 ### Importação de Dados
 
-O Apache Cassandra oferece uma variedade de métodos para importar dados de fontes externas para suas tabelas. Um desses métodos é o cqlsh, a ferramenta de linha de comando do Cassandra. Você pode usar o cqlsh para executar instruções CQL (Cassandra Query Language) e, assim, inserir dados em suas tabelas a partir de arquivos externos, como CSV ou outros formatos. Exemplo de uso:
+O Apache Cassandra oferece métodos para importar dados de fontes externas para suas tabelas. Um desses métodos é utilizar o próprio CQL Shell, a ferramenta de linha de comando do Cassandra. Você pode usar o `cqlsh` para executar instruções CQL (Cassandra Query Language) e, assim, inserir dados em suas tabelas a partir de arquivos externos, como CSV ou outros formatos. Exemplo de uso:
 
-```
+```csv
 id,nome,idade,curso,email
 1,João Leite,22,Engenharia da Computação,joao.leite@email.com
 2,Domitila Canto,22,Letras,domitila.canto@email.com
@@ -208,7 +244,7 @@ cqlsh -e "COPY MeuBancoDeDados.MinhaTabela FROM 'caminho/para/arquivo.csv' WITH 
 
 ### Backup e Restauração de Dados
 
-O Apache Cassandra fornece ferramentas para fazer backup de seus dados, o que é crucial para a recuperação de dados em caso de falhas ou erros de operação. Você pode usar o nodetool para criar backups completos ou incrementais de seus nós Cassandra. Exemplo de uso:
+O Apache Cassandra fornece ferramentas para realizar backup de seus dados, prática essencial para viabilizar a recuperação de dados em caso de falhas, erros de operação e desastres. Você pode usar o `nodetool` para criar backups completos ou incrementais de seus nós Cassandra. Exemplo de uso:
 
 ```bash
 nodetool snapshot -t nome_do_snapshot MeuBancoDeDados
@@ -227,7 +263,6 @@ DataStax Astra: É um serviço de banco de dados gerenciado baseado no Cassandra
 <!--
 
 Apache Cassandra GUIs: Existem várias ferramentas de terceiros, como o "Cassandra Query Browser," que fornecem interfaces gráficas para gerenciamento e consulta de dados no Cassandra.
-
 
 -->
 
