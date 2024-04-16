@@ -329,11 +329,11 @@ DROP KEYSPACE IF EXISTS AulaDemo;
 
 -->
 
-## Administração do Ambiente no Cassandra
+## Administração do Ambiente
 
 ### Importação de Dados
 
-O Apache Cassandra oferece métodos para importar dados de fontes externas para suas tabelas. Um desses métodos é utilizar o próprio CQL Shell, a ferramenta de linha de comando do Cassandra. Você pode usar o `cqlsh` para executar instruções CQL (Cassandra Query Language) e, assim, inserir dados em suas tabelas a partir de arquivos externos, como CSV ou outros formatos. Exemplo de uso:
+O Cassandra oferece métodos para importar dados de fontes externas para suas tabelas. Um desses métodos é utilizar o próprio CQL Shell, a ferramenta de linha de comando do Cassandra. Você pode usar o `cqlsh` para executar instruções CQL (Cassandra Query Language) e, assim, inserir dados em suas tabelas a partir de arquivos externos, como CSV ou outros formatos. Exemplo de uso:
 
 ```csv
 id,nome,idade,curso,email
