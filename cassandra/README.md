@@ -154,10 +154,9 @@ SELECT COUNT(*) FROM empregados WHERE departamento_id = '123';
 
 - Você pode fazer contagens simples por chave de partição, mas agregações complexas sobre grandes volumes de dados requerem uma abordagem diferente, frequentemente envolvendo o processamento externo dos dados. Neste caso, geralmente contamos com uma ferramenta externa, por exemplo, Apache Spark atuando junto com o Cassandra. 
 
-
 ## Laboratório 
 
-Agora vamos para a prática! Execute os contêineres do Cassandra (DB e GUI) e conclua o roteiro a seguir. Se este for seu primeiro acesso, vá até o diretório `/opt/idp-bigdata/mongodb` e certifique-se que o script `wait-for-it.sh` tenha permissão de execução: 
+Agora vamos para a prática! Execute os contêineres do Cassandra (DB e GUI) e conclua o roteiro a seguir. Se este for seu primeiro acesso, vá até o diretório `/opt/idp-bigdata/cassandra` e certifique-se que o script `wait-for-it.sh` tenha permissão de execução: 
 
 ```bash
 cd /opt/idp-bigdata/cassandra
