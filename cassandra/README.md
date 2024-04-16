@@ -86,16 +86,39 @@ O Apache Cassandra oferece níveis de consistência que permitem controlar o equ
 
 - EACH_QUORUM: Em uma configuração de múltiplos data centers, um quórum de nós em cada data center deve responder.
 
-Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação. Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas, mas com um risco maior de inconsistências temporárias.
+Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação. 
 
+Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas, mas com um risco maior de inconsistências temporárias.
+
+No lado servidor, você pode ter acesso a essas configurações no arquivo `/etc/cassandra/cassandra.yaml`. Contudo, em nosso laboratório, para fins de simplificação do ambiente e recursos, estamos executando o Cassandra com apenas um nó. 
+
+## Execute os contêineres do Cassandra (DB e GUI): 
+
+Se este for seu primeiro acesso, vá até o diretório `/opt/idp-bigdata/mongodb` e certifique-se que o script `wait-for-it.sh` tenha permissão de execução: 
+
+```bash
+cd /opt/idp-bigdata/cassandra
+chmod +x wait-for-it.sh
+```
+
+```bash
+docker-compose up -d
+```
+
+Verifique se os contêineres estão ativos e sem erros de implantação: 
+
+```bash
+docker ps
+docker-compose logs
+```
 
 ## Acesso à GUI 
 
-Abra um navegador da web e acesse `http://localhost:3000/#/main` para vistualizar o Cassandra Web, uma interface web adicional que foi disponibilizada como GUI em nosso `docker-compose.yml`.
+Abra um navegador da web e acesse `http://localhost:3000/#/main` para vistualizar o Cassandra Web, a interface web adicional que foi disponibilizada como GUI em nosso `docker-compose.yml`.
 
-## Acesso ao CLI 
+## Acesso à CLI 
 
-Você também pode interagir com o Cassandra por meio do comando-line (CLI). Aqui estão os passos para acessar o CLI do Cassandra: 
+Você também pode interagir com o Cassandra por meio da comando-line (CLI). Aqui estão os passos para acessar a CLI do Cassandra (CQL Shell): 
 
 ```shell
 docker exec -it cassandra-container cqlsh
