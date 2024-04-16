@@ -20,33 +20,35 @@ Por essas razões, bancos de dados NoSQL como o Cassandra têm sido crescentemen
 
 ## Consistency Levels
 
-O Cassandra permite ajustar o equilíbrio entre consistência e disponibilidade dos dados. Configurar esses níveis é essencial para projetar pipelines de dados adequados, assegurando que as operações de leitura e gravação atendam aos requisitos específicos dos sistemas suportados. 
+O Cassandra oferece a flexibilidade para equilibrar as necessidades de consistência e disponibilidade dos dados. Configurar esses níveis é crucial para desenvolver pipelines de dados eficazes, garantindo que as operações de leitura e gravação cumpram com os requisitos específicos dos sistemas suportados. Os níveis de consistência permitem que os desenvolvedores ajustem o comportamento do SGBD com base nas necessidades da aplicação: 
 
-Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação: 
+- **ONE**: A operação é considerada concluída após a confirmação de um único nó. Este é o modo mais rápido, porém o menos consistente.
 
-- ONE: A operação é considerada bem-sucedida após o retorno de um único nó. É o mais rápido, mas também o menos consistente.
+- **QUORUM**: A maioria dos nós deve confirmar para que a operação seja considerada bem-sucedida. Isso assegura uma boa consistência e tolerância a falhas.
 
-- QUORUM: A maioria dos nós deve responder para que a operação seja bem-sucedida. Isso garante uma boa consistência e tolerância a falhas.
+- **ALL**: Todos os nós no cluster de replicação devem confirmar. Isso proporciona a maior consistência possível, mas pode comprometer a disponibilidade se algum nó estiver indisponível.
 
-- ALL: Todos os nós no cluster de replicação devem responder. Isso garante a consistência mais forte possível, mas pode reduzir a disponibilidade se qualquer nó estiver inativo.
+- **TWO, THREE**, *etc.*: Variações entre ONE e QUORUM, exigindo um número específico de confirmações de nós.
 
-- TWO, THREE, etc.: Variações entre ONE e QUORUM, onde um número específico de respostas de nós é necessário.
+- **LOCAL_QUORUM**: Um quórum de nós no mesmo data center deve confirmar. Esta configuração é útil em ambientes com múltiplos data centers.
 
-- LOCAL_QUORUM: Um quórum de nós no mesmo data center local deve responder. Isso é útil em configurações de múltiplos data centers.
+- **EACH_QUORUM**: Em uma configuração com múltiplos data centers, um quórum de nós em cada data center deve confirmar.
 
-- EACH_QUORUM: Em uma configuração de múltiplos data centers, um quórum de nós em cada data center deve responder.
+Por exemplo, utilizar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras desatualizadas em um ambiente altamente distribuído. Por outro lado, operações com o nível de consistência ONE podem apresentar latências mais baixas, mas com maior risco de inconsistências temporárias.
 
-Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas, porém, um risco maior de inconsistências temporárias.
-
-No lado servidor, você pode ter acesso a essas configurações no arquivo `/etc/cassandra/cassandra.yaml`. Contudo, em nosso laboratório, para fins de simplificação do ambiente e recursos, estamos executando o Cassandra com apenas um nó.
+No lado do servidor, essas configurações podem ser acessadas no arquivo `/etc/cassandra/cassandra.yaml`. No entanto, em nosso laboratório, para simplificar o ambiente e os recursos, estamos operando o Cassandra em um único nó.
 
 ## Arquitetura Colunar
 
-Esta arquitetura oferece otimização para sistemas onde leituras e consultas agregadas são frequentes, como sistemas de análise de dados (Data Warehousing). Ler uma coluna inteira para uma agregação (como soma ou média) não requer a leitura de outros dados irrelevantes, o que seria inevitável em uma arquitetura baseada em registros (linhas).
+Esta arquitetura é especialmente otimizada para sistemas onde leituras e consultas agregadas são frequentes, como é o caso dos sistemas de análise de dados (Data Warehousing). Em uma arquitetura colunar, ler uma coluna inteira para realizar uma agregação (como soma ou média) não exige a leitura de outros dados irrelevantes, o que seria inevitável em uma arquitetura baseada em registros (linhas).
 
-Além disso, as colunas tendem a armazenar dados semelhantes, o que permite técnicas de compressão mais eficazes, reduzindo o uso de espaço em disco e melhorando o desempenho. Em cargas de trabalho com muitas colunas, mas com apenas um subconjunto frequentemente acessado, os bancos de dados colunares evitam o custo de carregar dados desnecessários em memória.
+Além disso, as colunas tendem a armazenar dados semelhantes, o que favorece a implementação de técnicas de compressão mais eficazes. Isso não apenas reduz o uso de espaço em disco, mas também melhora o desempenho geral do sistema. Em ambientes com muitas colunas, mas apenas um subconjunto frequentemente acessado, os bancos de dados colunares evitam o custo de carregar dados desnecessários na memória.
 
-Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real e sistemas de processamento de eventos, incluindo sensores IoT. 
+Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real e sistemas de processamento de eventos complexos, incluindo aqueles que envolvem sensores IoT. Eles são ideais para cenários onde a eficiência na consulta de grandes volumes de dados é crítica, pois permitem análises mais rápidas e menos onerosas em termos de recursos computacionais.
+
+Além disso, a arquitetura colunar suporta melhor a escalabilidade horizontal, permitindo que as organizações expandam sua capacidade de processamento de dados adicionando mais servidores sem grandes alterações na infraestrutura existente. Isso é particularmente útil em ambientes de nuvem, onde a demanda por recursos pode flutuar significativamente durante determinados períodos. 
+
+Combinando alta eficiência, escalabilidade e redução de custos, os sistemas baseados em arquitetura colunar estão se tornando o núcleo de muitas soluções modernas de processamento de dados e inteligência de negócios.
 
 ## Modelagem de Dados 
 
