@@ -180,7 +180,7 @@ docker-compose logs
 
 ## Acesso à GUI 
 
-Abra um navegador da web e acesse `http://localhost:3000/#/main` para vistualizar o Cassandra Web, a interface web adicional que foi disponibilizada como GUI em nosso `docker-compose.yml`. 
+Abra um navegador da web e acesse `http://localhost:3000/#/main` para visualizar o Cassandra Web, a interface web complementar que foi disponibilizada como GUI em nosso `docker-compose.yml`. Para quem está utilizando a VM do Virtual Box, lembre-se de configurar o NAT para tornar disponível a porta 3000 ao computador hospedeiro. 
 
 ## Acesso à CLI 
 
