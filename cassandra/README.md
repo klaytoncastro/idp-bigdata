@@ -1,10 +1,14 @@
 # Apache Cassandra
 
-Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribuído, projetado para lidar com grandes quantidades de dados em múltiplos servidores *commodity*, proporcionando alta disponibilidade e tolerância à falha. 
+Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribuído, projetado para lidar com grandes volumes de dados em múltiplos servidores commodity, oferecendo alta disponibilidade e tolerância a falhas.
 
-Um servidor *commodity* é construído a partir de componentes de hardware padronizados e de fácil substituição, amplamente disponíveis no mercado, adotando uma arquitetura popular como x86_64. Estes servidores são menos caros do que suas contrapartes especializadas, como os mainframes de arquitetura RISC, que contam com processadores Sun Sparc, IBM Power, Hitachi, etc, sendo projetados para serem facilmente escaláveis e mantidos em clusters dedicados a aplicações distribuídas de baixa plataforma. Ou seja, a parte de HA (alta disponibilidade) e FT (tolerância à falha) é ofertada pelo software de forma mais pragmática em relação ao hardware especializado de arquiteturas de alta plataforma.
+Um servidor commodity é construído usando componentes de hardware padronizados e facilmente substituíveis, que são amplamente disponíveis no mercado e geralmente baseados em arquiteturas populares como x86_64.
 
-Por essa razão, os bancos NoSQL como o Cassandra tem sido cada vez mais escolhidos por grandes empresas do mercado para hospedar seus serviços, como Netflix, Apple, e Facebook, com objetivo de gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo de modo mais eficiente, eficaz e seguro, apesar de utilizar servidores *commodity*. 
+Esses servidores são menos caros do que suas contrapartes especializadas, como os mainframes de arquitetura RISC, que utilizam processadores de marcas como Sun Sparc, IBM Power e Hitachi. Além disso, são projetados para serem facilmente escaláveis e mantidos em clusters dedicados a aplicações distribuídas de grande escala.
+
+Os recursos de Alta Disponibilidade (HA) e Tolerância a Falhas (FT) são proporcionados pelo software de forma mais eficiente do que pelo hardware especializado em plataformas de alta performance. Isso significa que, embora o hardware commodity possa falhar com mais frequência, o software adequado compensa essa desvantagem, tornando tais falhas aceitáveis.
+
+Por essas razões, bancos de dados NoSQL como o Cassandra têm sido crescentemente adotados por grandes empresas, incluindo Netflix, Apple e Facebook. Eles escolhem essas soluções para hospedar seus serviços devido à capacidade de gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo de maneira mais eficiente, eficaz e segura, mesmo utilizando servidores commodity.
 
 ## Características
 
@@ -306,6 +310,16 @@ INSERT INTO estudantes (nome, idade, curso, email) VALUES ('Domitila Canto', 22,
 -- Atualizar a idade de um estudante com base no nome
 UPDATE estudantes SET idade = 23 WHERE nome = 'João Leite';
 ```
+
+Como a coluna nome não faz parte da chave primária na tabela Estudantes, você não pode utilizá-la diretamente na cláusula WHERE para filtrar os dados e deve ter obtido um erro no comando acima. Alterar a estrutura da chave primária para incluir nome como parte da chave de clustering irá permitir a filtragem por nome:
+
+```sql
+
+ALTER TABLE Estudantes ADD PRIMARY KEY (id, nome);
+
+
+```
+
 
 ```sql
 -- Atualizar o curso de um estudante com base no nome
