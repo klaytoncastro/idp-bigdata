@@ -1,6 +1,11 @@
 # Apache Cassandra
 
-Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribuído, projetado para lidar com grandes quantidades de dados em múltiplos servidores *commodity*, proporcionando alta disponibilidade e tolerância à falha. Por essa razão, tem sido escolhido por grandes empresas do mercado para hospedar seus serviços, como Netflix, Apple, e Facebook, com objetivo de gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo de modo eficiente, eficaz e seguro. 
+Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribuído, projetado para lidar com grandes quantidades de dados em múltiplos servidores *commodity*, proporcionando alta disponibilidade e tolerância à falha. 
+
+Um servidor *commodity* é construído a partir de componentes de hardware padronizados e de fácil substituição, que são comumente disponíveis no mercado de consumo, usando uma arquitetura popular como x86_64. Estes servidores são frequentemente menos caros do que suas contrapartes especializadas, como mainframes de arquitetura RISC, com processadores Sun Sparc, IBM Power, Hitachi, etc, sendo projetados para serem facilmente escaláveis e mantidos em clusters em aplicações distribuídas de baixa plataforma, tolerantes ao seu maior nível de falha se comparável aos mainframes. Ou seja, a parte de HA e FT é ofertada pelo software de forma mais pragmática em relação ao hardware especializado de arquiteturas de alta plataforma. 
+
+Por essa razão, os bancos NoSQL como o Cassandra tem sido cada vez mais escolhidos por grandes empresas do mercado para hospedar seus serviços, como Netflix, Apple, e Facebook, com objetivo de gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo de modo eficiente, eficaz e seguro. 
+
 
 ## Características
 
