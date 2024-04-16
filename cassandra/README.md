@@ -16,6 +16,7 @@ Por essas razões, bancos de dados NoSQL como o Cassandra têm sido crescentemen
 - **Escalabilidade Horizontal**: o Cassandra é projetado para ser escalado horizontalmente, adicionando mais servidores à medida que a carga de trabalho aumenta.
 - **Tolerante a Falhas**: o Cassandra é tolerante a falhas, com backups e replicações automáticas para garantir que os dados não sejam perdidos.
 - **Orientado a Colunas**: Organiza dados por colunas, em vez de linhas, como é comum em bancos de dados relacionais. Cada coluna é armazenada separadamente, o que traz benefícios para vários tipos de aplicações.
+
 - **Suporte a Queries CQL**: o Cassandra usa uma linguagem de consulta chamada CQL (Cassandra Query Language) que guarda algumas semelhanças ao SQL.
 
 ## Consistency Levels
@@ -40,23 +41,21 @@ No lado do servidor, essas configurações podem ser acessadas no arquivo `/etc/
 
 ## Arquitetura Colunar
 
-Esta arquitetura é especialmente otimizada para sistemas onde leituras e consultas agregadas são frequentes, como é o caso dos sistemas de análise de dados (Data Warehousing). Em uma arquitetura colunar, ler uma coluna inteira para realizar uma agregação (como soma ou média) não exige a leitura de outros dados irrelevantes, o que seria inevitável em uma arquitetura baseada em registros (linhas).
+Combinando alta eficiência, escalabilidade e redução de custos, os sistemas baseados em arquitetura colunar estão se tornando o núcleo de muitas soluções modernas de processamento de dados e inteligência de negócios. Ela é otimizada para atender sistemas onde leituras e consultas agregadas são frequentes, como é o caso dos sistemas analíticos de inteligência de negócios (Data Warehousing). 
 
-Além disso, as colunas tendem a armazenar dados semelhantes, o que favorece a implementação de técnicas de compressão mais eficazes. Isso não apenas reduz o uso de espaço em disco, mas também melhora o desempenho geral do sistema. Em ambientes com muitas colunas, mas apenas um subconjunto frequentemente acessado, os bancos de dados colunares evitam o custo de carregar dados desnecessários na memória.
+Em uma arquitetura colunar, ler uma coluna inteira para realizar uma agregação (como soma ou média) não exige a leitura de outros dados irrelevantes ao contexto, o que seria inevitável em uma arquitetura baseada em registros (linhas). Além disso, as colunas tendem a armazenar dados semelhantes, o que favorece a implementação de técnicas de compressão mais eficazes. Isso não apenas reduz o uso de espaço em disco, mas também melhora o desempenho. 
 
-Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real e sistemas de processamento de eventos complexos, incluindo aqueles que envolvem sensores IoT. Eles são ideais para cenários onde a eficiência na consulta de grandes volumes de dados é crítica, pois permitem análises mais rápidas e menos onerosas em termos de recursos computacionais.
+Em um sistema gerenciador com organização orientada às colunas, quando um subconjunto de dados é tipicamente mais acessado, evita-se o custo de carregar dados desnecessários na memória ou o acesso à disco para recuperação dos dados mais frequentemente utilizados. 
 
-Além disso, a arquitetura colunar suporta melhor a escalabilidade horizontal, permitindo que as organizações expandam sua capacidade de processamento de dados adicionando mais servidores sem grandes alterações na infraestrutura existente. Isso é particularmente útil em ambientes de nuvem, onde a demanda por recursos pode flutuar significativamente durante determinados períodos. 
+Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real e sistemas de processamento de eventos complexos, incluindo aqueles que envolvem sensores IoT. Eles são ideais para cenários onde a eficiência na consulta de grandes volumes de dados é crítica, pois permitem análises mais rápidas e menos onerosas em termos de recursos computacionais. 
 
-Combinando alta eficiência, escalabilidade e redução de custos, os sistemas baseados em arquitetura colunar estão se tornando o núcleo de muitas soluções modernas de processamento de dados e inteligência de negócios.
+Esta arquitetura também facilita a implementação da escalabilidade horizontal, permitindo que as organizações expandam sua capacidade processamento e armazenamento de dados adicionando mais servidores, o que é particularmente útil em ambientes de nuvem, onde a demanda por recursos pode flutuar significativamente durante determinados períodos. 
 
 ## Modelagem de Dados 
 
-A modelagem de dados para um ambiente NoSQL colunar como o Cassandra requer uma compreensão das necessidades de consulta e distribuição da aplicação. A estrutura de famílias de colunas deve ser pensada para otimizar cenários de alta escalabilidade e eficiência em consultas, aproveitando a arquitetura de chave-valor distribuída. 
+A modelagem de dados para um ambiente NoSQL colunar como o Cassandra requer uma compreensão preliminar das necessidades de consulta e distribuição da aplicação. A estrutura de famílias de colunas deve ser pensada para otimizar cenários de alta escalabilidade e eficiência em consultas, aproveitando a arquitetura de chave-valor distribuída. Cada tabela possui uma chave primária que define como os dados são distribuídos pelos nós do cluster. 
 
-Nessa arquitetura, os dados são organizados em tabelas orientadas a colunas. Cada tabela possui uma chave primária que define como os dados são distribuídos pelos nós do cluster. Ao contrário de bancos de dados relacionais, no Cassandra, você modelaria os dados com base nas consultas que você mais realiza, evitando junções e normalmente denormalizando os dados.
-
-Por exemplo, em um sistema de e-commerce que requer armazenamento de informações sobre usuários, produtos e pedidos, no modelo relacional, você poderia ter três tabelas principais:
+Ao contrário de bancos de dados relacionais, no Cassandra, você modelaria os dados com base nas consultas que você mais realiza, evitando junções e normalmente denormalizando os dados. Por exemplo, em um sistema de e-commerce que requer armazenamento de informações sobre usuários, produtos e pedidos, no modelo relacional, você poderia ter três tabelas principais:
 
 - Usuários
 - Produtos
@@ -111,11 +110,9 @@ CREATE TABLE Pedidos (
 
 ```
 
-
-
 ## Cassandra Query Language (CQL)
 
-A linguagem Cassandra Query Language (CQL) é otimizada para operações de leitura e gravação eficientes. Possui uma sintaxe que guarda semelhanças ao SQL, mas há algumas diferenças importantes a serem observadas:
+A linguagem Cassandra Query Language (CQL)possui uma sintaxe que guarda semelhanças ao SQL, mas há algumas diferenças importantes a serem observadas:
 
 - A criação de tabelas no Cassandra envolve a definição de uma chave primária, que é crucial para manutenção do modelo de dados distribuído. As consultas CQL podem ser executadas para recuperar dados de acordo com a chave primária e outras condições, mas agregações complexas e operações de junção (JOINs) não são nativamente suportadas assim como no SQL.
 
@@ -162,7 +159,7 @@ GROUP BY department_id;
 SELECT COUNT(*) FROM empregados WHERE departamento_id = '123';
 ```
 
-- Você pode fazer contagens simples por chave de partição, mas agregações complexas sobre grandes volumes de dados requerem uma abordagem diferente, frequentemente envolvendo o processamento externo dos dados. Neste caso, geralmente contamos com uma ferramenta externa, por exemplo, Apache Spark atuando junto com o Cassandra. 
+- Você pode fazer contagens simples por chave de partição, mas agregações complexas sobre grandes volumes de dados requerem uma abordagem diferente, podendo incluir uso de ferramentas complementares, por exemplo, o Apache Spark. 
 
 ## Laboratório 
 
@@ -173,11 +170,13 @@ cd /opt/idp-bigdata/cassandra
 chmod +x wait-for-it.sh
 ```
 
+Agora suba os contêineres: 
+
 ```bash
 docker-compose up -d
 ```
 
-Verifique se os contêineres estão ativos e sem erros de implantação: 
+Verifique se eles estão ativos e sem erros de implantação: 
 
 ```bash
 docker ps
@@ -212,13 +211,13 @@ WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 ```
 
 ```sql
--- Selecionar um keyspace
-USE AulaDemo;
+-- Criar um keyspace
+CREATE KEYSPACE IF NOT EXISTS AulaDemo WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
 ```
 
 ```sql
--- Criar um keyspace
-CREATE KEYSPACE IF NOT EXISTS AulaDemo WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+-- Selecionar um keyspace
+USE AulaDemo;
 ```
 
 <!--
@@ -241,12 +240,6 @@ Essa configuração é mais robusta porque espalha as réplicas por vários data
 
 -->
 
-
-```sql
--- Mostrar todas as tabelas em um keyspace
-DESCRIBE TABLES;
-```
-
 ```sql
 -- Criar uma tabela chamada "Estudantes"
 CREATE TABLE IF NOT EXISTS Estudantes (
@@ -256,6 +249,11 @@ CREATE TABLE IF NOT EXISTS Estudantes (
     curso TEXT,
     email TEXT
 );
+```
+
+```sql
+-- Mostrar todas as tabelas em um keyspace
+DESCRIBE TABLES;
 ```
 
 ```sql
@@ -313,14 +311,19 @@ INSERT INTO estudantes (nome, idade, curso, email) VALUES ('Domitila Canto', 22,
 UPDATE estudantes SET idade = 23 WHERE nome = 'João Leite';
 ```
 
+<!--
+
 Como a coluna nome não faz parte da chave primária na tabela Estudantes, você não pode utilizá-la diretamente na cláusula WHERE para filtrar os dados e deve ter obtido um erro no comando acima. Alterar a estrutura da chave primária para incluir nome como parte da chave de clustering irá permitir a filtragem por nome:
+
+
 
 ```sql
 
 ALTER TABLE Estudantes ADD PRIMARY KEY (id, nome);
 
-
 ```
+
+-->
 
 
 ```sql
@@ -349,7 +352,7 @@ DROP KEYSPACE IF EXISTS AulaDemo;
 
 ### Importação de Dados
 
-O Cassandra oferece métodos para importar dados de fontes externas para suas tabelas. Um desses métodos é utilizar o próprio CQL Shell, a ferramenta de linha de comando do Cassandra. Você pode usar o `cqlsh` para executar instruções CQL (Cassandra Query Language) e, assim, inserir dados em suas tabelas a partir de arquivos externos, como CSV ou outros formatos. Exemplo de uso:
+O Cassandra oferece métodos para importar dados de fontes externas para suas tabelas. Um dos mais práticos e usuais é utilizar o próprio CQL Shell. Você pode usar o `cqlsh` para executar instruções CQL (Cassandra Query Language) e, assim, inserir dados em suas tabelas a partir de arquivos externos, como `CSV` ou outros formatos. Exemplo de uso:
 
 ```csv
 id,nome,idade,curso,email
@@ -404,4 +407,4 @@ https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/download?datasetVersionN
 
 ## Conclusão
 
-Esta documentação fornece uma visão geral dos aspectos essenciais do Apache Cassandra, um sistema de gerenciamento de banco de dados NoSQL altamente escalável. Exploramos métodos de importação de dados, backup e restauração, bem como outras ferramentas para administração do ambiente Cassandra. Se você deseja aprofundar seu conhecimento, consulte também a documentação oficial. 
+Esta documentação fornece uma visão geral dos aspectos essenciais do Apache Cassandra, um sistema de gerenciamento de banco de dados NoSQL colunar robusto e escalável. Exploramos métodos de importação de dados, backup e restauração, bem como outras ferramentas para administração do ambiente Cassandra. Se você deseja aprofundar seu conhecimento, consulte também a documentação oficial. 
