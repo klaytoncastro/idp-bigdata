@@ -288,6 +288,15 @@ Apache Cassandra GUIs: Existem várias ferramentas de terceiros, como o "Cassand
 
 -->
 
+<!--
+## Desafio Spark: 
+
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/download?datasetVersionNumber=3
+
+-->
+
 ## Conclusão
 
 Esta documentação fornece uma visão geral dos aspectos essenciais do Apache Cassandra, um sistema de gerenciamento de banco de dados NoSQL altamente escalável. Exploramos métodos de importação de dados, backup e restauração, bem como outras ferramentas para administração do ambiente Cassandra. Se você deseja aprofundar seu conhecimento, consulte também a documentação oficial. 
