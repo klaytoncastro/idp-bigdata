@@ -1,19 +1,20 @@
 # Apache Cassandra
 
-Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribuído, projetado para lidar com grandes quantidades de dados em muitos servidores commodity, proporcionando alta disponibilidade sem um único ponto de falha. Por essa razão, vem sendo utilizado por grandes empresas do mercado, tais como Netflix, Apple, e Facebook, visando gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo.
+Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribuído, projetado para lidar com grandes quantidades de dados em múltiplos servidores *commodity*, proporcionando alta disponibilidade e tolerância à falha. Por essa razão, tem sido escolhido por grandes empresas do mercado para hospedar seus serviços, como Netflix, Apple, e Facebook, com objetivo de gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo de modo eficiente, eficaz e seguro. 
 
 ## Características
 
 - **Distribuído**: o Cassandra é projetado para ser distribuído em muitos servidores, proporcionando alta disponibilidade e escalabilidade.
-- **Suporte a Queries CQL**: o Cassandra usa uma linguagem de consulta chamada CQL (Cassandra Query Language) que guarda algumas semelhanças ao SQL.
 - **Escalabilidade Horizontal**: o Cassandra é projetado para ser escalado horizontalmente, adicionando mais servidores à medida que a carga de trabalho aumenta.
 - **Resistente a Falhas**: o Cassandra é resistente a falhas, com backups e replicações automáticas para garantir que os dados não sejam perdidos.
-
 - **Orientado a Colunas**: Organiza dados por colunas, em vez de linhas, como é comum em bancos de dados relacionais. Cada coluna é armazenada separadamente, o que traz benefícios para vários tipos de aplicações.
+- **Suporte a Queries CQL**: o Cassandra usa uma linguagem de consulta chamada CQL (Cassandra Query Language) que guarda algumas semelhanças ao SQL.
 
 ## Apache Cassandra Consistency Levels
 
-O Apache Cassandra permite ajustar o equilíbrio entre consistência e disponibilidade dos dados por meio de seus níveis de consistência configuráveis. Compreender esses níveis é essencial ao projetar pipelines de dados adequados, assegurando que as operações de leitura e gravação atendam aos requisitos específicos do sistema. Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação: 
+O Apache Cassandra permite ajustar o equilíbrio entre consistência e disponibilidade dos dados. Configurar esses níveis é essencial para projetar pipelines de dados adequados, assegurando que as operações de leitura e gravação atendam aos requisitos específicos dos sistemas suportados. 
+
+Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação: 
 
 - ONE: A operação é considerada bem-sucedida após o retorno de um único nó. É o mais rápido, mas também o menos consistente.
 
@@ -27,7 +28,7 @@ O Apache Cassandra permite ajustar o equilíbrio entre consistência e disponibi
 
 - EACH_QUORUM: Em uma configuração de múltiplos data centers, um quórum de nós em cada data center deve responder.
 
-Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas, mas com um risco maior de inconsistências temporárias.
+Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas e um risco maior de inconsistências temporárias.
 
 No lado servidor, você pode ter acesso a essas configurações no arquivo `/etc/cassandra/cassandra.yaml`. Contudo, em nosso laboratório, para fins de simplificação do ambiente e recursos, estamos executando o Cassandra com apenas um nó.
 
@@ -37,11 +38,11 @@ Esta arquitetura oferece otimização para sistemas onde leituras e consultas ag
 
 Além disso, as colunas tendem a armazenar dados semelhantes, o que permite técnicas de compressão mais eficazes, reduzindo o uso de espaço em disco e melhorando o desempenho. Em cargas de trabalho com muitas colunas, mas com apenas um subconjunto frequentemente acessado, os bancos de dados colunares evitam o custo de carregar dados desnecessários em memória.
 
-Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real, e sistemas de processamento de eventos, incluindo sensores IoT. 
+Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real e sistemas de processamento de eventos, incluindo sensores IoT. 
 
 ## Modelagem de Dados 
 
-A modelagem de dados para um ambiente Cassandra requer uma compreensão das necessidades de consulta e distribuição da aplicação. A estrutura de famílias de colunas deve ser pensada para otimizar cenários de alta escalabilidade e eficiência em consultas, aproveitando a arquitetura de chave-valor distribuída. 
+A modelagem de dados para um ambiente NoSQL colunar como o Cassandra requer uma compreensão das necessidades de consulta e distribuição da aplicação. A estrutura de famílias de colunas deve ser pensada para otimizar cenários de alta escalabilidade e eficiência em consultas, aproveitando a arquitetura de chave-valor distribuída. 
 
 Nessa arquitetura, os dados são organizados em tabelas orientadas a colunas. Cada tabela possui uma chave primária que define como os dados são distribuídos pelos nós do cluster. Ao contrário de bancos de dados relacionais, no Cassandra, você modelaria os dados com base nas consultas que você mais realiza, evitando junções e normalmente denormalizando os dados.
 
@@ -84,7 +85,7 @@ CREATE TABLE Pedido_Produtos (
 
 ```
 
-Já no Cassandra, se você frequentemente recupera todos os pedidos de um usuário, incluiria os detalhes do produto diretamente na tabela de pedidos:
+Já no Cassandra, se você frequentemente recupera todos os pedidos de um usuário, a recomendação inicial de uma modelagem já incluiria os detalhes do produto diretamente na tabela de pedidos:
 
 ```sql
 
@@ -106,14 +107,9 @@ CREATE TABLE Pedidos (
 
 A linguagem Cassandra Query Language (CQL) é otimizada para operações de leitura e gravação eficientes. Possui uma sintaxe que guarda semelhanças ao SQL, mas há algumas diferenças importantes a serem observadas:
 
-- A CQL foi projetada para lidar especificamente com o armazenamento e a recuperação de dados no modelo distribuído do Cassandra, diferenciando-a dos modelos de bancos de dados relacionais tradicionais, manipulados por SQL. 
-
-- Embora o CQL e o SQL compartilhem algumas semelhanças em sua sintaxe, eles têm diferenças significativas em termos de propósito e modelagem. Portanto, ao trabalhar com o Cassandra, é importante entender as peculiaridades do CQL e como ele se relaciona com o modelo de dados distribuído do Cassandra. 
-
 - A criação de tabelas no Cassandra envolve a definição de uma chave primária, que é crucial para manutenção do modelo de dados distribuído. As consultas CQL podem ser executadas para recuperar dados de acordo com a chave primária e outras condições, mas agregações complexas e operações de junção (JOINs) não são nativamente suportadas assim como no SQL.
 
-
-No SQL, os JOINs são usados para combinar linhas de duas ou mais tabelas baseadas em uma relação entre elas, o que é extremamente útil para normalizar bancos de dados e evitar a duplicação de informações.
+- Já no SQL, os JOINs são usados para combinar linhas de duas ou mais tabelas baseadas em uma relação entre elas, o que é extremamente útil para normalizar bancos de dados e evitar a duplicação de informações.
 
 ```sql
 -- Neste exemplo, uma tabela de funcionários (employees) é unida com uma tabela de departamentos (departments) para trazer o nome do departamento de cada funcionário. Essa é uma operação comum em bancos de dados relacionais.
@@ -124,7 +120,7 @@ JOIN departments ON employees.department_id = departments.department_id;
 
 ```
 
-- O Cassandra não suporta operações de JOIN devido ao seu design distribuído. Se precisar realizar uma operação similar no Cassandra, você teria que denormalizar os dados ou fazer múltiplas consultas na aplicação, o que pode ser menos eficiente. Para simular o mesmo resultado do SQL acima, você poderia ter uma única tabela que inclui tanto os dados dos funcionários quanto dos departamentos:
+- O Cassandra não suporta operações complexas de JOIN devido ao seu design distribuído. Se você precisar realizar uma operação similar no Cassandra, seria interessante denormalizar os dados ou fazer múltiplas consultas na aplicação (o que pode ser menos eficiente). Para simular o mesmo resultado do SQL acima, você poderia ter uma única tabela que incluiria tanto os dados dos funcionários quanto dos departamentos:
 
 ```sql
 
@@ -156,7 +152,7 @@ GROUP BY department_id;
 SELECT COUNT(*) FROM empregados WHERE departamento_id = '123';
 ```
 
-- Você pode fazer contagens simples por chave de partição, mas agregações complexas sobre grandes volumes de dados requerem uma abordagem diferente, frequentemente envolvendo o processamento externo dos dados, por exemplo, usando Apache Spark junto com Cassandra. 
+- Você pode fazer contagens simples por chave de partição, mas agregações complexas sobre grandes volumes de dados requerem uma abordagem diferente, frequentemente envolvendo o processamento externo dos dados. Neste caso, geralmente contamos com uma ferramenta externa, por exemplo, Apache Spark atuando junto com o Cassandra. 
 
 
 ## Laboratório 
