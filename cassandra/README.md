@@ -9,11 +9,11 @@ Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribu
 - **Escalabilidade Horizontal**: o Cassandra é projetado para ser escalado horizontalmente, adicionando mais servidores à medida que a carga de trabalho aumenta.
 - **Resistente a Falhas**: o Cassandra é resistente a falhas, com backups e replicações automáticas para garantir que os dados não sejam perdidos.
 
--**Orientado a Colunas**: Organiza dados por colunas, em vez de linhas, como é comum em bancos de dados relacionais. Cada coluna é armazenada separadamente, o que traz benefícios para vários tipos de aplicações.
+- **Orientado a Colunas**: Organiza dados por colunas, em vez de linhas, como é comum em bancos de dados relacionais. Cada coluna é armazenada separadamente, o que traz benefícios para vários tipos de aplicações.
 
 ## Apache Cassandra Consistency Levels
 
-O Apache Cassandra oferece níveis de consistência que permitem controlar o equilíbrio entre consistência e disponibilidade dos dados. É importante entender esses níveis de consistência ao projetar pipelines de dados para garantir níveis de consistência adequados para leituras e gravações, permitindo o equilíbrio entre consistência e disponibilidade: 
+O Apache Cassandra permite ajustar o equilíbrio entre consistência e disponibilidade dos dados por meio de seus níveis de consistência configuráveis. Compreender esses níveis é essencial ao projetar pipelines de dados adequados, assegurando que as operações de leitura e gravação atendam aos requisitos específicos do sistema. Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação: 
 
 - ONE: A operação é considerada bem-sucedida após o retorno de um único nó. É o mais rápido, mas também o menos consistente.
 
@@ -27,8 +27,6 @@ O Apache Cassandra oferece níveis de consistência que permitem controlar o equ
 
 - EACH_QUORUM: Em uma configuração de múltiplos data centers, um quórum de nós em cada data center deve responder.
 
-Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação. 
-
 Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas, mas com um risco maior de inconsistências temporárias.
 
 No lado servidor, você pode ter acesso a essas configurações no arquivo `/etc/cassandra/cassandra.yaml`. Contudo, em nosso laboratório, para fins de simplificação do ambiente e recursos, estamos executando o Cassandra com apenas um nó.
@@ -39,7 +37,7 @@ Esta arquitetura oferece otimização para sistemas onde leituras e consultas ag
 
 Além disso, as colunas tendem a armazenar dados semelhantes, o que permite técnicas de compressão mais eficazes, reduzindo o uso de espaço em disco e melhorando o desempenho. Em cargas de trabalho com muitas colunas, mas com apenas um subconjunto frequentemente acessado, os bancos de dados colunares evitam o custo de carregar dados desnecessários em memória.
 
-Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real, e sistemas de processamento de eventos.
+Essas características tornam os bancos de dados colunares uma escolha excelente para big data analytics, relatórios em tempo real, e sistemas de processamento de eventos, incluindo sensores IoT. 
 
 ## Modelagem de Dados 
 
@@ -183,7 +181,7 @@ docker-compose logs
 
 ## Acesso à GUI 
 
-Abra um navegador da web e acesse `http://localhost:3000/#/main` para vistualizar o Cassandra Web, a interface web adicional que foi disponibilizada como GUI em nosso `docker-compose.yml`.
+Abra um navegador da web e acesse `http://localhost:3000/#/main` para vistualizar o Cassandra Web, a interface web adicional que foi disponibilizada como GUI em nosso `docker-compose.yml`. 
 
 ## Acesso à CLI 
 
