@@ -2,22 +2,21 @@
 
 Apache Cassandra é um sistema de gerenciamento de banco de dados NoSQL distribuído, projetado para lidar com grandes quantidades de dados em múltiplos servidores *commodity*, proporcionando alta disponibilidade e tolerância à falha. 
 
-Um servidor *commodity* é construído a partir de componentes de hardware padronizados e de fácil substituição, que são comumente disponíveis no mercado de consumo, usando uma arquitetura popular como x86_64. Estes servidores são frequentemente menos caros do que suas contrapartes especializadas, como mainframes de arquitetura RISC, com processadores Sun Sparc, IBM Power, Hitachi, etc, sendo projetados para serem facilmente escaláveis e mantidos em clusters em aplicações distribuídas de baixa plataforma, tolerantes ao seu maior nível de falha se comparável aos mainframes. Ou seja, a parte de HA e FT é ofertada pelo software de forma mais pragmática em relação ao hardware especializado de arquiteturas de alta plataforma. 
+Um servidor *commodity* é construído a partir de componentes de hardware padronizados e de fácil substituição, amplamente disponíveis no mercado, adotando uma arquitetura popular como x86_64. Estes servidores são menos caros do que suas contrapartes especializadas, como os mainframes de arquitetura RISC, que contam com processadores Sun Sparc, IBM Power, Hitachi, etc, sendo projetados para serem facilmente escaláveis e mantidos em clusters dedicados a aplicações distribuídas de baixa plataforma. Ou seja, a parte de HA (alta disponibilidade) e FT (tolerância à falha) é ofertada pelo software de forma mais pragmática em relação ao hardware especializado de arquiteturas de alta plataforma.
 
-Por essa razão, os bancos NoSQL como o Cassandra tem sido cada vez mais escolhidos por grandes empresas do mercado para hospedar seus serviços, como Netflix, Apple, e Facebook, com objetivo de gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo de modo eficiente, eficaz e seguro. 
-
+Por essa razão, os bancos NoSQL como o Cassandra tem sido cada vez mais escolhidos por grandes empresas do mercado para hospedar seus serviços, como Netflix, Apple, e Facebook, com objetivo de gerenciar volumes massivos de dados e lidar com milhares de solicitações por segundo de modo mais eficiente, eficaz e seguro, apesar de utilizar servidores *commodity*. 
 
 ## Características
 
 - **Distribuído**: o Cassandra é projetado para ser distribuído em muitos servidores, proporcionando alta disponibilidade e escalabilidade.
 - **Escalabilidade Horizontal**: o Cassandra é projetado para ser escalado horizontalmente, adicionando mais servidores à medida que a carga de trabalho aumenta.
-- **Resistente a Falhas**: o Cassandra é resistente a falhas, com backups e replicações automáticas para garantir que os dados não sejam perdidos.
+- **Tolerante a Falhas**: o Cassandra é tolerante a falhas, com backups e replicações automáticas para garantir que os dados não sejam perdidos.
 - **Orientado a Colunas**: Organiza dados por colunas, em vez de linhas, como é comum em bancos de dados relacionais. Cada coluna é armazenada separadamente, o que traz benefícios para vários tipos de aplicações.
 - **Suporte a Queries CQL**: o Cassandra usa uma linguagem de consulta chamada CQL (Cassandra Query Language) que guarda algumas semelhanças ao SQL.
 
-## Apache Cassandra Consistency Levels
+## Consistency Levels
 
-O Apache Cassandra permite ajustar o equilíbrio entre consistência e disponibilidade dos dados. Configurar esses níveis é essencial para projetar pipelines de dados adequados, assegurando que as operações de leitura e gravação atendam aos requisitos específicos dos sistemas suportados. 
+O Cassandra permite ajustar o equilíbrio entre consistência e disponibilidade dos dados. Configurar esses níveis é essencial para projetar pipelines de dados adequados, assegurando que as operações de leitura e gravação atendam aos requisitos específicos dos sistemas suportados. 
 
 Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a precisão e a latência das respostas das consultas de acordo com as necessidades específicas da aplicação: 
 
@@ -33,7 +32,7 @@ Os níveis de consistência no Cassandra permitem aos desenvolvedores ajustar a 
 
 - EACH_QUORUM: Em uma configuração de múltiplos data centers, um quórum de nós em cada data center deve responder.
 
-Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas e um risco maior de inconsistências temporárias.
+Por exemplo, usar o nível de consistência QUORUM para leituras e escritas pode ajudar a garantir que os dados lidos sejam consistentes em mais de 50% dos nós, reduzindo o risco de leituras obsoletas em um ambiente altamente distribuído. Em contrapartida, operações com o nível de consistência ONE podem ter latências mais baixas, porém, um risco maior de inconsistências temporárias.
 
 No lado servidor, você pode ter acesso a essas configurações no arquivo `/etc/cassandra/cassandra.yaml`. Contudo, em nosso laboratório, para fins de simplificação do ambiente e recursos, estamos executando o Cassandra com apenas um nó.
 
