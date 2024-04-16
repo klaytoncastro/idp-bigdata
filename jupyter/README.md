@@ -52,12 +52,12 @@ g) Agora crie a rede virtual `mybridge` no Docker:
 ```bash
 docker network create --driver bridge mybridge
 ```
-h) Acesse as respectivas subpastas em nosso repositório (`/opt/idp-bigdata/mongodb` e `/opt/idp-bigdata/jupyter-spark`) e suba os contêineres do MongoDB e Jupyter-Spark em cada uma delas: 
+h) Acesse as respectivas subpastas em nosso repositório (`/opt/idp-bigdata/mongodb` e `/opt/idp-bigdata/jupyter`) e suba os contêineres do MongoDB e Jupyter em cada uma delas: 
 
 ```bash
 cd /opt/idp-bigdata/mongodb 
 docker-compose up -d 
-cd /opt/idp-bigdata/jupyter-spark
+cd /opt/idp-bigdata/jupyter
 docker-compose build
 docker-compose up -d 
 ```
