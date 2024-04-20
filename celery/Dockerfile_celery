@@ -22,7 +22,8 @@ RUN chmod +x /app/wait-for-it.sh
 # Install any needed packages specified in requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Make port 5555 available to the world outside this container
+# Make port 5554 e 5555 available to the world outside this container
+EXPOSE 5554
 EXPOSE 5555
 
 # Run the Celery worker when the container launches
