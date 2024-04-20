@@ -1,2 +1,4 @@
 flask
 redis
+celery[redis]
+flower
