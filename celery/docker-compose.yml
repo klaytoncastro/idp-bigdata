@@ -15,8 +15,8 @@ services:
       - mybridge # Nome da rede que será usada.
     depends_on:
       - redis
-
- celery_worker:
+      
+  celery_worker:
     build: 
       context: .
       dockerfile: Dockerfile_celery
