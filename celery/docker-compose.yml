@@ -13,13 +13,13 @@ services:
 
   celery_worker:
     build: .
-    command: /usr/wait-for-it.sh redis:6379 -- celery -A app.celery worker --loglevel=info
+    command: /app/wait-for-it.sh redis:6379 -- celery -A app.celery worker --loglevel=info
     depends_on:
       - redis
 
   flower:
     build: .
-    command: /usr/wait-for-it.sh redis:6379 -- flower --broker=redis://redis:6379/0 --port=5555
+    command: /app/wait-for-it.sh redis:6379 -- flower --broker=redis://redis:6379/0 --port=5555
     ports:
       - "5555:5555"
     depends_on:
