@@ -10,6 +10,9 @@ services:
       - ./app.py:/app/app.py  # Mapeia o arquivo app.py externo
       - ./templates:/app/templates  # Mapeia o diretório de templates
       - ./static:/app/static  # Mapeia o diretório de arquivos estáticos
+        # Definindo as redes que serão usadas pelos serviços.
+    networks:
+      - mybridge # Nome da rede que será usada.
     depends_on:
       - redis
 
@@ -20,6 +23,9 @@ services:
     command: /app/wait-for-it.sh redis:6379 -- celery -A app.celery worker --loglevel=info
     ports:
       - "5554:5554"  # Atualizado para usar a porta 5554
+        # Definindo as redes que serão usadas pelos serviços.
+    networks:
+      - mybridge # Nome da rede que será usada.
     depends_on:
       - redis
 
@@ -30,6 +36,9 @@ services:
     command: /app/wait-for-it.sh redis:6379 -- flower --broker=redis://redis:6379/0 --port=5555
     ports:
       - "5555:5555"
+        # Definindo as redes que serão usadas pelos serviços.
+    networks:
+      - mybridge # Nome da rede que será usada.
     depends_on:
       - redis
 
@@ -37,6 +46,9 @@ services:
     image: "redis:alpine"
     ports:
       - "6379:6379"
+  # Definindo as redes que serão usadas pelos serviços.
+    networks:
+      - mybridge # Nome da rede que será usada.
 
   redis-commander:
     image: rediscommander/redis-commander:latest
@@ -46,3 +58,12 @@ services:
       - "8081:8081"
     depends_on: 
       - redis
+      # Definindo as redes que serão usadas pelos serviços.
+    networks:
+      - mybridge # Nome da rede que será usada.
+
+# Configuração das redes que serão usadas no docker-compose.
+networks:
+  mybridge: # Nome da rede.
+    external: # Indica que a rede é externa e já foi criada anteriormente.
+      name: mybridge # Nome da rede externa que será usada.
