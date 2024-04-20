@@ -16,16 +16,15 @@ services:
     depends_on:
       - redis
 
-  celery_worker:
+ celery_worker:
     build: 
       context: .
       dockerfile: Dockerfile_celery
     command: /app/wait-for-it.sh redis:6379 -- celery -A app.celery worker --loglevel=info --broker=redis://redis:6379/0
     ports:
-      - "5554:5554"  # Atualizado para usar a porta 5554
-        # Definindo as redes que serão usadas pelos serviços.
+      - "5554:5554"
     networks:
-      - mybridge # Nome da rede que será usada.
+      - mybridge
     depends_on:
       - redis
 
