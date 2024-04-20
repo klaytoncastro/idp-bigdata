@@ -1,8 +1,39 @@
 version: '3.3'
 services:
-# Python Flask (Front-End / API)
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    depends_on:
+      - redis
+    command: /usr/wait-for-it.sh redis:6379 -- redis-commander
+
+  celery_worker:
+    build: .
+    command: /usr/wait-for-it.sh redis:6379 -- celery -A app.celery worker --loglevel=info
+    volumes:
+      - .:/app
+    depends_on:
+      - redis
+
+  flower:
+    image: mher/flower
+    command: /usr/wait-for-it.sh redis:6379 -- flower --broker=redis://redis:6379/0 --port=5555
+    ports:
+      - "5555:5555"
+    depends_on:
+      - redis
+
   app:
     build: .
+    command: /usr/wait-for-it.sh redis:6379 -- python app.py
     ports:
       - "5000:5000"
     volumes:
@@ -11,37 +42,6 @@ services:
       - ./static:/app/static  # Mapeia o diretório de arquivos estáticos
     depends_on:
       - redis
-
-# Celery Worker (Back-End)
-  celery_worker:
-    build: .
-    command: celery -A app.celery worker --loglevel=info
-    volumes:
-      - .:/app
-    depends_on:
-      - redis
-
-# Celery GUI (Management)
-  flower:
-    image: mher/flower
-    command: flower --broker=redis://redis:6379/0 --port=5555
-    ports:
-      - "5555:5555"
-    depends_on:
-      - redis
-
-# Redis DB
-  redis:
-    image: "redis:alpine"
-    ports:
-      - "6379:6379"
-
-# Redis GUI
-  redis-commander:
-    image: rediscommander/redis-commander:latest
-    environment:
-      - REDIS_HOSTS=local:redis:6379
-    ports:
-      - "8081:8081"
-    depends_on: 
-      - redis
+      - redis-commander
+      - celery_worker
+      - flower
