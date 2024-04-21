@@ -26,6 +26,32 @@ exemplo = {
     "color": 1
 }
 
+# Teste no SO a partir de um "arquivo.json". 
+# curl -X POST -H "Content-Type: application/json" -d @arquivo.json http://localhost:5000/predict
+
+# Teste no SO com JSON inline. 
+# curl -X POST -H "Content-Type: application/json" -d '{"fixed acidity":6.6,"volatile acidity":0.16,"citric acid":0.4,"residual sugar":1.5,"chlorides":0.044,"free sulfur dioxide":48.0,"total sulfur dioxide":143.0,"density":0.9912,"pH":3.54,"sulphates":0.52,"alcohol":12.4,"color":1}' http://localhost:8500/predict
+
+""" Teste no SO com JSON formatado. 
+# curl -X POST -H "Content-Type: application/json" \
+-d '{
+    "fixed acidity": 6.6,
+    "volatile acidity": 0.16,
+    "citric acid": 0.4,
+    "residual sugar": 1.5,
+    "chlorides": 0.044,
+    "free sulfur dioxide": 48.0,
+    "total sulfur dioxide": 143.0,
+    "density": 0.9912,
+    "pH": 3.54,
+    "sulphates": 0.52,
+    "alcohol": 12.4,
+    "color": 1
+}' \
+http://localhost:8500/predict
+
+"""
+
 @app.route('/test', methods=['GET'])
 def test():
     # Fazer uma previsão de exemplo
