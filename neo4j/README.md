@@ -35,11 +35,6 @@ services:
 
 ## Modelagem de Grafos
 
-Acesse: 
-
-`https://exoplanetarchive.ipac.caltech.edu/`
-
-
 O conjunto de dados que usaremos inclui informações sobre:
 - **Exoplanetas**: como nome, massa, raio e temperatura.
 - **Estrelas Hospedeiras**: como nome, massa, raio e temperatura.
@@ -55,6 +50,11 @@ O conjunto de dados que usaremos inclui informações sobre:
 - `pl_masse`: Massa do planeta em massas terrestres.
 - `st_teff`: Temperatura efetiva da estrela hospedeira.
 - `pl_facility`: Observatório que descobriu o planeta.
+
+Acesse o link a seguir e verifique as colunas úteis para construir seu dataset: `https://exoplanetarchive.ipac.caltech.edu/cgi-bin/TblView/nph-tblView?app=ExoTbls&config=PS`
+
+Há vários outros recursos disponívels para explorar no site ExoPlanetArchive: `https://exoplanetarchive.ipac.caltech.edu/`
+
 
 ### Relacionamentos
 
