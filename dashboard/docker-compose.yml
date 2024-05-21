@@ -1,0 +1,119 @@
+version: '3.3'
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    hostname: zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    ports:
+      - "2181:2181"
+    networks:
+      - mybridge
+
+  kafka1:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka1
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092
+      KAFKA_LISTENERS: PLAINTEXT://:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    ports:
+      - "9092:9092"
+    volumes:
+      - /var/lib/kafka/data
+    networks:
+      - mybridge
+
+  kafka2:
+    image: confluentinc/cp-kafka:latest
+    hostname: kafka2
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_LISTENERS: PLAINTEXT://:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 2
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+    ports:
+      - "9093:9093"
+    volumes:
+      - /var/lib/kafka/data
+    networks:
+      - mybridge
+
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    hostname: kafka-ui
+    ports:
+      - "8083:8080"
+    depends_on:
+      - kafka1
+      - kafka2
+      - zookeeper
+    environment:
+      KAFKA_CLUSTERS_0_NAME: "Meu Cluster Kafka"
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka1:9092,kafka2:9093"
+      KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
+      # AUTH_TYPE: "LOGIN_FORM"
+      # SPRING_SECURITY_USER_NAME: admin
+      # SPRING_SECURITY_USER_PASSWORD: admin
+    networks:
+      - mybridge
+
+  postgres:
+    container_name: postgres_container
+    hostname: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-admin}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-admin}
+      PGDATA: /data/postgres
+    volumes:
+       - ./postgres:/data/postgres
+    ports:
+      - "5432:5432"
+    networks:
+      - mybridge
+  
+  pgadmin:
+    container_name: pgadmin_container
+    hostname: pgadmin
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-pgadmin4@pgadmin.org}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+       - ./pgadmin:/var/lib/pgadmin
+    ports:
+      - "${PGADMIN_PORT:-80}:80"
+    networks:
+      - mybridge
+
+  grafana:
+    image: grafana/grafana-enterprise
+    container_name: grafana
+    restart: on-failure
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./grafana:/var/lib/grafana
+      - ./grafana_imagens:/usr/share/grafana/public/img/andre
+    networks:
+      - mybridge
+    environment:
+      - GF_INSTALL_PLUGINS=dalvany-image-panel,yesoreyeram-boomtheme-panel
+
+networks:
+  mybridge:
+    name: mybridge
+    external: true
+    driver: bridge

@@ -1,0 +1,3 @@
+confluent_kafka
+pandas
+psycopg2-binary
