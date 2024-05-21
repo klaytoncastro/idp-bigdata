@@ -1,15 +1,16 @@
 # Introdução
 
-Este projeto consiste em criar um ambiente completo de envio e coleta de dados via streamming, utilizando dados da Formula 1. Os dados utilizados neste projeto podem ser obtidos no [kaggle](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020), e são resultado da coleta via API do site [Ergst](http://ergast.com/mrd/), conforme [artigo](https://www.kdnuggets.com/building-a-formula-1-streaming-data-pipeline-with-kafka-and-risingwave).  
+Este projeto consiste em criar um ambiente de envio e coleta de dados via streamming, utilizando um dataset da Formula 1 obtido no [Kaggle](https://www.kaggle.com/datasets/rohanrao/formula-1-world-championship-1950-2020), que é resultado da coleta via API [Ergst](http://ergast.com/mrd/), conforme descrito neste [artigo](https://www.kdnuggets.com/building-a-formula-1-streaming-data-pipeline-with-kafka-and-risingwave).  
 
 ## Como utilizar
 
-1 - Abra o Jupyter em seu navegador para ter acessos aos notebooks já criados: <http://localhost:8888> <br>
-2 - Os dados coletados contém informações de diversos anos de corridas da F1, vamos utilizar apenas o ano de 2022. Para isto, execute o notebook [F1.ipynb](jupyter\F1.ipynb). Este deve gerar os dados de 2022 em um arquivo csv que vamos utilizar como fonte para o nosso processo de streaming. O Notebook [F1_v2](jupyter\F1_v2.ipynb) faz a mesma coisa que o anterior, mas gerando 1 arquivo para cada ano de corrida disponível. <br>
-3 - Para monitorar o Kafka, temos o kafka-ui. Caso queira ver o processo de cadastro do cadastro e o Producer trabalhando acesse <http://localhost:8080> <br>
-4 - Execute o notebook que simula o produtor de conteudo do Kafka(Producer): [Producer](jupyter\Producer.ipynb) <br>
-8 - Em nosso projeto vamos guardar os dados no Postgres, para isto vamos usar o pgadmin para fazer a gestão do banco de dados. Acesso pelo link: <http://localhost:80> . Possivelmente irá solicitar o login e senha, utilize admin/admin <br>
-9 - Configure a conexão ao banco do postgres. <br>
+1 - Abra o Jupyter em seu navegador e carregue os notebooks. 
+2 - Os dados coletados contém informações de diversos anos de corridas da F1, vamos utilizar apenas o ano de 2022. Para isto, execute o notebook `F1.ipynb`. Este deve gerar os dados de 2022 em um arquivo csv que vamos utilizar como fonte para o nosso processo de streamming. 
+3 - O Notebook `F1_v2` faz a mesma coisa que o anterior, mas gerando 1 arquivo para cada ano de corrida disponível.
+4 - Para monitorar o Kafka, temos o kafka-ui. Caso queira ver o processo de cadastro do cadastro e o Producer trabalhando, acesse `http://localhost:8082`. 
+5 - Execute o notebook que simula o produtor de conteudo do Kafka: `Producer.ipynb`. 
+6 - Em nosso projeto vamos guardar os dados no Postgres, para isto vamos usar o pgadmin para fazer a gestão do banco de dados. Acesse pela URL `link: <`http://localhost:80`. Como login e senha, utilize admin/admin <br>
+7 - Configure a conexão ao banco do postgres. <br>
     hostname: postgres <br>
     port: 5432 <br>
     username: admin <br>
@@ -19,4 +20,4 @@ Este projeto consiste em criar um ambiente completo de envio e coleta de dados v
 13 - Acesse o Grafana: <http://localhost:3000> . Provavelmente irá pedir login e senha: admin/admin <br>
 14 - Faça o import do arquivo Json [F1](grafana\f1.json) no Grafana <br>
 15 - Execute o notebook [Consumer](jupyter\Consumer.ipynb) <br>
-16 - Abra o Grafana novamente e visualize os graficos e dados sendo atualizados 
+16 - Abra o Grafana novamente e visualize os graficos e dados sendo atualizados. 
