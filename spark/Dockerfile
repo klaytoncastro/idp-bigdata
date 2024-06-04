@@ -1,8 +1,7 @@
-# Utilize a imagem oficial do Jupyter Notebook base
 FROM jupyter/base-notebook:latest
 
 # Define variáveis de ambiente para o Spark
-ENV SPARK_VERSION=3.3.3 \
+ENV SPARK_VERSION=3.4.3 \
     HADOOP_VERSION=3 \
     SPARK_HOME=/usr/local/spark \
     PATH=$SPARK_HOME/bin:$PATH
@@ -30,4 +29,3 @@ USER jovyan
 
 # Configure o diretório de trabalho padrão para os notebooks
 WORKDIR /home/jovyan/work
-

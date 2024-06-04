@@ -7,10 +7,11 @@
 4. [Configuração do MinIO com Docker](#configuração-do-minio-com-docker)
 5. [Uso da API para Leitura e Gravação de Arquivos](#uso-da-api-para-leitura-e-gravação-de-arquivos)
 6. [Exemplos Práticos](#exemplos-práticos)
+7. [Conclusão](#conclusão)
 
 ## O que é Armazenamento de Objetos
 
-O armazenamento de objetos é um método baseado em uso de APIs para armazenar e recuperar arquivos em um repositório que trata cada entidade como um objeto que encapsula o próprio arquivo e seus metadados. Essa abordagem é bastante adequada a cenários de aplicações baseadas em nuvem, por ser agnóstica à infraestrutura subjacente. Ao adotar o conceito de objeto, os arquivos são armazenados em um repositório que pode ser acessado por uma API, ao invés de um sistema de arquivos hierárquico utilizado em protocolos de bloco (FCP, iSCSI), de rede (SMB, NFS), ou estrutura de tabelas como em bancos de dados relacionais (BLOBs).
+O armazenamento de objetos é um método baseado em uso de APIs para manipular arquivos em um repositório que trata cada entidade como um objeto que encapsula o próprio arquivo e seus metadados. Essa abordagem é bastante adequada a cenários de aplicações baseadas em nuvem, por ser agnóstica à infraestrutura subjacente. Ao adotar o conceito de objeto, os arquivos são armazenados em um repositório que pode ser acessado por uma API, ao invés de um sistema de arquivos hierárquico utilizado em protocolos de bloco (FCP, iSCSI), de rede (SMB, NFS), ou estrutura de tabelas como em bancos de dados relacionais (BLOBs).
 
 ### Principais Características
 - **Imutabilidade**: Uma vez gravados, os objetos não são modificados.
@@ -78,6 +79,19 @@ volumes:
 
 MinIO suporta a API S3, permitindo operações de leitura e gravação de arquivos através de chamadas HTTP.
 
+Para utilizar o MinIO com Python, recomenda-se a biblioteca oficial da AWS (Amazon Web Services) para interagir com os serviços de armazenamento de objeto (S3). 
+
+A biblioteca Boto3 permite que os desenvolvedores programem a interação com serviços como S3, EC2, DynamoDB, dentre outros, a partir do seu código em Python.
+
+### Instalação do Boto3
+
+Você pode instalar o Boto3 usando o pip:  
+
+```python
+
+pip install boto3
+
+```
 
 <!--
 ```python
