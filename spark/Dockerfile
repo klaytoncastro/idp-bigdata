@@ -1,11 +1,16 @@
 FROM jupyter/base-notebook:latest
 
 # Define variáveis de ambiente para o Spark
+#ENV SPARK_VERSION=3.4.3 \
+#    HADOOP_VERSION=3 \
+#    SPARK_HOME=/usr/local/spark \
+#    PATH=$SPARK_HOME/bin:$PATH
+
 ENV SPARK_VERSION=3.4.3 \
     HADOOP_VERSION=3 \
     SPARK_HOME=/usr/local/spark \
-    PATH=$SPARK_HOME/bin:$PATH
-
+    PATH=/usr/local/spark/bin:$PATH
+    
 # Altera para o usuário root para instalar as dependências
 USER root
 
@@ -20,7 +25,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Instale as bibliotecas Python necessárias
-RUN pip install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pyspark==${SPARK_VERSION}
+#RUN pip install --no-cache-dir --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pyspark==${SPARK_VERSION} pandas seaborn matplotlib scikit-learn scikit-optimize xgboost lightgbm joblib pycaret pymongo cassandra-driver
+RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org pyspark==${SPARK_VERSION} pandas seaborn matplotlib scikit-learn scikit-optimize xgboost lightgbm joblib pycaret pymongo cassandra-driver
 
 RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/jovyan
 

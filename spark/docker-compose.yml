@@ -12,8 +12,15 @@ services:
       - ./data:/home/jovyan/data
       - ./config:/home/jovyan/.jupyter
 
+    networks:
+      - mybridge # Nome da rede.
+
 volumes:
   notebooks:
   data:
   config:          
 
+networks:
+  mybridge: # Nome da rede indicada no serviço.
+    external: # Indica que a rede é externa e já foi criada anteriormente.
+      name: mybridge # Nome da rede externa que será usada.
