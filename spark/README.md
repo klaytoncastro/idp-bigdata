@@ -48,11 +48,12 @@ O PySpark oferece transformações e ações em RDDs (Resilient Distributed Data
 
 ## Atividade
 
-Construa o contêiner do Spark e acesse a IDE Jupyter.
+Construa o contêiner do Spark e posteriormente acesse a IDE Jupyter.
 (`http://localhost:8889`). Alteramos a porta para `8889` para evitar conflitos com a instância do Jupyter sem Spark. 
 
 ```bash
 cd /opt/idp-bigdata/spark
+chmod +x permissions.sh && ./permissions.sh
 docker-compose up -d --build
 ```
 Caso seja o seu primeiro acesso a esta instância do Jupyter, lembre-se de executar o comando a seguir para visualizar os logs e identificar o token para obter acesso à IDE: 
