@@ -2,37 +2,68 @@
 
 ## Introdução
 
-O Apache Spark é um framework open-source para processamento distribuído de dados massivos. Possui módulos integrados para agendamento de jobs, streaming de dados, consultas SQL, modelos de aprendizado de máquina e visualização de dados. 
+O Apache Spark é um framework open-source, compatível com Hadoop, e bastante expressivo para realizar tarefas de processamento distribuído de dados massivos. Possui módulos integrados para o agendamento dos jobs, streaming de dados (fluxos em tempo real), consultas SQL, modelos de aprendizado de máquina e visualização de dados. 
 
 ## Arquitetura
 
-O Apache Spark é composto por vários componentes que trabalham de maneira coordenada para fornecer processamento distribuído e escalável de dados. A arquitetura do Spark é baseada em um modelo master/slave, onde o nó mestre é responsável por agendar tarefas e coordenar a execução dos dados, enquanto os nós slave (workers) executam as tarefas e armazenam dados.
+O Apache Spark é construído sobre componentes que atuam de maneira coordenada para disponibilizar o processamento distribuído e escalável de dados. Sua arquitetura é do tipo master/slave, onde o nó mestre é responsável por agendar e distribuir a execução das tarefas, e os nós slaves (workers) realizam estas tarefas e lidam com os mecanismos necessários para armazenamento e processamento dos dados. 
 
 ### Componentes Principais
 
-- **Driver Program**: O ponto de entrada para uma aplicação Spark. O driver programa cria o contexto Spark e as RDDs, e executa ações e transformações nas RDDs.
-- **Cluster Manager**: Gere os recursos em todo o cluster. Pode ser o Spark Standalone, YARN, ou Mesos.
+- **Driver**: É o ponto de entrada, o programa para uma aplicação Spark. O driver define o contexto de execução e das RDDs, bem como estabelece suas ações e transformações.
+
+- **Cluster Manager**: Gere os recursos em todo o cluster, podendo empregar o Spark standalone, YARN (Haddop), ou Apache Mesos nesta função.
+
 - **Worker Nodes**: Nós que executam as tarefas de processamento de dados. Cada nó trabalhador hospeda um ou mais executores.
+
 - **Executors**: Processos que executam as tarefas e armazenam os dados em cache. Cada aplicação Spark possui seus próprios executores.
-- **Tasks**: Unidades de trabalho que são enviadas para os executores pelo driver program.
+
+- **Tasks**: Unidades de trabalho que são enviadas para os executores pelo driver.
+
+### Conceitos Chave
+
+- **RDDs (Resilient Distributed Datasets)**: São coleções distribuídas imutáveis ​​de dados que são particionadas entre máquinas em um cluster.
+
+- **Transformação**: São operações realizadas em um RDD, tais como: `filter()`, `map()` ou `union()`, cuja saída é outro RDD.
+
+- **Ação**: São operações que acionam um cálculo, tais como `count()`, `first()`, `take(n)` ou `collect()`.
+
+- **Partição**: É uma divisão lógica de dados armazenados em um nó de um cluster.
 
 ### Bibliotecas Integradas
 
-- Spark SQL: É um módulo Spark que permite trabalhar com estruturas dados. A consulta de dados é suportada no formato SQL ou HQL (Hive / Hadoop). 
+- **Spark SQL**: É um módulo Spark que permite trabalhar com estruturas dados. A consulta de dados é suportada no formato SQL ou HQL (Hive / Hadoop). 
 
-- Spark Streaming: É usado para construir aplicações escaláveis em modo streaming (tempo real) com tolerância à falhas. 
+- **Spark Streaming**: É usado para construir aplicações escaláveis em modo streaming (tempo real) com tolerância à falhas. 
 
-- Mlib: É uma biblioteca escalável de aprendizado de máquina e fornece vários algoritmos para classificação, regressão, clustering, dentre outros. 
+- **Mlib**: É uma biblioteca escalável de aprendizado de máquina e fornece vários algoritmos para classificação, regressão, clustering, dentre outros. 
 
-- GraphX: É uma API para geração de gráficos estáticos. 
+- **GraphX**: É uma API para geração de gráficos estáticos. 
 
-Para usar o Spark com a linguagem Python, o PySpark é uma biblioteca que fornece uma API de alto nível para acessar, processar e analisar dados. Assim, a interface do PySpark expõe o modelo de programação Spark a um ambiente suportado por Python e viabiliza sua rápida utilização por meio de uma IDE como o Jupyter. 
+### PySpark
+
+Para usar o Spark com a linguagem Python, temos  PySpar, uma biblioteca que fornece uma API de alto nível para acessar, processar e analisar dados. A interface do PySpark expõe o modelo de programação Spark a um ambiente suportado por Python e viabiliza sua rápida utilização por meio de uma IDE como o Jupyter. 
 
 O PySpark oferece transformações e ações em RDDs (Resilient Distributed Datasets) e DataFrames, que são abstrações para trabalhar com dados distribuídos, enquanto a configuração Spark, seu modo de operação e integrações ocorrem na infraestrutura subjacente. 
 
+## Atividade
+
+Construa o contêiner do Spark e acesse a IDE Jupyter.
+(`http://localhost:8889`). Alteramos a porta para `8889` para evitar conflitos com a instância do Jupyter sem Spark. 
+
+```bash
+cd /opt/idp-bigdata/spark
+docker-compose up -d --build
+```
+Caso seja o seu primeiro acesso a esta instância do Jupyter, lembre-se de executar o comando a seguir para visualizar os logs e identificar o token para obter acesso à IDE: 
+
+```bash
+docker-compose logs | grep 'token='
+```
+
 ### Configuração da rede para comunicação com outros contêineres
 
-Para permitir a comunicação entre os contêineres, o arquivo `docker-compose.yml` deve ser atualizado para conectá-los à rede `mybridge`. 
+Para permitir a comunicação entre os contêineres de outros serviços de Big Data e NoSQL, verifique o arquivo `docker-compose.yml`, que deve estar atualizado para conectá-los à rede `mybridge`. 
 
 ```yaml
 # Definindo as redes que serão usadas pelos serviços.
@@ -45,17 +76,17 @@ networks:
     external: # Indica que a rede é externa e já foi criada anteriormente.
       name: mybridge # Nome da rede externa que será usada.
 ```
+
 Caso não tenha criado, implemente a rede virtual `mybridge` no Docker: 
 
 ```bash
 docker network create --driver bridge mybridge
 ```
-
 ### Inicialize e teste o Spark
 
 a) Quando o Apache Spark está em execução, ele disponibiliza uma interface web para viabilizar o acompanhamento das tarefas designadas por sua aplicação. A Spark Application UI (`http://localhost:4040`) só se tornará disponível após a inicialização de uma sessão Spark por uma aplicação. 
 
-b) Para isso, acesse o Jupyter (`http://localhost:8888`), crie um notebook e teste o ambiente inicializando uma sessão Spark com os comandos abaixo: 
+b) Para isso, crie um notebook no Jupyter e teste o ambiente inicializando uma sessão Spark com os comandos abaixo: 
 
 ```python
 # Importando as bibliotecas
@@ -127,15 +158,15 @@ spark.stop()
 ```
 -->
 
-b) Em outra aba, acesse a URL da [Spark Application UI](http://localhost:4040) e observe que agora ela está disponível. 
+c) Em outra aba, acesse a URL da [Spark Application UI](http://localhost:4040) e observe que agora ela está disponível. 
 
-c) Execute o código abaixo em seu notebook Jupyter para encerrar sua sessão Spark: 
+d) Execute o código abaixo em seu notebook Jupyter para encerrar sua sessão Spark: 
 
 ```python
 spark.stop()
 ```
 
-d) Atualize o navegador e observe que a interface http://localhost:4040 não estará mais acessível após encerrarmos a sessão. 
+e) Atualize o navegador e observe que a interface http://localhost:4040 não estará mais acessível após encerrarmos a sessão. 
 
 <!--
 https://www.datacamp.com/cheat-sheet/pyspark-cheat-sheet-spark-dataframes-in-python
