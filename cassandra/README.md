@@ -322,6 +322,35 @@ Como a coluna nome não faz parte da chave primária na tabela Estudantes, você
 ALTER TABLE Estudantes ADD PRIMARY KEY (id, nome);
 
 ```
+Outra abordagem seria escrever um script para fazer a selecao e posterior delecao: 
+
+```python
+from cassandra.cluster import Cluster
+from cassandra.auth import PlainTextAuthProvider
+from cassandra import OperationTimedOut
+
+# Configuração de autenticação e conexão
+auth_provider = PlainTextAuthProvider(username='cassandra', password='cassandra')
+cluster = Cluster(['172.23.0.2'], port=9042, auth_provider=auth_provider)
+
+try:
+    # Inicia a sessão de conexão
+    session = cluster.connect()
+
+    # Verifica se a conexão foi bem-sucedida executando uma consulta simples
+    session.execute("SELECT * FROM system.local")
+    print("Conexão estabelecida com sucesso!")
+
+except OperationTimedOut:
+    print("Falha na conexão ao servidor Cassandra")
+
+finally:
+    # Fecha a conexão
+    if session:
+        session.shutdown()
+    if cluster:
+        cluster.shutdown()
+```
 
 -->
 
