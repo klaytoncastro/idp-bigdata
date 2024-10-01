@@ -203,8 +203,8 @@ s3.delete_object(Bucket='meu-bucket', Key='localfile.txt')
 
 ## Conclusão
 
-O armazenamento baseado em objetos é uma solução robusta e versátil para lidar com o crescimento exponencial de dados não estruturados. Com segurança, escalabilidade e flexibilidade integradas, é uma escolha ideal para aplicações modernas, como serviços de nuvem, arquivamento de longo prazo e gerenciamento de dados críticos.
+O armazenamento baseado em objetos é uma solução robusta e versátil para gerenciar o crescimento exponencial de dados não estruturados. Com segurança, escalabilidade e flexibilidade, ele é ideal para aplicações modernas, como serviços de nuvem, arquivamento de longo prazo e gerenciamento de dados críticos.
 
-Nesse cenário MinIO, com sua compatibilidade com a API S3, tem se destacado como uma solução de armazenamento de objetos eficiente e escalável, sendo frequentemente adotado em ambientes on-premises e híbridos para criar datalakes que suportam esses ecossistemas. Sua integração com plataformas de big data permite que os dados sejam facilmente armazenados, acessados e processados, utilizando ferramentas populares do ecossistema de big data.
+Nesse contexto, o MinIO, compatível com a API S3, tem se destacado como uma solução eficiente e escalável, sendo amplamente adotado em ambientes on-premises e híbridos para criar datalakes que suportam ecossistemas de big data. Sua integração com plataformas de big data facilita o armazenamento, acesso e processamento de dados utilizando ferramentas populares desse ecossistema.
 
-Explore o MinIO para testar essas funcionalidades em um ambiente controlado antes de migrar para soluções em larga escala, como o Amazon S3. Esse processo é ideal para validar fluxos de trabalho e garantir que sua infraestrutura seja escalável e eficiente. Para maiores informações, consulte a documentação oficial do [MinIO](https://min.io/docs/).
+Recomenda-se explorar o MinIO para testar essas funcionalidades em um ambiente controlado antes de migrar para soluções em larga escala, como o Amazon S3. Esse processo ajuda a validar fluxos de trabalho e garante uma infraestrutura escalável e eficiente. Para mais informações, consulte a documentação oficial do [MinIO](https://min.io/docs/).
