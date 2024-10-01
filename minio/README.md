@@ -83,7 +83,7 @@ Cada objeto dentro de um bucket é identificado por uma chave única, que funcio
 - **Alto Desempenho**: Ideal para workloads intensivos em dados.
 - **Facilidade de Uso**: Interface web intuitiva e fácil configuração.
 - **Segurança**: Suporte para criptografia em repouso e em trânsito.
-- 
+
 ### Operações Comuns
 
 - **PUT**: Adicionar ou substituir um objeto em um bucket.
@@ -124,7 +124,7 @@ volumes:
 
 ### Leitura e Gravação de Arquivos
 
-O MinIO utiliza uma API S3-compatible para permitir que operações sejam feitas através de chamadas HTTP de modo semelhante ao que seria no serviço AWS (Amazon Web Services). Essas operações incluem upload, download, criação de buckets e listagem de arquivos. Para utilizar o MinIO com Python, recomenda-se a biblioteca oficial da AWS para interagir com os serviços de armazenamento de objeto (S3), dessa forma usaremos objetos `boto3` como cliente para facilitar a comunicação com o servidor MinIO. Esta biblioteca permite que os desenvolvedores programem a interação com serviços da AWS, a partir do seu código em Python.
+O MinIO utiliza uma API compatível com S3 para realizar operações via chamadas HTTP, como upload, download, criação de buckets e listagem de arquivos, de forma semelhante à AWS. Para usar o MinIO com Python, a biblioteca recomendada é o Boto3, que facilita a comunicação com o servidor MinIO. O nome "Boto" faz referência ao boto-cor-de-rosa, um golfinho da Amazônia, escolhido de forma divertida por Mitch Garnaat, criador da biblioteca, comparando-a ao boto navegando pelos serviços da nuvem.
 
 ### Instalação da Boto3
 
