@@ -68,7 +68,14 @@ Nos últimos anos, o armazenamento de objetos tem se tornado uma peça fundament
 
 ## Prática com MinIO
 
-MinIO é uma solução de armazenamento de objetos de alto desempenho compatível com **Amazon S3**. É projetado para aplicações de grande escala e pode ser usado tanto em infraestruturas de nuvem quanto em ambientes on-premises.
+**MinIO** é uma solução de armazenamento de objetos de alto desempenho compatível com a API do Amazon S3 (Simple Storage Service), um serviço de armazenamento de objetos da Amazon Web Services (AWS), projetado para armazenar e recuperar qualquer quantidade de dados de qualquer lugar na Internet, cujos principais conceitos estão listados a seguir: 
+
+- **Buckets**: Contêineres onde os objetos são armazenados.
+- **Objetos**: Unidades de dados que são armazenadas nos buckets.
+- **Chaves**: Identificadores únicos para cada objeto dentro de um bucket.
+- **Metadados**: Informações adicionais armazenadas com cada objeto.
+
+Cada objeto dentro de um bucket é identificado por uma chave única, que funciona como o caminho completo para o arquivo, similar a um nome de arquivo em um sistema de arquivos tradicional. O MinIO foi projetado para aplicações de grande escala e pode ser usado tanto em infraestruturas de nuvem quanto em ambientes on-premises.
 
 ### Benefícios do MinIO
 
@@ -76,28 +83,15 @@ MinIO é uma solução de armazenamento de objetos de alto desempenho compatíve
 - **Alto Desempenho**: Ideal para workloads intensivos em dados.
 - **Facilidade de Uso**: Interface web intuitiva e fácil configuração.
 - **Segurança**: Suporte para criptografia em repouso e em trânsito.
-
-## Introdução ao S3 (Simple Storage Service)
-
-**Amazon S3** é um serviço de armazenamento de objetos da Amazon Web Services (AWS), projetado para armazenar e recuperar qualquer quantidade de dados de qualquer lugar na internet.
-
-### Funcionamento do S3
-
-- **Buckets**: Contêineres onde os objetos são armazenados.
-- **Objetos**: Unidades de dados que são armazenadas nos buckets.
-- **Chaves**: Identificadores únicos para cada objeto dentro de um bucket.
-- **Metadados**: Informações adicionais armazenadas com cada objeto.
-
-Cada objeto dentro de um bucket é identificado por uma chave única, que funciona como o caminho completo para o arquivo, similar a um nome de arquivo em um sistema de arquivos tradicional.
-
-### Operações Comuns com a API S3-Compatible
+- 
+### Operações Comuns
 
 - **PUT**: Adicionar ou substituir um objeto em um bucket.
 - **GET**: Recuperar um objeto de um bucket.
 - **DELETE**: Remover um objeto de um bucket.
 - **LIST**: Listar objetos em um bucket.
 
-## Configuração do MinIO com Docker
+## Configuração com Docker
 
 Para configurar e iniciar um servidor MinIO usando Docker, siga as etapas abaixo.
 
@@ -128,7 +122,7 @@ volumes:
   minio-data:
 ```
 
-## Uso da API para Leitura e Gravação de Arquivos
+### Leitura e Gravação de Arquivos
 
 O MinIO utiliza uma API S3-compatible para permitir que operações sejam feitas através de chamadas HTTP de modo semelhante ao que seria no serviço AWS (Amazon Web Services). Essas operações incluem upload, download, criação de buckets e listagem de arquivos. Para utilizar o MinIO com Python, recomenda-se a biblioteca oficial da AWS para interagir com os serviços de armazenamento de objeto (S3), dessa forma usaremos objetos `boto3` como cliente para facilitar a comunicação com o servidor MinIO. Esta biblioteca permite que os desenvolvedores programem a interação com serviços da AWS, a partir do seu código em Python.
 
