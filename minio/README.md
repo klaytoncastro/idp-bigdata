@@ -19,21 +19,17 @@ Essa abordagem é ideal para aplicações em nuvem, como AWS S3 e Azure Blob Sto
 
 ### Comparação com Armazenamento Tradicional
 
-Ao contrário dos sistemas de arquivos hierárquicos como NAS (Network Attached Storage) e SAN (Storage Area Network), que podem ter dificuldades para escalar, o armazenamento de objetos gerencia dados de forma mais eficiente, tratando cada unidade como um objeto independente.
+Ao contrário dos sistemas de arquivos hierárquicos, como NAS (Network Attached Storage) e SAN (Storage Area Network), que enfrentam desafios de escalabilidade, o armazenamento de objetos lida de maneira mais eficaz com grandes volumes de dados. Cada unidade de dados é tratada como um objeto independente, encapsulando seu conteúdo e metadados. Abaixo estão as principais diferenças:
 
-Enquanto sistemas de arquivos hierárquicos enfrentam limitações à medida que o volume de dados cresce, o armazenamento de objetos lida melhor com esses desafios, tratando cada unidade de dados como um objeto independente, encapsulando seu conteúdo e metadados. Aqui estão as principais diferenças:
+- Armazenamento em Bloco: É baseado em soluções de armazenamento local ou em rede de armazenamento dedicada (SAN - Storage Area Network). Organiza os dados em blocos de tamanho fixo e requer um sistema de arquivos para mapeá-los. Embora eficiente como plataforma para dados estruturados, não é ideal para grandes volumes de dados não estruturados.
 
-- Armazenamento em Bloco: É baseado em soluções de armazenamento local ou em rede de armazenamento dedicada (SAN - Storage Area Network). Organiza os dados em blocos de tamanho fixo e requer um sistema de arquivos para mapeá-los. Embora eficiente para dados estruturados, não é ideal para grandes volumes de dados não estruturados.
-
-- Armazenamento em Arquivos. É baseado em soluções de armazenamento em rede de propósito (NAS - Network Attached Storage): Utiliza uma estrutura de arquivos hierárquica (com pastas e subpastas) para organizar os dados, o que pode se tornar ineficiente com o crescimento do volume de dados.
+- Armazenamento em Arquivos: É baseado em soluções de armazenamento em rede de propósito (NAS - Network Attached Storage): Utiliza uma estrutura de arquivos hierárquica (com pastas e subpastas) para organizar os dados, o que pode se tornar ineficiente com o crescimento do volume de dados.
  
-- Armazenamento em Objetos. É baseado em soluções de hardware (appliances) e implementações de software dedicadas para prover um ambiente de OSDs (Object-Storage Devices). Armazena dados como objetos independentes sem a necessidade de uma estrutura hierárquica, proporcionando escalabilidade e flexibilidade para gerenciar dados não estruturados.
-
-Ao adotar o conceito de objeto, os arquivos são armazenados em um repositório que pode ser acessado por uma API, ao invés de um sistema de arquivos hierárquico utilizado em protocolos de bloco das SANs (FCP - Fibre-Channel Protocol, iSCSI - Internet Small Computer System Interface), protocolos de rede dos NAS (SMB - Server Message Block , NFS - Network File System), ou estrutura de tabelas como em bancos de dados relacionais (BLOBs - Binary Large Objects).
+- Armazenamento em Objetos: Armazena dados como objetos independentes sem estrutura hierárquica, oferecendo escalabilidade e flexibilidade para gerenciar grandes volumes de dados não estruturados. Os arquivos são armazenados em um repositório acessível por uma API (Application Programming Interface), diferentemente dos sistemas de arquivos tradicionais utilizados como plataforma para métodos de acesso de nível mais baixo na pilha de infraestrutura, como os protocolos de bloco das SANs (FCP - Fibre-Channel Protocol, iSCSI - Internet Small Computer System Interface), protocolos de rede dos NAS (SMB - Server Message Block , NFS - Network File System), ou estrutura de tabelas em bancos de dados relacionais (BLOBs - Binary Large Objects).
 
 ### Principais Vantagens e Características
 
-- Escalabilidade: Graças ao uso de um espaço de endereçamento simples (Single Namespace), o armazenamento de objetos pode gerenciar vastas quantidades de dados sem comprometer o desempenho. Tanto a infraestrutura de armazenamento quanto os nós OSD (Object Storage Device) podem ser escalados conforme necessário, garantindo uma solução flexível e eficiente.
+- Escalabilidade: Graças ao uso de um espaço de endereçamento simples (Single Namespace), o armazenamento de objetos pode gerenciar vastas quantidades de dados sem comprometer o desempenho. Tanto a infraestrutura de armazenamento quanto os nós OSD (Object Storage Devices) podem ser escalados conforme necessário, garantindo uma solução flexível e eficiente.
 
 - Segurança e Confiabilidade: Cada objeto é identificado por um ID exclusivo, gerado por um algoritmo especializado. Esse processo assegura a integridade e autenticidade dos dados, tornando-o bastante seguro, especialmente para dados críticos.
 
@@ -45,7 +41,7 @@ Ao adotar o conceito de objeto, os arquivos são armazenados em um repositório 
 
 ### Como Funciona? 
 
-O armazenamento de objetos elimina a complexidade da hierarquia de diretórios, usando um espaço de endereçamento simples (Single Namespace). Um objeto contém os dados do usuário, seus metadados (como tamanho, data e permissões), e um ID de objeto gerado por uma função de hash que garante sua unicidade. Isso permite que os dados sejam distribuídos de forma eficiente e recuperados de maneira rápida e segura dos OSDs. 
+O armazenamento de objetos elimina a complexidade da hierarquia de diretórios, usando um espaço de endereçamento simples (Single Namespace). Um objeto contém os dados do usuário, seus metadados (como tamanho, data e permissões), e um ID de objeto exclusivo, gerado por uma função de hash que garante sua unicidade. Isso permite que os dados sejam distribuídos de forma eficiente e recuperados de maneira rápida e segura dos OSDs, desde que você possua o ID em questão e as devidas permissões de acesso. 
 
 - Upload: Quando um aplicativo envia um arquivo para o sistema OSD, o arquivo é dividido em dados do usuário e metadados.
 - Geração de ID: O sistema OSD gera um ID de objeto exclusivo com base nos dados do arquivo.
@@ -59,24 +55,24 @@ O armazenamento de objetos elimina a complexidade da hierarquia de diretórios, 
 
 O armazenamento em objetos é ideal para cenários como:
 
-- Armazenamento em Nuvem: Com o suporte para APIs baseadas em REST e SOAP, o armazenamento de objetos facilita o acesso de múltiplos usuários e plataformas de maneira eficiente e segura.
+- Armazenamento em Nuvem: Com o suporte para APIs baseadas em REST (Representational State Transfer) e SOAP (Simple Object Access Protocol), o armazenamento de objetos facilita o acesso de múltiplos usuários e plataformas de maneira eficiente e segura.
 - Arquivamento de Conteúdos: Sistemas como CAS (Content Addressable Storage) são otimizados para armazenar grandes volumes de conteúdo fixo, como arquivos de imagem médica e registros financeiros, com alta integridade e políticas de retenção rígidas.
 - Metadados: Cada objeto pode conter metadados personalizados, que tornam o processo de gerenciamento e busca mais eficiente, proporcionando mais controle sobre o conteúdo armazenado.
 - Endereçamento via URL: Cada objeto é acessível por meio de uma URL única, o que facilita sua localização e acesso, especialmente em ambientes distribuídos e em nuvem.
 
-Nos últimos anos, o armazenamento de objetos tem se tornado uma peça fundamental na composição de datalakes e fluxos de trabalho para big data, devido à sua capacidade de armazenar grandes volumes de dados em diversos formatos e acessá-los de maneira eficiente. Ele é amplamente utilizado em ecossistemas de big data para suportar arquiteturas distribuídas, onde ferramentas como Apache Spark, Airflow e Kafka são frequentemente integradas para processar, orquestrar e analisar grandes conjuntos de dados.
-
-Um exemplo típico desse ecossistema inclui:
+Nos últimos anos, o armazenamento de objetos tem se tornado uma peça fundamental na composição de datalakes e fluxos de trabalho para big data, devido à sua capacidade de armazenar grandes volumes de dados em diversos formatos e acessá-los de maneira eficiente. Ele é amplamente utilizado em ecossistemas de big data para suportar arquiteturas distribuídas, onde ferramentas como Apache Spark, Airflow e Kafka são frequentemente integradas para processar, orquestrar e analisar grandes conjuntos de dados. Um exemplo típico desse ecossistema inclui:
 
 - Apache Airflow: Para orquestração de fluxos de trabalho complexos e automação de pipelines de dados.
 - Apache Spark: Para processamento de dados em larga escala, incluindo operações de ETL (extração, transformação e carga) e análise de dados massivos.
 - Apache Kafka: Para ingestão de dados em tempo real, permitindo o processamento contínuo de streams de dados.
+- MinIO: Para armazenamento escalável de objetos, facilitando o gerenciamento de grandes volumes de dados não estruturados.
 
 ## Prática com MinIO
 
-MinIO é uma solução de armazenamento de objetos de alto desempenho compatível com Amazon S3. É projetado para aplicações de grande escala e pode ser usado tanto em infraestruturas de nuvem quanto em ambientes on-premises.
+MinIO é uma solução de armazenamento de objetos de alto desempenho compatível com Amazon S3. É projetado para aplicações de grande escala e pode ser usado tanto em infraestruturas de nuvem quanto em ambientes on-premises. 
 
 ### Benefícios do MinIO
+
 - **Compatibilidade com S3**: Totalmente compatível com a API S3 da AWS.
 - **Alto Desempenho**: Ideal para workloads intensivos em dados.
 - **Facilidade de Uso**: Interface web intuitiva e fácil configuração.
@@ -94,7 +90,8 @@ Amazon S3 é um serviço de armazenamento de objetos da Amazon Web Services (AWS
 
 Cada objeto dentro de um bucket é identificado por uma chave única, que funciona como o caminho completo para o arquivo, similar a um nome de arquivo em um sistema de arquivos tradicional.
 
-### Operações Comuns com S3
+### Operações Comuns com a API S3-Compatible
+
 - **PUT**: Adicionar ou substituir um objeto em um bucket.
 - **GET**: Recuperar um objeto de um bucket.
 - **DELETE**: Remover um objeto de um bucket.
