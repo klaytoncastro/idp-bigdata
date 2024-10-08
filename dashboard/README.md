@@ -10,7 +10,7 @@ Este projeto consiste em criar um ambiente de envio e coleta de dados via stream
 
 3 - O Notebook `F1_v2` faz a mesma coisa que o anterior, mas utilizando um arquivo para cada ano de corrida disponível.
 
-4 - Para monitorar o funcionamento Kafka, utilizamos o Kafka-UI. Caso queira visualizar o processo de Consumers e Producers, acesse `http://localhost:8082`. 
+4 - Para monitorar o funcionamento Kafka, utilizamos o Kafka-UI. Caso queira visualizar o processo de Consumers e Producers, acesse `http://localhost:8083`. 
 
 5 - Execute o notebook que simula o produtor de conteudo do Kafka: `Producer.ipynb`. 
 
