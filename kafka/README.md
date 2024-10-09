@@ -1,5 +1,7 @@
 # Apacha Kafka
 
+## Visão Geral
+
 O Apache Kafka é uma plataforma de streaming de dados distribuída e de código aberto que foi originalmente desenvolvida pelo LinkedIn e posteriormente doada à Apache Software Foundation, tornando-se um projeto de código aberto. A arquitetura do Apache Kafka é projetada para lidar com a ingestão, o armazenamento e o processamento de dados em tempo real em larga escala. Pode ser usado para criar aplicativos de streaming em tempo real para operacionalizar fluxos de dados, transformar ou deduzir alguma inteligência deles, provendo: 
 
 - Escalabilidade: Capaz de lidar com a escalabilidade em todas as quatro dimensões (produtores de eventos, processadores de eventos, consumidores de eventos e conectores de eventos).
@@ -19,6 +21,58 @@ Os principais componentes de sua arquitetura incluem:
 - Consumidores (Consumers): Os consumidores são aplicativos ou sistemas que leem dados dos tópicos do Kafka. Eles podem processar os dados em tempo real ou armazená-los em outro local para análises posteriores.
 
 - ZooKeeper: Embora o Kafka tenha originalmente usado o Apache ZooKeeper para gerenciamento de metadados e coordenação de cluster, em versões mais recentes começou a priorizar sua própria implementação de coordenação interna, tornando-se menos dependente do ZooKeeper.
+
+## Prática
+
+Esta seção básica de prática descreve o uso da interface de usuário (UI) do **Kafka** para gerenciar tópicos, publicar e consumir mensagens, e monitorar a saúde do cluster. Você aprenderá a criar tópicos, visualizar consumidores e brokers, e publicar mensagens diretamente pela UI.
+
+### Acessando a UI do Kafka
+
+1. Certifique-se de que o ambiente **Kafka** com a UI está rodando.
+2. Acesse a interface do Kafka no seu navegador através do seguinte endereço:
+   - **URL**: `http://localhost:8083`
+
+### Explorando a UI do Kafka
+
+1. Overview
+
+- Ao entrar na UI, você verá um **Overview** do cluster Kafka, com informações sobre os brokers, tópicos, consumidores e partições.
+
+2. Tópicos (Topics)
+
+- Para visualizar ou criar novos tópicos:
+  a. Navegue até a aba **Topics**.
+  b. Para criar um novo tópico, clique em **Create a new topic** e preencha os campos:
+     - **Name**: Nome do tópico.
+     - **Partitions**: Número de partições (importante para escalabilidade).
+     - **Replication Factor**: Número de réplicas para tolerância a falhas.
+  c. Clique em **Create** para finalizar a criação do tópico.
+
+3. Publicação de Mensagens
+
+- Para publicar mensagens em um tópico:
+  a. Selecione o tópico desejado na aba **Topics**.
+  b. Na aba **Messages**, preencha o campo **Key** (opcional) e **Value** (conteúdo da mensagem) na seção **Produce messages**.
+  c. Clique em **Send** para enviar a mensagem ao tópico.
+
+4. Consumo de Mensagens
+
+- Para visualizar as mensagens publicadas em um tópico:
+  a. Selecione o tópico na aba **Topics** e vá para a aba **Messages**.
+  b. As mensagens publicadas aparecerão no histórico.
+- Para monitorar consumidores:
+  c. Navegue até a aba **Consumers** para ver os grupos de consumidores que estão lendo mensagens do tópico.
+
+5. Monitoramento
+
+- Use a aba **Brokers** para visualizar o status de cada broker no cluster.
+- A UI também permite visualizar detalhes de **partições**, **offsets** e **grupos de consumidores** para garantir que o Kafka está funcionando corretamente.
+
+6. Exemplo de Teste
+
+a. Crie um tópico chamado `meu_topico` com 3 partições e fator de replicação 2.
+b. Publique uma mensagem simples no tópico com o conteúdo: `"Olá, Kafka!"`.
+c. Crie um consumidor que leia as mensagens do tópico e observe o comportamento do cluster enquanto as mensagens são consumidas.
 
 <!--
 
@@ -56,7 +110,5 @@ Desacoplamento	Fracamente desacoplado	Fortemente desacoplado
 Persistência de Mensagens	Não há persistência	Persistência configurável
 Reprocessamento de Mensagens	Não é possível	Permitido com configuração
 Latência	Baixa em ambientes simples	Pode aumentar com mais consumidores
-
-
 
 -->
