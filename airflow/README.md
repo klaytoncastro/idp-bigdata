@@ -1,14 +1,16 @@
-# Orquestrador de Fluxos de Trabalho para Big Data e NoSQL
+# Orquestração de Fluxos de Trabalho e Pipelines de Dados
 
 ## Visão Geral
 
-Apache Airflow é uma plataforma de orquestração de fluxos de trabalho que permite o desenvolvimento, agendamento e monitoramento de pipelines de dados programaticamente. Em um ambiente de Big Data e NoSQL, onde grandes volumes de dados são processados continuamente, Airflow é fundamental para gerenciar e automatizar tarefas complexas de ETL (Extract, Transform, Load), integração entre diferentes sistemas de armazenamento, ingestão e análise de dados.
+Orquestração refere-se ao processo de gerenciar e coordenar a execução de tarefas interdependentes em um fluxo de trabalho, garantindo que elas sejam executadas corretamente. Nesse cenário, um pipeline consiste numa série de etapas consecutivas que processam os dados de forma estruturada, garantindo que os dados sejam transformados e movidos de um sistema para outro de forma eficiente e ordenada. 
 
-## O Que é Apache Airflow? 
+Em ambientes onde grandes volumes de dados são processados continuamente, ferramentas como o Airflow são fundamentais para implementar e automatizar tarefas complexas de ETL (Extract, Transform, Load), integração entre diferentes sistemas de armazenamento, ingestão e análise de dados, onde cada etapa do fluxo — desde a ingestão até a transformação e armazenamento deve ser organizada de maneira programática, com intuito de gerenciar, monitorar e escalonar essas operações. 
 
-Apache Airflow é uma ferramenta open-source que facilita a criação de pipelines de dados automatizados e complexos. Esses pipelines são construídos como grafos acíclicos dirigidos (DAGs - Directed Acyclic Graphs), onde cada nó representa uma tarefa (task) e as arestas entre os nós indicam a sequência de execução.
+## Apache Airflow 
 
-O Airflow foi criado para resolver a necessidade de orquestração de fluxos de trabalho de dados, especialmente em ambientes onde a ingestão e o processamento de grandes volumes de dados (Big Data) são críticos. Ele permite definir, agendar e monitorar essas tarefas, possibilitando maior controle sobre fluxos de trabalho complexos e permitindo a automatização de pipelines em ambientes de produção.
+Apache Airflow é uma plataforma de orquestração de fluxos de trabalho que permite o desenvolvimento, agendamento e monitoramento de pipelines de dados programaticamente. Esses pipelines são construídos como grafos acíclicos dirigidos (DAGs - Directed Acyclic Graphs), onde cada nó representa uma tarefa (task) e as arestas entre os nós indicam a sequência de execução.
+
+O Airflow foi criado para resolver a necessidade de orquestração de fluxos de trabalho de dados em ambientes onde a ingestão e o processamento de grandes volumes de dados (Big Data) são críticos. Ele permite definir, agendar e monitorar essas tarefas, possibilitando maior controle sobre fluxos de trabalho complexos e permitindo a automatização de pipelines em ambientes de produção.
 
 ### Funcionalidades Principais
 
@@ -112,4 +114,4 @@ extract >> transform >> load
 
 ## Conclusão
 
-Apache Airflow é uma ferramenta essencial para orquestrar fluxos de trabalho complexos e automatizar pipelines de dados em um ambiente moderno de Big Data e NoSQL. Ele facilita a integração entre várias fontes de dados, sistemas de armazenamento distribuído e ferramentas de análise, além de permitir a escalabilidade necessária para lidar com volumes de dados massivos. Seu uso é amplamente difundido no mercado para otimizar operações de ETL, integração de dados, análises em tempo real e machine learning, tornando-se um componente crítico nas arquiteturas de dados modernas.
+As tarefas de orquestração de fluxos de trabalho e automatização pipelines em um ambiente de Big Data e BI é extremamente relevante na engenharia de dados Nesse cenário o Apache Airflow é uma ferramenta essencial para facilitar a integração entre várias fontes de dados, sistemas de armazenamento distribuído e ferramentas de análise, além de permitir a escalabilidade necessária para lidar com dados massivos. Seu uso é amplamente difundido no mercado para otimizar operações de ETL, integração de dados, análises em tempo real e machine learning, tornando-se um componente crítico nas arquiteturas de dados modernas.
