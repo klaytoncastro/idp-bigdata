@@ -14,7 +14,7 @@ chmod -R 755 "$BASE_DIR/dags" "$BASE_DIR/plugins"
 chmod -R 770 "$BASE_DIR/logs" "$BASE_DIR/postgresql_data"
 
 # Subindo os containers pela primeira vez
-docker compose up -d
+docker-compose up -d
 
 # Função para exibir a barra de progresso
 progress_bar() {
@@ -46,4 +46,4 @@ progress_bar 80
 docker ps
 
 # Derrubando os containers após a primeira subida
-docker compose down
+docker-compose down
