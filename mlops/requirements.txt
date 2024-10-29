@@ -1,4 +1,5 @@
 flask
 joblib
 scikit-learn==1.2.2
+transformers
 

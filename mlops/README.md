@@ -147,7 +147,9 @@ Você criou um pequeno aplicativo web com o Flask, adicionou rotas estáticas e 
 
 ## 7. Tarefa
 
-Implementem uma nova rota em nossa aplicação Flask para avaliar textos utilizando um modelo de classificação de sentimentos. Vocês deverão modificar o código existente para carregar o modelo de sentimentos e criar uma rota `/analyze_sentiment` que aceite requisições `POST` com um `JSON` contendo um texto e retorne o sentimento classificado como 'positivo', 'negativo' ou 'neutro'. Utilizem o seguinte formato `JSON` para a requisição: 
+Implementem uma nova rota em nossa aplicaçãoo Flask para avaliar textos utilizando um modelo de classificação de sentimentos pré-treinado da [Hugging Face](https://huggingface.co/blog/sentiment-analysis-python). 
+
+Vocês deverão modificar o código existente para carregar o modelo de sentimentos e criar uma rota `/analyze_sentiment` que aceite requisições `POST` com um `JSON` contendo um texto e retorne o sentimento classificado como 'positivo', 'negativo' ou 'neutro'. Utilizem o seguinte formato `JSON` para a requisição: 
 
 ```json
 { "text": "Seu texto aqui" }
