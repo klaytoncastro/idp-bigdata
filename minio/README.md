@@ -115,11 +115,13 @@ services:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
-      - minio-data:/data
+      - minio-data:/data        # Volume para dados do MinIO
+      - minio-backup:/backup    # Volume para armazenar backups
     command: server /data --console-address ":9001"
 
 volumes:
   minio-data:
+  minio-backup:
 ```
 
 ### Leitura e Gravação de Arquivos
