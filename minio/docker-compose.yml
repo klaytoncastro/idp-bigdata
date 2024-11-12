@@ -1,0 +1,20 @@
+version: '3.7'
+
+services:
+  minio:
+    image: minio/minio
+    container_name: minio
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+#      - ./minio-data:/data        # Diretório local para dados do MinIO
+      - ./minio-backup:/backup    # Diretório local para armazenar backups
+    command: server /data --console-address ":9001"
+
+volumes:
+  minio-data:
+#   minio-backup:
