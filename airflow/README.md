@@ -111,7 +111,36 @@ load = BashOperator(
 extract >> transform >> load
 ```
 
-## DAG de Teste
+## Passos para Configuração e Execução do Airflow com Docker
+
+### Executar o Script de Pré-Configuração
+
+Antes de iniciar qualquer outro passo, execute o script `pre-setup.sh` para garantir que todas as dependências e configurações iniciais sejam aplicadas corretamente:
+
+```bash
+chmod +x pre-setup.sh
+./pre-setup.sh
+```
+
+### Executar o Script de Pós-Configuração 
+
+Após a execução do `pre-setup.sh`, execute o script `post-setup.sh` para aplicar as configurações finais necessárias para o funcionamento do Airflow:
+
+```bash
+chmod +x post-setup.sh
+./post-setup.sh)
+```
+
+### Acessar a Interface Gráfica Web do Airflow
+
+Na interface, você poderá gerenciar e monitorar suas DAGs. Após a execução dos dois scripts, abra seu navegador e acesse a interface gráfica do Airflow via URL: `http://localhost:8080`
+
+- **Usuário**: admin 
+- **Senha**: admin
+
+### Colocar o Script .py na Pasta dags
+
+Para que suas DAGs sejam reconhecidas pelo Airflow, coloque o arquivo `.py` que contém o código da DAG dentro da pasta dags no seu diretório do Airflow. Exemplo de Código Simples: 
 
 ```python
 from airflow import DAG
@@ -136,6 +165,16 @@ with DAG(
         python_callable=print_hello,
     )
 ```
+
+### Reiniciar o Contêiner do Airflow Scheduler
+
+Após adicionar a DAG, você precisará reiniciar o contêiner do Airflow Scheduler para que ele reconheça a nova DAG. Execute o seguinte comando para reiniciar **APENAS** o contêiner do scheduler:
+
+```bash
+docker compose restart airflow-scheduler
+```
+
+Isso irá garantir que o Airflow carregue as novas configurações e DAGs corretamente. 
 
 ## Conclusão
 
