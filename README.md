@@ -1,18 +1,115 @@
-# Instruções para os Laboratórios da Disciplina de Big Data e NoSQL
+# 1. Instruções Gerais 
 
 Olá, aluno(a)! Bem-vindo aos laboratórios da disciplina de Big Data e NoSQL.
 
-No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados. O conceito de Big Data surge em resposta a essa demanda, caracterizado não apenas pelo grande Volume, mas também pela Velocidade com que os dados são gerados e processados, a Variedade de formatos e fontes, a Veracidade dos dados e, finalmente, o potencial Valor que podem agregar quando analisados corretamente. No contexto de bancos de dados, os sistemas NoSQL (Not-only SQL) emergem como soluções otimizadas para lidar com estas características. Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relacionados a estes temas. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. Siga atentamente as instruções para configurar seu ambiente.
+No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados. O conceito de Big Data surge em resposta a essa demanda, caracterizado não apenas pelo grande Volume, mas também pela Velocidade com que os dados são gerados e processados, a Variedade de formatos e fontes, a Veracidade dos dados e, finalmente, o potencial Valor que podem agregar quando analisados corretamente. No contexto de bancos de dados, os sistemas NoSQL (Not-only SQL) emergem como soluções otimizadas para lidar com estas características. Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relacionados a estes temas. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. Siga atentamente as instruções abaixo para configurar seu ambiente.
 
-### Configuração do Ambiente: 
+## 2. Instalação e Configuração do Ambiente de Laboratório via WSL
 
-Visando uma experiência mais uniforme, disponibilizamos uma máquina virtual (VM) pré-configurada. Essa abordagem assegura que todos iniciem o curso com o mesmo ambiente e configurações. Embora o Docker possa ser executado diretamente em diversos sistemas operacionais, optamos por essa padronização para simplificar nosso processo de suporte e oferecer soluções mais ágeis e consistentes diante de eventuais desafios técnicos.
+O Docker é uma plataforma de virtualização leve que permite empacotar aplicações e todas as suas dependências. Diferente de máquinas virtuais, que replicam um sistema operacional inteiro, o Docker compartilha o kernel do sistema host, tornando a execução de containers mais leve e eficiente. (bibliotecas, configurações e código) em ambientes isolados, chamados containers. Esses containers são altamente portáveis e podem ser executados em qualquer sistema operacional compatível. Essa solução é amplamente adotada no mercado para criar ambientes replicáveis e consistentes, eliminando a necessidade de configurar e instalar manualmente cada aplicação em diferentes máquinas.
+
+Nos sistemas Microsoft Windows, recomenda-se a utilização do WSL (Windows Subsystem for Linux) para a instalação do Docker. O WSL é um recurso nativo do Windows que permite a execução de distribuições Linux sem a necessidade de emulação ou virtualização completa, como o Microsoft Hyper-V ou Oracle VirtualBox. Projetado para facilitar o desenvolvimento de software no Windows, o WSL oferece uma integração simplificada entre os dois sistemas operacionais, tornando o uso do Docker mais eficiente e acessível.
+
+O uso do Docker, em conjunto com o WSL, é essencial para nossos laboratórios, pois garante a replicabilidade do ambiente de desenvolvimento, independentemente do sistema operacional usado por cada estudante.
+
+**Nota**: Usuários de sistemas baseados em Linux ou MacOS não precisam utilizar o WSL, pois esses sistemas já possuem suporte nativo ao Docker. Para executar containers, basta instalar o Docker diretamente, sem a necessidade de qualquer subsistema ou ferramenta adicional.
+
+### Passo 1: Verificação dos Requisitos
+
+Certifique-se de que você está utilizando o sistema operacional Windows 10 ou uma versão superior, e que o recurso de virtualização de hardware está habilitado. Para verificar, acesse a BIOS/UEFI do seu computador pressionando a tecla apropriada (geralmente F2, F10, DEL ou ESC) durante a inicialização. No menu de configurações, procure por uma opção como "Intel VT-x" (para processadores Intel) ou "AMD-V" (para processadores AMD) e certifique-se de que esteja ativada.
+
+### Passo 2: Ativação do WSL
+Abra o aplicativo **PowerShell ISE**, como administrador, e execute os comandos abaixo:
+
+```bash
+# Ativa o subsistema Windows para Linux
+dism /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+
+# Ativa a plataforma de máquina virtual necessária para o WSL 2
+dism /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart
+
+# Instala o WSL
+wsl --install
+
+# Define a versão 2 do WSL como padrão
+wsl --set-default-version 2
+```
+
+**Nota:** Caso tenha encontrado algum erro ou qualquer dificuldade, você pode verificar na BIOS/UEFI de seu dispositivo se o recurso de virtualização está ativado (`VT-x` para processadores Intel, como `Core i3`, `i5`, `i7`, etv; e `AMD-V` para processadores `Ryzen 5`, `Ryzen 7`, etc). Se não conseguir avançar, entre em contato com o professor para obter orientação sobre a instalação.
+
+### Passo 3: Escolha de uma Distribuição
+
+- Caso ainda não utilize WSL com uma distribuição Linux embarcada, instale uma distribuição pelo aplicativo **Microsoft Store** ou via **linha de comando (CLI)**. Recomenda-se instalar o **Ubuntu 24.04**.
+
+- Caso prefira realizar a instalação de forma rápida via CLI, execute o comando abaixo diretamente no **PowerShell ISE**, execute o comando abaixo: 
+
+<!--
+wsl -l -o
+-->
+
+```bash
+# Instala o Ubuntu 24.04
+wsl --install -d Ubuntu-24.04
+
+# Define o Ubuntu 24.04 como distribuição padrão ao executar o comando wsl. 
+wsl --setdefault Ubuntu-24.04
+```
+
+- Finalizada a instalação, reinicie o seu computador. 
+
+### Passo 4: Configuração Inicial
+
+- Inicie o aplicativo WSL e configure o usuário e a senha da distribuição. Depois disso você terá acesso a um kernel e a um terminal Linux. Você pode invocar o Powershell ou Terminal Windows e acionar o comando `wsl` para ter acesso ao ambiente. 
+- Além do acesso via CLI, você também pode navegar via nas pastas e arquivos do ambiente Linux através do Windows Explorer (ícone do pinguim), diretamente na pasta da sua distribuição.
+- Caso prefira uma interface gráfica (GUI), considere o uso do [Visual Studio Code (VS Code)](https://code.visualstudio.com/), que permite estabelecer uma sessão de terminal com seu ambiente WSL. Esta alternativa pode ser mais intuitiva e amigável para edição de arquivos, unificando sua experiência de desenvolvimento e administração. Procure o professor caso tenha dúvidas na utilização dessa ferramenta.
+
+### Passo 5: Instalação do Docker
+
+- O Docker Desktop for Windows fornece uma interface gráfica e integra o Docker ao sistema, facilitando a execução e o gerenciamento de containers diretamente no Windows.
+- Baixe e instale o [Docker Desktop for Windows](https://docs.docker.com/desktop/install/windows-install/#:~:text=Docker%20Desktop%20for%20Windows%20%2D%20x86_64). Após a instalação, o Windows pode solicitar que você faça o logout e o login novamente para aplicar as alterações. 
+
+### Passo 6: Utilização do Ambiente
+
+- Ao longo do curso, você será guiado pelo Professor nas atividades práticas que envolverá o conteúdo das subpastas deste repositório.
+- Para começar, inicie o Docker Desktop e, depois disso, o aplicativo WSL ou, se preferir, o terminal Linux diretamente a partir do VS Code. 
+- Para quem está em sua primeira experiência com terminal Linux, segue um glossário com os comandos básicos: 
+
+### Comandos Básicos
+
+| Comando | Descrição                                              | Exemplo                                |
+|---------|--------------------------------------------------------|----------------------------------------|
+| `whoami`| Exibe o nome do usuário atual                           | `whoami`                               |
+| `pwd`   | Mostra o diretório atual                                | `pwd`                                  |
+| `history`| Exibe o histórico de comandos                          | `history`                              |
+| `cd`    | Navega entre diretórios                                 | `cd /home`                             |
+| `ls`    | Lista arquivos e diretórios                             | `ls -la`                               |
+| `mkdir` | Cria um novo diretório                                  | `mkdir nova_pasta`                     |
+| `cp`    | Copia arquivos ou diretórios                            | `cp arquivo.txt /caminho/destino/`     |
+| `mv`    | Move ou renomeia arquivos e diretórios                  | `mv arquivo.txt /caminho/destino/`     |
+| `rm`    | Remove arquivos ou diretórios                           | `rm arquivo.txt`                       |
+| `cat`   | Exibe o conteúdo de um arquivo                          | `cat arquivo.txt`                      |
+| `grep`  | Pesquisa por padrões em arquivos                        | `grep "termo" arquivo.txt`             |
+| `vim`   | Editor de texto no terminal                             | `vim arquivo.txt`                      |
+| `chmod` | Altera permissões de arquivos                           | `chmod 755 arquivo.txt`                |
+| `chown` | Modifica o proprietário de um arquivo ou diretório      | `chown usuario:grupo arquivo.txt`      |
+| `ps`    | Lista processos em execução                             | `ps aux`                               |
+| `ping`  | Testa a conectividade com um host                       | `ping google.com`                      |
+| `wget`  | Baixa conteúdo da web                                   | `wget http://exemplo.com/arquivo.zip`  |
+
+
+### Conclusão
+
+Pronto! Agora seu ambiente está preparado para nossos laboratórios. A partir daqui, você poderá seguir as instruções do professor para completar os exercícios práticos. Se surgir qualquer dúvida, consulte os materiais de apoio indicados no Moodle e neste repositório. 
+
+## 3. Configuração Alternativa do Ambiente de Laboratório via Oracle VirtualBox: 
+
+Visando uma experiência mais uniforme, disponibilizamos como alternativa, uma máquina virtual (VM) pré-configurada. Essa abordagem assegura que todos iniciem o curso com o mesmo ambiente e configurações. Embora o Docker possa ser executado diretamente em diversos sistemas operacionais, optamos por essa padronização para simplificar nosso processo de suporte e oferecer soluções mais ágeis e consistentes diante de eventuais desafios técnicos.
 
 No entanto, valorizamos a autonomia de cada estudante, especialmente quando se trata da prática em seus computadores pessoais. Se você já está familiarizado com o Docker e deseja executá-lo nativamente em seu sistema operacional, este repositório está preparado para essa alternativa. Além disso, para os usuários de hardware recente da Apple, como o M2, essa opção é particularmente relevante, devido a possíveis incompatibilidades com versões do VirtualBox originalmente desenvolvidas para ambientes x86_64.
 
-No caso dos usuários de Windows, que preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, o Windows Subsystem for Linux (WSL) é uma alternativa interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2).
+No caso dos usuários de Windows, que preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, o Windows Subsystem for Linux (WSL) que apresentamos é a alternativa mais interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2).
 
-## 1. Sobre o Oracle Virtual Box e a imagem OVA
+### 3.1. Sobre o Oracle Virtual Box e a imagem OVA
 
 Oracle VirtualBox é um software de virtualização de código aberto que permite executar vários sistemas operacionais em uma única máquina física. Com ele, é possível criar e gerenciar máquinas virtuais, cada uma com seu sistema operacional, aplicativos e arquivos em um ambiente isolado. Ele é compatível com diversos sistemas, como Windows, Linux e MacOS.
 
@@ -36,7 +133,7 @@ Utilizando um arquivo OVA, é possível distribuir ambientes pré-configurados, 
 - **Usuário:** labihc
 - **Senha:** L@b1hc
 
-## 2. Compreendendo o modo NAT
+### 3.2. Compreendendo o modo NAT
 
 NAT (_Network Address Translation_) é a implementação de um recurso para tradução de endereços de rede. No contexto do VirtualBox, ao configurar uma VM para usar NAT, você está permitindo que essa VM se comunique com redes externas, incluindo a Internet, usando o mesmo endereço IP (_Internet Protocol_) do host. Assim, a máquina _host_ (seu _desktop_ de laboratório ou _notebook_ pessoal) age como um _gateway_ e a VM parece estar atrás de uma rede privada.
 
@@ -65,29 +162,13 @@ Além de fornecer acesso à Internet, o recurso de NAT do VirtualBox também per
 
 - **Nota**: Ao configurar o redirecionamento de portas, evite utilizar as portas 0-1023 (exceto 80 e 443, para aplicações web), pois elas são reservadas. A porta 2222 é comumente usada para SSH devido à sua semelhança com a porta padrão 22 e por estar acima da faixa de portas reservadas, reduzindo a possibilidade de conflitos. Sempre certifique-se de que a porta escolhida **não esteja em uso**. Ferramentas nativas do sistema operacional, como `netstat`, podem ajudar na verificação. 
 
-## 3. Descrição das Ferramentas Utilizadas
+### 3.3. Descrição das Ferramentas Utilizadas
 
 No cenário atual de Big Data, é evidente a necessidade de plataformas integradas que consigam gerenciar, processar e analisar grandes volumes de dados de diversas fontes. A ideia de um Data Lake ou Data Lakehouse é central para essa abordagem, onde os dados são armazenados em sua forma bruta e processados conforme a necessidade, em vez de serem pré-processados em silos de dados. A combinação de ferramentas como Spark, Hadoop, e bancos de dados NoSQL, numa infraestrutura orquestrada pelo Docker e Docker Compose, pode ser vista como uma representação básica de uma plataforma Data Lakehouse, que visa otimizar o fluxo de dados, desde a ingestão até a análise. 
 
 Diante da quantidade de informações e ferramentas envolvidas, é natural temer essa certa complexidade inicial. No entanto, o objetivo não é dominar de imediato todas as técnicas e tecnologias envolvidas, mas proporcionar uma clara compreensão dos conceitos fundamentais e apresentar ferramentas fundamentais no panorama atual da indústria em se tratando de engenharia e ciência de dados. Não se preocupe, cada tópico será abordado de forma gradual, garantindo o suporte necessário e o esclarecimento de dúvidas ao longo do processo de aprendizagem. Com dedicação e tempo, essa complexidade inicial dará lugar a uma compreensão cada vez mais profunda e intuitiva. A seguir, apresentamos um diagrama que representa a arquitetura de referência da plataforma que estamos construindo: 
 
 ![Arquitetura Básica do Data Lake](puml/arch-bigdata-nosql.svg)
-
-### Docker:
-
-Em contextos de Big Data, é comum a interconexão de diversos serviços. Por exemplo, uma pipeline de processamento de dados pode envolver o Spark para processamento em memória, o Hadoop para armazenamento distribuído e bancos de dados NoSQL como MongoDB, Redis, Cassandra e Neo4j para diferentes finalidades. Para desenvolver e testar as aplicações, é comumente utilizado um Jupyter Notebook. Configurar essa quantidade de serviços para trabalharem de modo integrado é desafiador.
-
-O Docker surge como solução, permitindo desenvolver e executar aplicações em contêineres. Esses contêineres são unidades padrão de software que contêm o código e todas as suas dependências, garantindo consistência em diferentes ambientes. Eles são leves, iniciam rapidamente e são altamente portáteis, facilitando a transição entre, por exemplo, um computador pessoal e um servidor ou ambiente de nuvem.
-
-Importante destacar que, tanto as VMs quanto o Docker são utilizados para objetivos de virtualização, embora apresentem diferenças marcantes em suas abordagens. Enquanto as VMs emulam sistemas operacionais completos, oferecendo isolamento robusto e a capacidade de replicar ambientes completos e padronizados, o Docker adota uma abordagem de virtualização em nível de processo, onde os aplicativos são executados em contêineres isolados que compartilham o kernel do sistema hospedeiro.
-
-### Docker Compose:
-
-O Docker Compose é uma ferramenta do ecossistema Docker projetada para definir e gerenciar aplicações multicontêiner. Através do arquivo docker-compose.yml, é possível orquestrar aplicações complexas compostas por diversos contêineres. Com o comando `docker-compose up -d`, todos os contêineres especificados são iniciados simultaneamente, garantindo sua configuração e integração correta. 
-
-Por exemplo, para uma aplicação que combina um ambiente com Jupyter e Spark, o Docker Compose elimina a necessidade de configuração manual de cada contêiner. Basta definir a configuração em um arquivo e ativá-la. 
-
-Assim, simplificamos o processo de implantação e integração de ferramentas, reduzindo preocupações com procedimentos manuais. A utilização de uma imagem OVA padronizada potencializa o aproveitamento do poder computacional disponível no laboratório, que pode ser configurado como um grande sistema distribuído. 
 
 Dentro deste projeto, temos diversos diretórios, cada um representando um ambiente específico:
 
@@ -125,9 +206,27 @@ Neste diretório, você encontrará o ambiente para o Neo4j.
 
 ## 4. Preparando o Ambiente de Laboratório
 
+### Docker:
+
+Em contextos de Big Data, é comum a interconexão de diversos serviços. Por exemplo, uma pipeline de processamento de dados pode envolver o Spark para processamento em memória, o Hadoop para armazenamento distribuído e bancos de dados NoSQL como MongoDB, Redis, Cassandra e Neo4j para diferentes finalidades. Para desenvolver e testar as aplicações, é comumente utilizado um Jupyter Notebook. Configurar essa quantidade de serviços para trabalharem de modo integrado é desafiador.
+
+O Docker surge como solução ideal, permitindo desenvolver e executar aplicações em contêineres. Esses contêineres são unidades padrão de software que contêm o código e todas as suas dependências, garantindo consistência em diferentes ambientes. Eles são leves, iniciam rapidamente e são altamente portáteis, facilitando a transição entre, por exemplo, um computador pessoal e um servidor ou ambiente de nuvem.
+
+Importante destacar que, tanto as VMs quanto o Docker são utilizados para objetivos de virtualização, embora apresentem diferenças marcantes em suas abordagens. Enquanto as VMs emulam sistemas operacionais completos, oferecendo isolamento robusto e a capacidade de replicar ambientes completos e padronizados, o Docker adota uma abordagem de virtualização em nível de processo, onde os aplicativos são executados em contêineres isolados que compartilham o kernel do sistema hospedeiro.
+
+### Docker Compose:
+
+O Docker Compose é uma ferramenta do ecossistema Docker projetada para definir e gerenciar aplicações multicontêiner. Através do arquivo docker-compose.yml, é possível orquestrar aplicações complexas compostas por diversos contêineres. Com o comando `docker-compose up -d`, todos os contêineres especificados são iniciados simultaneamente, garantindo sua configuração e integração correta. 
+
+Por exemplo, para uma aplicação que combina um ambiente com Jupyter e Spark, o Docker Compose elimina a necessidade de configuração manual de cada contêiner. Basta definir a configuração em um arquivo e ativá-la. 
+
+Assim, simplificamos o processo de implantação e integração de ferramentas, reduzindo preocupações com procedimentos manuais. A utilização de uma imagem OVA padronizada potencializa o aproveitamento do poder computacional disponível no laboratório, que pode ser configurado como um grande sistema distribuído. 
+
 ### Usando o SSH: Guia Básico
 
-SSH (_Secure Shell_), que se traduz como "cápsula segura", é um protocolo que viabiliza uma comunicação segura (criptografada) entre um computador cliente e um servidor remoto. Para gerenciar nossa VM instanciada no VirtualBox (ambiente servidor), é altamente recomendado o uso de conexões SSH ao invés da console física. Uma opção popular e confiável para realizar uma conexão via SSH em clientes Windows é o [Putty](https://www.putty.org/). A versão _portable_ pode ser obtida e usada diretamente em nossos laboratórios [aqui](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3). 
+SSH (_Secure Shell_), é um protocolo que viabiliza uma comunicação segura (criptografada/encapsulada) entre um computador cliente e um servidor remoto. Você pode logar diretamente com o comando `wsl` na sua instância ou, ainda, usar o SSH Remote para gerenciar a instância no Visual Studio Code. 
+
+Já no VirtualBox (ambiente servidor), é praticamente mandatório o uso de conexões SSH ao invés da console física. Uma opção popular e confiável para realizar uma conexão via SSH em clientes Windows é o [Putty](https://www.putty.org/). A versão _portable_ pode ser obtida e usada diretamente em nossos laboratórios [aqui](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3). 
 
 - **Nota**: Caso você já possua experiência com outras ferramentas de SSH ou tenha uma preferência específica, fique à vontade para usá-las.
 
@@ -328,7 +427,7 @@ chmod +x docker-cleanup.sh
 
 ### Desligamento Seguro do Ambiente 
 
-Desligamentos abruptos, seja por interrupções forçadas ou por encerramento inadequado do VirtualBox, podem afetar a consistência dos discos virtuais, levando à perda ou corrupção de dados e desestabilizando o ambiente. Por isso, ao concluir suas atividades, é fundamental executar o comando `shutdown -h now` a partir do terminal. Esse passo garante um desligamento apropriado e a integridade do sistema operacional da VM, incluindo os contêineres Docker. Assim, todas as alterações serão preservadas, assegurando que, ao reiniciar, o sistema retorne exatamente ao estado anterior, sem a necessidade de ajustes adicionais.
+Nas VMs (configuração alternativa), precisamos evitar desligamentos abruptos, seja por interrupções forçadas ou por encerramento inadequado do VirtualBox, podem afetar a consistência dos discos virtuais, levando à perda ou corrupção de dados e desestabilizando o ambiente. Por isso, ao concluir suas atividades, é fundamental executar o comando `shutdown -h now` a partir do terminal. Esse passo garante um desligamento apropriado e a integridade do sistema operacional da VM, incluindo os contêineres Docker. Assim, todas as alterações serão preservadas, assegurando que, ao reiniciar, o sistema retorne exatamente ao estado anterior, sem a necessidade de ajustes adicionais.
 
 ### Pronto! 
 
