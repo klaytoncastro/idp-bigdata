@@ -10,12 +10,10 @@ Cada desafio é uma experiência prática, onde você aplicará o conhecimento a
 
 | #  | Atividade                           | Desafio                                                        | Prazo      |
 |----|--------------------------------------|----------------------------------------------------------------|------------|
-| 01 | [MongoDB](./mongodb/)               | Aplicar conceitos básicos na utilização do MongoDB             | 26/02/2025 |
-| 02 | [Jupyter & MongoDB](./jupyter/#3-integração-com-ferramentas-externas) | Pré-Processamento e comunicação de ambientes em contêineres | 05/03/2025 |
-| 03 | [Jupyter & MongoDB - Kaggle](https://www.kaggle.com/code/ganu1899/mongodb-with-python) | Tutorial Kaggle: MongoDB e Python | 12/03/2025 |
-| 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo do Ensino Superior | 19/03/2025 |
-
-
+| 01 | [MongoDB](./mongodb/)               | Fundamentos do MongoDB e Administração de Dados                | 26/02/2025 |
+| 02 | [Jupyter & MongoDB](./jupyter/)      | Integração de Ambientes e Manipulação de Dados com MongoDB     | 05/03/2025 |
+| 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python) | Prática com MongoDB e Python no Kaggle                         | 12/03/2025 |
+| 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo do Ensino Superior com MongoDB       | 19/03/2025 |
 
 ## 3. Instalação e Configuração do Ambiente de Laboratório via WSL
 
