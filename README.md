@@ -8,11 +8,13 @@ No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentam
 
 Cada desafio é uma experiência prática, onde você aplicará o conhecimento adquirido para explorar novas ferramentas e terá a oportunidade de aprofundar seu aprendizado de forma progressiva, empregando técnicas adequadas na resolução de problemas reais do mercado. 
 
-| #  |Atividade                            | Desafio                                           | Prazo      |
-|----|-------------------------------------|---------------------------------------------------|------------|
-| 01 | [MongoDB](./mongodb/)               | Aplicar conceitos básicos na utilização do MongoDB| 26/02/2025 |
-| 02 | [MongoDB & Python](./jupyter/)      | Integração de Contêineres e Tutorial Kaggle       | 05/03/2025 |
-| 03 | [Censo IES 2022 e 2023](./jupyter/) | Análise de Dados Censo Ensino Superior            | 12/03/2025 |
+| #  | Atividade                           | Desafio                                                        | Prazo      |
+|----|--------------------------------------|----------------------------------------------------------------|------------|
+| 01 | [MongoDB](./mongodb/)               | Aplicar conceitos básicos na utilização do MongoDB             | 26/02/2025 |
+| 02 | [Jupyter & MongoDB](./jupyter/#3-integração-com-ferramentas-externas) | Pré-Processamento e comunicação de ambientes em contêineres | 05/03/2025 |
+| 03 | [Jupyter & MongoDB - Kaggle](https://www.kaggle.com/code/ganu1899/mongodb-with-python) | Tutorial Kaggle: MongoDB e Python | 12/03/2025 |
+| 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo do Ensino Superior | 19/03/2025 |
+
 
 
 ## 3. Instalação e Configuração do Ambiente de Laboratório via WSL
