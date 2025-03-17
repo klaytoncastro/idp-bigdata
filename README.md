@@ -1,14 +1,10 @@
 # Laboratórios da Disciplina
 
-Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados. O conceito de Big Data surge em resposta a essa demanda, caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, os bancos de dados, especialmente os NoSQL (Not-only SQL), emergem como soluções otimizadas para lidar com estas características
+Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados à Internet. O conceito de Big Data se desenvolve em resposta a essa demanda, sendo caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, os bancos de dados, incluindo os sistemas os **NoSQL** (Not-only SQL), que emergem como soluções otimizadas para lidar com estas características. 
 
-## 1. Instruções Gerais 
+## 1. Instruções Gerais e Desafios
 
-Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relacionados a estes temas. Siga atentamente as instruções abaixo para configurar seu ambiente. 
-
-## 2. Desafios de Big Data e NoSQL
-
-Cada desafio é uma experiência prática, onde você aplicará o conhecimento adquirido para explorar novas ferramentas e terá a oportunidade de aprofundar seu aprendizado de forma progressiva, empregando técnicas para resolução de problemas reais comumente vistos no mercado.  
+Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relacionados a estes temas na forma de desafios. Cada desafio é uma experiência prática, onde você aplicará o conhecimento adquirido para explorar novas ferramentas de Big Data e NoSQL, e terá a oportunidade de aprofundar seu aprendizado de forma progressiva, empregando técnicas para resolução de problemas reais comumente vistos no mercado.  
 
 | #  | Atividade                                                                            | Desafio                                                    | Prazo      |
 |----|--------------------------------------------------------------------------------------|------------------------------------------------------------|------------|
@@ -16,8 +12,11 @@ Cada desafio é uma experiência prática, onde você aplicará o conhecimento a
 | 02 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB | 05/03/2025 |
 | 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                     | 12/03/2025 |
 | 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo IES                              | 19/03/2025 |
+| 05 | [Cassandra](./cassandra/)                                                            | Prática com MongoDB                                        | 26/03/2025 |
 
-## 3. Infraestrutura dos Laboratórios
+ Siga atentamente as instruções abaixo para configurar seu ambiente e realizar os desafios propostos. 
+
+## 2. Infraestrutura dos Laboratórios
 
 Considerando o tempo e recursos disponíveis, optamos por apresentar o curso sobre uma infraestrutura baseada na ferramenta Docker, uma plataforma leve de virtualização que permite empacotar aplicações e todas as suas dependências. Contudo, diferentemente de máquinas virtuais, que replicam um sistema operacional inteiro, o Docker compartilha o kernel do sistema host, tornando a execução de containers mais leve e eficiente (bibliotecas, configurações e código) em ambientes isolados, chamados containers. Esses containers são altamente portáveis e podem ser implantados, executados e rapidamente eliminados em qualquer sistema operacional compatível. Trata-se de uma solução amplamente adotada no mercado para criar ambientes replicáveis e consistentes, eliminando a necessidade de configurar e instalar manualmente cada aplicação em diferentes máquinas.
 
@@ -114,7 +113,7 @@ wsl --setdefault Ubuntu-24.04
 
 Pronto! Agora seu ambiente está preparado para nossos laboratórios. A partir daqui, você poderá seguir as instruções do professor para completar os exercícios práticos. Se surgir qualquer dúvida, consulte os materiais de apoio indicados no Moodle e neste repositório. 
 
-## 4. Configuração Alternativa de Infraestrutura
+## 3. Configuração Alternativa de Infraestrutura
 
 Visando uma experiência mais uniforme, disponibilizamos como alternativa, uma máquina virtual (VM) pré-configurada. Essa abordagem assegura que todos iniciem o curso com o mesmo ambiente e configurações. Embora o Docker possa ser executado diretamente em diversos sistemas operacionais, essa padronização é necessária para viabilizar o processo de suporte e oferecer soluções mais ágeis e consistentes diante de eventuais desafios técnicos.
 
@@ -122,7 +121,7 @@ Visando uma experiência mais uniforme, disponibilizamos como alternativa, uma m
 
 No caso dos usuários de Windows, que preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, a infraestrutura depende Windows Subsystem for Linux (WSL) que apresentamos cima, e acaba sendo a alternativa mais interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2). Se você quiser se especializar no desenvolvimento de aplicações e infraestrutura pronta para execução em datacenters, também pode optar por instalar um sistema baseado em Linux em seu equipamento. 
 
-### 4.1. Sobre o Oracle Virtual Box e a imagem OVA
+### 3.1. Sobre o Oracle Virtual Box e a imagem OVA
 
 Oracle VirtualBox é um software de virtualização de código aberto que permite executar vários sistemas operacionais em uma única máquina física. Com ele, é possível criar e gerenciar máquinas virtuais, cada uma com seu sistema operacional, aplicativos e arquivos em um ambiente isolado. Ele é compatível com diversos sistemas, como Windows, Linux e MacOS.
 
@@ -146,7 +145,7 @@ Utilizando um arquivo OVA, é possível distribuir ambientes pré-configurados, 
 - **Usuário:** labihc
 - **Senha:** L@b1hc
 
-### 4.2. Compreendendo o modo NAT
+### 3.2. Compreendendo o modo NAT
 
 NAT (_Network Address Translation_) é a implementação de um recurso para tradução de endereços de rede. No contexto do VirtualBox, ao configurar uma VM para usar NAT, você está permitindo que essa VM se comunique com redes externas, incluindo a Internet, usando o mesmo endereço IP (_Internet Protocol_) do host. Assim, a máquina _host_ (seu _desktop_ de laboratório ou _notebook_ pessoal) age como um _gateway_ e a VM parece estar atrás de uma rede privada.
 
@@ -175,7 +174,7 @@ Além de fornecer acesso à Internet, o recurso de NAT do VirtualBox também per
 
 - **Nota**: Ao configurar o redirecionamento de portas, evite utilizar as portas 0-1023 (exceto 80 e 443, para aplicações web), pois elas são reservadas. A porta 2222 é comumente usada para SSH devido à sua semelhança com a porta padrão 22 e por estar acima da faixa de portas reservadas, reduzindo a possibilidade de conflitos. Sempre certifique-se de que a porta escolhida **não esteja em uso**. Ferramentas nativas do sistema operacional, como `netstat`, podem ajudar na verificação. 
 
-### 4.3. Descrição das Ferramentas Utilizadas
+### 3.3. Descrição das Ferramentas Utilizadas
 
 No cenário atual de Big Data, é evidente a necessidade de plataformas integradas que consigam gerenciar, processar e analisar grandes volumes de dados de diversas fontes. A ideia de um Data Lake ou Data Lakehouse é central para essa abordagem, onde os dados são armazenados em sua forma bruta e processados conforme a necessidade, em vez de serem pré-processados em silos de dados. A combinação de ferramentas como Spark, Hadoop, e bancos de dados NoSQL, numa infraestrutura orquestrada pelo Docker e Docker Compose, pode ser vista como uma representação básica de uma plataforma Data Lakehouse, que visa otimizar o fluxo de dados, desde a ingestão até a análise. 
 
@@ -217,7 +216,7 @@ Neste diretório, você encontrará o ambiente para o Neo4j.
 
 - **Neo4j**: É um banco de dados NoSQL orientado a grafos, que permite modelar relacionamentos complexos por meio de padrões e estruturas de dados que utilizam os conceitos de nós e arestas. 
 
-## 5. Preparando o Ambiente de Laboratório
+## 4. Preparando o Ambiente de Laboratório
 
 ### Docker:
 
