@@ -1,6 +1,10 @@
-# 1. Instruções Gerais 
+# Laboratórios da Disciplina
 
-Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados. O conceito de Big Data surge em resposta a essa demanda, caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, os bancos de dados, especialmente os NoSQL (Not-only SQL), emergem como soluções otimizadas para lidar com estas características. Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relacionados a estes temas. Siga atentamente as instruções abaixo para configurar seu ambiente. 
+Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados. O conceito de Big Data surge em resposta a essa demanda, caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, os bancos de dados, especialmente os NoSQL (Not-only SQL), emergem como soluções otimizadas para lidar com estas características
+
+## 1. Instruções Gerais 
+
+Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relacionados a estes temas. Siga atentamente as instruções abaixo para configurar seu ambiente. 
 
 ## 2. Desafios de Big Data e NoSQL
 
