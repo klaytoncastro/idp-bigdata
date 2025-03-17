@@ -1,10 +1,10 @@
 # Laboratórios da Disciplina
 
-Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados à Internet. O conceito de Big Data se desenvolve em resposta a essa demanda, sendo caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, os bancos de dados, incluindo os sistemas os **NoSQL** (Not-only SQL), que emergem como soluções otimizadas para lidar com estas características. 
+Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados à Internet. O conceito de Big Data se desenvolve em resposta a essa demanda, sendo caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, as ferramentas de Big Data e, também, os sistemas gerenciadores de bancos de dados **NoSQL** (Not-only SQL), emergem como soluções otimizadas para lidar com estas características. 
 
 ## 1. Instruções Gerais e Desafios
 
-Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relacionados a estes temas na forma de desafios. Cada desafio é uma experiência prática, onde você aplicará o conhecimento adquirido para explorar novas ferramentas de Big Data e NoSQL, e terá a oportunidade de aprofundar seu aprendizado de forma progressiva, empregando técnicas para resolução de problemas reais comumente vistos no mercado.  
+Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big Data e NoSQL por meio de desafios práticos. Cada desafio proporcionará uma experiência aplicada, permitindo que você consolide os conhecimentos adquiridos e aprofunde seu aprendizado de maneira progressiva. Durante essa jornada, você terá contato com ferramentas amplamente utilizadas no mercado e empregará técnicas para resolver problemas reais.
 
 | #  | Atividade                                                                            | Desafio                                                    | Prazo      |
 |----|--------------------------------------------------------------------------------------|------------------------------------------------------------|------------|
@@ -12,9 +12,7 @@ Ao longo do curso, abordaremos os conceitos, infraestrutura e aplicações relac
 | 02 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB | 05/03/2025 |
 | 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                     | 12/03/2025 |
 | 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo IES                              | 19/03/2025 |
-| 05 | [Cassandra](./cassandra/)                                                            | Prática com MongoDB                                        | 26/03/2025 |
-
- Siga atentamente as instruções abaixo para configurar seu ambiente e realizar os desafios propostos. 
+| 05 | [Cassandra](./cassandra/)                                                            | Prática com Cassandra                                      | 26/03/2025 |
 
 ## 2. Infraestrutura dos Laboratórios
 
