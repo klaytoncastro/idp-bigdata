@@ -534,7 +534,7 @@ volumes:
 
 -->
 
-- Ao tentar conectar ao Cassandra via Python (`cassandra-driver`), ocorre um erro como este: `NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1': error...})`. Verifique o IP correto do Cassandra no Docker, assim como fizemos com o MongoDB, você precisa colocar os contêineres do Cassandra na mesma rede do Jupyter (`mybridge`) e inpecionar com o `docker network inspect` para descobrir qual é o IP correto associado ao contêiner. 
+- Ao tentar conectar ao Cassandra via Python (`cassandra-driver`), ocorre um erro como este: `NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1': error...})`. Verifique o IP correto do Cassandra no Docker, assim como fizemos com o MongoDB, você precisa colocar os contêineres do Cassandra na mesma rede do Jupyter (`mybridge`) e inpecionar a rede com `docker network inspect` ou o próprio contêiner com `docker inspect cassandra-container`, para descobrir qual é o IP correto associado ao contêiner. 
 
 
 <!--
