@@ -311,6 +311,61 @@ INSERT INTO estudantes (nome, idade, curso, email) VALUES ('Domitila Canto', 22,
 UPDATE estudantes SET idade = 23 WHERE nome = 'João Leite';
 ```
 
+```sql
+-- Atualizar o curso de um estudante com base no nome
+UPDATE estudantes SET curso = 'Ciência da Computação' WHERE nome = 'Domitila Canto';
+```
+
+```sql
+-- Excluir um estudante com base no nome
+DELETE FROM estudantes WHERE nome = 'João Leite';
+```
+
+```sql
+-- Excluir todos os estudantes com idade menor que 20
+DELETE FROM estudantes WHERE idade < 20;
+```
+
+<!-- OBJETIVO DOS DESAFIOS: Fazer os alunos perceberem que, no Cassandra, a exclusão e atualização de dados exigem a referência direta à chave primária e que, ao parar e reiniciar o contêiner, os dados não serão preservados por padrão, a não ser que configurem a persistência no contêiner. --> 
+
+
+## Desafio 1 - Exclusão e atualização de dados e impacto da chave primária
+
+### Perguntas: 
+- Você conseguiu efetuar todos os comandos propostos? 
+- Qual a importância da chave primária no Cassandra?
+- Por que não podemos excluir ou atualizar um registro apenas pelo nome?
+
+
+<!-- Porque Cassandra é um banco distribuído e precisa da chave primária para localizar o dado no nó correto. A PK define a distribuição dos dados no cluster e garante que as operações sejam eficientes. Se escolhermos mal a chave primária ao modelar uma tabela, o desempenho pode ser comprometido, resultando em gargalos e dificuldades na consulta.-->
+
+<!--  RESPOSTAS
+
+-- Apagar um keyspace
+DROP KEYSPACE IF EXISTS AulaDemo;
+
+-->
+
+<!--
+
+Apache Cassandra GUIs: Existem várias ferramentas de terceiros, como o "Cassandra Query Browser," que fornecem interfaces gráficas para gerenciamento e consulta de dados no Cassandra.
+
+-->
+
+<!--
+## Desafio Spark: 
+
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/download?datasetVersionNumber=3
+
+-->
+
+
+<!-- 
+
+##
+
 Como a coluna nome não faz parte da chave primária na tabela Estudantes, você não pode utilizá-la diretamente na cláusula `WHERE` para filtrar os dados e deve ter obtido um erro no comando acima. Alterar a estrutura da chave primária para incluir nome como parte da chave de clustering irá permitir a filtragem por nome:
 
 ```sql
@@ -348,27 +403,55 @@ finally:
         cluster.shutdown()
 ```
 
-```sql
--- Atualizar o curso de um estudante com base no nome
-UPDATE estudantes SET curso = 'Ciência da Computação' WHERE nome = 'Domitila Canto';
-```
-
-```sql
--- Excluir um estudante com base no nome
-DELETE FROM estudantes WHERE nome = 'João Leite';
-```
-
-```sql
--- Excluir todos os estudantes com idade menor que 20
-DELETE FROM estudantes WHERE idade < 20;
-```
-
-<!--
-
--- Apagar um keyspace
-DROP KEYSPACE IF EXISTS AulaDemo;
-
 -->
+
+## Desafio 2 - Entendendo a configuração para persistência de dados 
+
+### Acesse o **CQL Shell**:
+
+```bash
+docker exec -it cassandra-container cqlsh
+```
+### Crie um keyspace e uma tabela:
+```sql
+CREATE KEYSPACE TestePersistencia
+WITH replication = {'class': 'SimpleStrategy', 'replication_factor': 1};
+
+USE TestePersistencia;
+
+CREATE TABLE usuarios (
+    id UUID PRIMARY KEY,
+    nome TEXT,
+    idade INT
+);
+
+INSERT INTO usuarios (id, nome, idade) VALUES (uuid(), 'Carlos Silva', 30);
+INSERT INTO usuarios (id, nome, idade) VALUES (uuid(), 'Ana Souza', 25);
+```
+
+### Verifique os dados inseridos:
+```sql
+SELECT * FROM usuarios;
+```
+### Agora pare e reinicie o contêiner:
+```bash
+docker-compose down && docker-compose up -d
+```
+### **Reabra o CQL Shell e tente consultar os dados novamente:**
+```sql
+SELECT * FROM TestePersistencia.usuarios;
+```
+
+### Perguntas:
+- O que aconteceu com os dados após a reinicialização?
+- Por que isso ocorreu? 
+- Pesquise sobre como garantir a persistência dos dados no Cassandra ao reiniciar o contêiner. 
+
+ **Dica:** Compare os arquivos `docker-compose.yml` do MongoDB e Cassandra. 
+
+<!-- **Os dados foram perdidos porque em nosso ambiente, tanto o Cassandra, quanto outros SGBD (SQL ou NoSQL), não irão persistir dados se não houver um volume montado no Docker.** 
+**O Cassandra armazena dados no diretório `/var/lib/cassandra`, mas sem um volume persistente, esse diretório é recriado ao reiniciar o contêiner.** 
+**Criando um volume Docker persistente e montando-o em `/var/lib/cassandra`.** -->
 
 ## Administração do Ambiente
 
@@ -401,32 +484,65 @@ O Apache Cassandra fornece ferramentas para realizar backup de seus dados, prát
 ```bash
 nodetool snapshot -t nome_do_snapshot MeuBancoDeDados
 ```
-
 Em seguida, você pode usar o `sstableloader`` para restaurar dados a partir de um snapshot em um nó Cassandra ou em um novo cluster.
 
-## Outras Considerações e Ferramentas
+## Desafio 3 - Importação de Dados no Cassandra usando `cqlsh`
 
-Além das ferramentas de linha de comando, você pode explorar outras opções para administrar e interagir com o Apache Cassandra:
+Reproduza a **mesma análise de dados** feita anteriormente no MongoDB, agora usando **Apache Cassandra**.  
 
-DataStax DevCenter: É uma GUI (Interface Gráfica de Usuário) que oferece uma experiência visual para criar, editar e consultar dados no Cassandra.
-
-DataStax Astra: É um serviço de banco de dados gerenciado baseado no Cassandra oferecido pela DataStax. Ele fornece uma maneira fácil de implantar e gerenciar clusters Cassandra na nuvem.
+**Dica:** Você precisa definir um volume para associar o diretório onde se encontram os datasets em sua máquina e referenciá-los no contêiner.
 
 <!--
 
-Apache Cassandra GUIs: Existem várias ferramentas de terceiros, como o "Cassandra Query Browser," que fornecem interfaces gráficas para gerenciamento e consulta de dados no Cassandra.
-
+### Importando o CSV para o Cassandra
+```bash
+cqlsh -e "COPY inep.ies FROM 'caminho/para/ies.csv' WITH DELIMITER=',' AND HEADER=TRUE;"
+```
 -->
+
+## Considerações Finais
+
+Além das ferramentas de linha de comando, existem diversas ferramentas gráficas e serviços gerenciados que podem facilitar a administração e interação com o Apache Cassandra:
+
+- DataStax DevCenter: Interface gráfica (GUI) que permite criar, editar e consultar dados no Cassandra de forma visual e intuitiva.
+- DataStax Astra: Serviço de banco de dados gerenciado baseado no Cassandra, permitindo a implantação e administração de clusters na nuvem com configuração simplificada.
+
+### Entendendo Erros Comuns e Soluções 
+
+- Ao executar um comando `DELETE` ou `UPDATE`, Cassandra retorna um erro dizendo que a chave primária (`PK`) está ausente: `Invalid Request: Cannot execute DELETE query since the PRIMARY KEY is missing`. 
 
 <!--
-## Desafio Spark: 
 
-https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
-
-https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/download?datasetVersionNumber=3
+SELECT id FROM Estudantes WHERE nome = 'João Leite';
+DELETE FROM Estudantes WHERE id = <id_obtido>;
 
 -->
 
-## Conclusão
+- Ao trabalhar em ambientes com Docker, Você precisa definir corretamente as seções de volumes individual e geral para garantir persistência do ambiente em contêiner, estabelecendo uma rede comum e volumes de armazenamento que preservem os dados. 
 
-Esta documentação fornece uma visão geral dos aspectos essenciais do Apache Cassandra, um sistema de gerenciamento de banco de dados NoSQL colunar robusto e escalável. Exploramos métodos de importação de dados, backup e restauração, bem como outras ferramentas para administração do ambiente Cassandra. Se você deseja aprofundar seu conhecimento, consulte também a documentação oficial. 
+
+<!--
+
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: cassandra-container
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+volumes:
+  cassandra_data:
+
+-->
+
+- Ao tentar conectar ao Cassandra via Python (`cassandra-driver`), ocorre um erro como este: `NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1': error...})`. Verifique o IP correto do Cassandra no Docker, assim como fizemos com o MongoDB, você precisa colocar os contêineres do Cassandra na mesma rede do Jupyter (`mybridge`) e inpecionar com o `docker network inspect` para descobrir qual é o IP correto associado ao contêiner. 
+
+
+<!--
+
+docker inspect cassandra-container | grep "IPAddress"
+
+-->
+
+### Conclusão
+
+Esta documentação fornece uma visão geral dos aspectos essenciais do Apache Cassandra, um sistema de gerenciamento de banco de dados NoSQL colunar robusto e escalável. Exploramos métodos de importação de dados, backup e restauração, bem como outras ferramentas para administração de dados. Se você deseja aprofundar seu conhecimento, consulte também a documentação oficial da ferramenta. 
