@@ -484,7 +484,7 @@ O Apache Cassandra fornece ferramentas para realizar backup de seus dados, prát
 ```bash
 nodetool snapshot -t nome_do_snapshot MeuBancoDeDados
 ```
-Em seguida, você pode usar o `sstableloader`` para restaurar dados a partir de um snapshot em um nó Cassandra ou em um novo cluster.
+Em seguida, você pode usar o `sstableloader` para restaurar dados a partir de um snapshot em um nó Cassandra ou em um novo cluster.
 
 ## Desafio 3 - Importação de Dados no Cassandra usando `cqlsh`
 
