@@ -71,7 +71,7 @@ Atualmente, a solução é uma escolha popular para gerenciar workflows de trein
 
 O Airflow também pode ser utilizado para sincronizar dados entre diferentes fontes de dados e sistemas de processamento, facilitando a movimentação de dados entre SGBDs relacionais (SQL) e não-relacionais (NoSQL), ou entre sistemas de arquivos distribuídos (HDFS) e locais (NAS). 
 
-Aqui está um exemplo simples de um pipeline ETL com Airflow. demonstra a criação de três tarefas: extração, transformação e carga. O código ilustra como o Airflow pode ser usado para automatizar o processamento de dados em diferentes estágios:
+Aqui está um exemplo simples de como estruturar um pipeline ETL com Airflow, ilustrando a criação de três tarefas: extração, transformação e carga. O código demonstra como o Airflow pode ser usado para automatizar o processamento de dados em diferentes estágios:
 
 ```python
 from airflow import DAG
@@ -135,7 +135,7 @@ chmod +x post-setup.sh
 
 Na interface, você poderá gerenciar e monitorar suas DAGs. Após a execução dos dois scripts, abra seu navegador e acesse a interface gráfica do Airflow via URL: `http://localhost:8080`
 
-- **Usuário**: admin 
+- **Usuário**: admin
 - **Senha**: admin
 
 ### Colocar o Script .py na Pasta dags
@@ -174,7 +174,7 @@ Após adicionar a DAG, você precisará reiniciar o contêiner do Airflow Schedu
 docker compose restart airflow-scheduler
 ```
 
-Isso irá garantir que o Airflow carregue as novas configurações e DAGs corretamente. 
+Isso irá forçar que o Airflow recarregue as novas configurações e identifique as DAGs corretamente. Após o procedimento, veja na interface gráfica a sua nova DAG, teste sua inicialização e verifique os logs de execução. 
 
 ## Conclusão
 

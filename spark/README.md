@@ -167,7 +167,7 @@ d) Execute o código abaixo em seu notebook Jupyter para encerrar sua sessão Sp
 spark.stop()
 ```
 
-e) Atualize o navegador e observe que a interface http://localhost:4040 não estará mais acessível após encerrarmos a sessão. 
+e) Atualize o navegador e observe que a interface `http://localhost:4040` não estará mais acessível após encerrarmos a sessão. 
 
 <!--
 https://www.datacamp.com/cheat-sheet/pyspark-cheat-sheet-spark-dataframes-in-python

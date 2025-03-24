@@ -38,6 +38,10 @@ O Streamlit oferece uma combinação única de simplicidade e eficácia para cri
 
 - **Comunidade Ativa**: A comunidade do Streamlit é acolhedora e oferece suporte, tornando-o ideal para desenvolvedores de todos os níveis de experiência.
 
+## Prática
+
+
+
 ## Documentação Oficial
 
 Para começar a usar o Streamlit, consulte a [documentação oficial](https://docs.streamlit.io/). Lá, você encontrará tutoriais, exemplos e recursos adicionais para ajudar você a criar seus próprios aplicativos web interativos com facilidade.

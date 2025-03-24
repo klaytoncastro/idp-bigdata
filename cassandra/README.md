@@ -311,11 +311,7 @@ INSERT INTO estudantes (nome, idade, curso, email) VALUES ('Domitila Canto', 22,
 UPDATE estudantes SET idade = 23 WHERE nome = 'João Leite';
 ```
 
-<!--
-
-Como a coluna nome não faz parte da chave primária na tabela Estudantes, você não pode utilizá-la diretamente na cláusula WHERE para filtrar os dados e deve ter obtido um erro no comando acima. Alterar a estrutura da chave primária para incluir nome como parte da chave de clustering irá permitir a filtragem por nome:
-
-
+Como a coluna nome não faz parte da chave primária na tabela Estudantes, você não pode utilizá-la diretamente na cláusula `WHERE` para filtrar os dados e deve ter obtido um erro no comando acima. Alterar a estrutura da chave primária para incluir nome como parte da chave de clustering irá permitir a filtragem por nome:
 
 ```sql
 
@@ -351,9 +347,6 @@ finally:
     if cluster:
         cluster.shutdown()
 ```
-
--->
-
 
 ```sql
 -- Atualizar o curso de um estudante com base no nome
