@@ -1,5 +1,13 @@
 # Apache Spark
 
+<!--## Desafio Spark: 
+
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
+
+https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/download?datasetVersionNumber=3
+
+-->
+
 ## Introdução
 
 O Apache Spark é um framework open-source, compatível com Hadoop, e bastante expressivo para realizar tarefas de processamento distribuído de dados massivos. Possui módulos integrados para o agendamento dos jobs, streaming de dados (fluxos em tempo real), consultas SQL, modelos de aprendizado de máquina e visualização de dados. 
@@ -167,7 +175,7 @@ d) Execute o código abaixo em seu notebook Jupyter para encerrar sua sessão Sp
 spark.stop()
 ```
 
-e) Atualize o navegador e observe que a interface `http://localhost:4040` não estará mais acessível após encerrarmos a sessão. 
+e) Atualize o navegador e observe que a interface http://localhost:4040 não estará mais acessível após encerrarmos a sessão. 
 
 <!--
 https://www.datacamp.com/cheat-sheet/pyspark-cheat-sheet-spark-dataframes-in-python

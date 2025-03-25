@@ -12,22 +12,19 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 02 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB | 05/03/2025 |
 | 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                     | 12/03/2025 |
 | 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo IES                              | 19/03/2025 |
-| 05 | [Cassandra](./cassandra/)                                                            | Fundamentos do Cassandra e Administração de Dados          | 26/03/2025 |
+| 05 | [Cassandra](./cassandra/)                                                            | Prática com Cassandra                                      | 26/03/2025 |
 
 <!--
 | 06 | [Benchmarking NoSQL: Experimentação com MongoDB e Cassandra](./performance/)         | Modelagem de Experimentos para Análise de Desempenho       | 02/04/2025 |
 -->
 
-
 ## 2. Infraestrutura dos Laboratórios
 
-Considerando o tempo e recursos disponíveis, optamos por apresentar o curso sobre uma infraestrutura baseada na ferramenta Docker, uma plataforma leve de virtualização que permite empacotar aplicações e todas as suas dependências. Contudo, diferentemente de máquinas virtuais, que replicam um sistema operacional inteiro, o Docker compartilha o kernel do sistema host, tornando a execução de containers mais leve e eficiente (bibliotecas, configurações e código) em ambientes isolados, chamados containers. Esses containers são altamente portáveis e podem ser implantados, executados e rapidamente eliminados em qualquer sistema operacional compatível. Trata-se de uma solução amplamente adotada no mercado para criar ambientes replicáveis e consistentes, eliminando a necessidade de configurar e instalar manualmente cada aplicação em diferentes máquinas.
+Considerando o tempo e recursos disponíveis, optamos por utilizar uma infraestrutura baseada em código, por meio do Docker, uma ferramenta leve de virtualização de aplicativos, que permite implantar, levantar e baixar softwares e suas dependências (bibliotecas, configurações e código) com simples comandos via orquestrador `compose` (`docker compose up -d`). Trata-se de uma solução amplamente adotada no mercado para criar ambientes replicáveis e consistentes, eliminando a necessidade de configurar e instalar manualmente cada aplicação em diferentes máquinas Diferentemente de máquinas virtuais, que replicam um sistema operacional inteiro, o Docker compartilha o kernel do sistema host, tornando a execução leve e eficiente em ambientes isolados, chamados containers. Esses containers são altamente portáveis e podem ser implantados, executados e rapidamente eliminados em qualquer sistema operacional compatível. 
 
-Nos sistemas Microsoft Windows, recomenda-se a utilização do WSL (Windows Subsystem for Linux) para a instalação do Docker. O WSL é um recurso nativo do Windows que permite a execução de distribuições Linux sem a necessidade de emulação ou virtualização completa, como o Microsoft Hyper-V ou Oracle VirtualBox. Projetado para facilitar o desenvolvimento de software no Windows, o WSL oferece uma integração simplificada entre os dois sistemas operacionais, tornando o uso do Docker mais eficiente e acessível.
+Para tal, nos sistemas Microsoft Windows, recomenda-se a utilização do WSL (Windows Subsystem for Linux) como requisito para instalação do Docker. O WSL é um recurso nativo do Windows que permite a execução de distribuições Linux sem a necessidade de emulação ou virtualização completa, como o Microsoft Hyper-V ou Oracle VirtualBox. Projetado para facilitar o desenvolvimento de software no Windows, o WSL oferece uma integração simplificada entre os dois sistemas operacionais, tornando o uso do Docker mais eficiente e acessível. O uso do Docker, em conjunto com o WSL, é essencial para nossos laboratórios, pois garante a replicabilidade do ambiente de desenvolvimento, independentemente do sistema operacional usado por cada estudante. 
 
-O uso do Docker, em conjunto com o WSL, é essencial para nossos laboratórios, pois garante a replicabilidade do ambiente de desenvolvimento, independentemente do sistema operacional usado por cada estudante.
-
-**Nota**: Usuários de sistemas baseados em Linux ou MacOS não precisam utilizar o WSL, pois esses sistemas já possuem suporte nativo ao Docker. Para executar containers, basta instalar o Docker diretamente, sem a necessidade de qualquer subsistema ou ferramenta adicional.
+**Nota**: Usuários de sistemas baseados em Linux ou MacOS não precisam utilizar o WSL, pois esses sistemas já possuem suporte nativo ao Docker. Para executar containers, basta instalar o Docker diretamente, sem a necessidade de qualquer subsistema ou ferramenta adicional. 
 
 ### Passo 1: Verificação dos Requisitos
 
@@ -118,19 +115,21 @@ Pronto! Agora seu ambiente está preparado para nossos laboratórios. A partir d
 
 ## 3. Configuração Alternativa de Infraestrutura
 
-Visando uma experiência mais uniforme, disponibilizamos como alternativa, uma máquina virtual (VM) pré-configurada. Essa abordagem assegura que todos iniciem o curso com o mesmo ambiente e configurações. Embora o Docker possa ser executado diretamente em diversos sistemas operacionais, essa padronização é necessária para viabilizar o processo de suporte e oferecer soluções mais ágeis e consistentes diante de eventuais desafios técnicos.
 
-<!-->No entanto, valorizamos a autonomia de cada estudante, especialmente quando se trata da prática em seus computadores pessoais. Se você já está familiarizado com o Docker e deseja executá-lo nativamente em seu sistema operacional, este repositório está preparado para essa alternativa. Além disso, para os usuários de hardware recente da Apple, como o M2, essa opção é particularmente relevante, devido a possíveis incompatibilidades com versões do VirtualBox originalmente desenvolvidas para ambientes x86_64.-->
+No caso dos usuários de Windows, que preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, a infraestrutura depende Windows Subsystem for Linux (WSL) que apresentamos cima, e acaba sendo a alternativa mais interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2). Se você quiser se especializar no desenvolvimento de aplicações e infraestrutura pronta para execução em datacenters, também pode optar por instalar um sistema baseado em Linux em seu equipamento. No entanto, visando uma experiência mais uniforme, disponibilizamos como alternativa, uma máquina virtual (VM) pré-configurada. Embora o Docker possa ser executado diretamente em diversos sistemas operacionais, essa padronização por vezes é necessária para viabilizar o processo de suporte, visando oferecer soluções mais ágeis e consistentes diante de eventuais desafios técnicos.  
 
-No caso dos usuários de Windows, que preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, a infraestrutura depende Windows Subsystem for Linux (WSL) que apresentamos cima, e acaba sendo a alternativa mais interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2). Se você quiser se especializar no desenvolvimento de aplicações e infraestrutura pronta para execução em datacenters, também pode optar por instalar um sistema baseado em Linux em seu equipamento. 
+<!-->No entanto, valorizamos a autonomia de cada estudante, especialmente quando se trata da prática em seus computadores pessoais. Se você já está familiarizado com o Docker e deseja executá-lo nativamente em seu sistema operacional, este repositório está preparado para essa alternativa. Além disso, para os usuários de hardware recente da Apple, como o M2, essa opção é particularmente relevante, devido a possíveis incompatibilidades com versões do VirtualBox originalmente desenvolvidas para ambientes x86_64. 
+
+essa abordagem assegura que todos iniciem o curso com o mesmo ambiente e configurações.
+-->
 
 ### 3.1. Sobre o Oracle Virtual Box e a imagem OVA
 
-Oracle VirtualBox é um software de virtualização de código aberto que permite executar vários sistemas operacionais em uma única máquina física. Com ele, é possível criar e gerenciar máquinas virtuais, cada uma com seu sistema operacional, aplicativos e arquivos em um ambiente isolado. Ele é compatível com diversos sistemas, como Windows, Linux e MacOS.
+Caso opte pela VM alternativa, utilizaremos o Oracle VirtualBox, um software de virtualização de código aberto que permite executar vários sistemas operacionais em uma única máquina física. Com ele, é possível criar e gerenciar máquinas virtuais, cada uma com seu sistema operacional, aplicativos e arquivos em um ambiente isolado. Ele é compatível com diversos sistemas, como Windows, Linux e MacOS.
 
-OVA (Open Virtual Appliance) é um formato de arquivo para máquinas virtuais, contendo toda a configuração e discos virtuais necessários. Ele simplifica a portabilidade e implantação de ambientes virtualizados, permitindo importações fáceis em plataformas como o VirtualBox.
+Para tal, utilizaremo uma imagem OVA (Open Virtual Appliance), um formato de arquivo para máquinas virtuais, contendo toda a configuração e discos virtuais necessários. Ele simplifica a portabilidade e implantação de ambientes virtualizados, permitindo importações fáceis em plataformas como o VirtualBox. Utilizando um arquivo OVA, é possível distribuir ambientes pré-configurados, assegurando que os usuários tenham um ambiente consistente, independentemente da localização de execução. 
 
-Utilizando um arquivo OVA, é possível distribuir ambientes pré-configurados, assegurando que os usuários tenham um ambiente consistente, independentemente da localização de execução. A imagem OVA fornecida já vem equipada com ferramentas como `docker`, `docker-compose`, `git` e `ssh`, otimizando a configuração dos ambientes de laboratório.
+A imagem OVA fornecida já vem equipada com ferramentas como `docker`, `docker-compose`, `git` e `ssh`, otimizando a configuração dos ambientes de laboratório.
 
 ### Como Usar:
 1. Baixe a imagem OVA através deste [link](https://1drv.ms/f/s!As9_hcVH7a82gpovWfhahtGkRSmriA?e=vFJ2u3).
