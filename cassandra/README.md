@@ -317,7 +317,7 @@ DROP KEYSPACE IF EXISTS AulaDemo;
 - Qual a importância da chave primária no Cassandra?
 - Por que não podemos excluir ou atualizar um registro apenas pelo nome?
 
-<!-- RESPOSTAS 
+<!-- RESPOSTAS -->
 
 > Porque Cassandra é um banco distribuído e precisa da chave primária para localizar o dado no nó correto. A PK define a distribuição dos dados no cluster e garante que as operações sejam eficientes. Se escolhermos mal a chave primária ao modelar uma tabela, o desempenho pode ser comprometido, resultando em gargalos e dificuldades na consulta. Como a coluna nome não faz parte da chave primária na tabela Estudantes, você não pode utilizá-la diretamente na cláusula WHERE para filtrar os dados e deve ter obtido um erro no comando acima. Uma alternativa, seria alterar a estrutura da chave primária para incluir nome como parte da chave de clustering irá permitir a filtragem por nome:
 
@@ -353,7 +353,7 @@ finally:
     if cluster:
         cluster.shutdown()
 ```
--->
+<!---->
 
 ### Desafio 2 - Compreendendo a configuração de persistência de dados em containers
 
@@ -398,9 +398,9 @@ SELECT * FROM TestePersistencia.usuarios;
 
 **Dica:** Compare os arquivos `docker-compose.yml` do MongoDB e Cassandra. 
 
-<!-- RESPOSTAS: 
+<!-- RESPOSTAS: -->
 > Os dados foram perdidos porque em nosso ambiente, tanto o Cassandra, quanto outros SGBD (SQL ou NoSQL), não irão persistir dados se não houver um volume montado no Docker. O Cassandra armazena dados no diretório `/var/lib/cassandra`, mas sem um volume persistente, esse diretório é recriado ao reiniciar o contêiner. Você pode criar um volume Docker persistente montando-o em `/var/lib/cassandra`. 
--->
+<!---->
 
 ### Atividade 2: Administração do Ambiente
 
@@ -439,13 +439,13 @@ Reproduza a **mesma análise de dados** feita anteriormente no MongoDB, agora us
 
 **Dica:** Você precisa definir um volume para associar o diretório onde se encontram os datasets em sua máquina e referenciá-los no contêiner.
 
-<!--
+<!-- RESPOSTAS -->
 
 ### Importando o CSV para o Cassandra
 ```bash
 cqlsh -e "COPY inep.ies FROM 'caminho/para/ies.csv' WITH DELIMITER=',' AND HEADER=TRUE;"
 ```
--->
+<!---->
 
 ## 4. Considerações Finais
 
@@ -458,16 +458,14 @@ Além das ferramentas de linha de comando, existem diversas ferramentas gráfica
 
 - Ao executar um comando `DELETE` ou `UPDATE`, Cassandra retorna um erro dizendo que a chave primária (`PK`) está ausente: `Invalid Request: Cannot execute DELETE query since the PRIMARY KEY is missing`. 
 
-<!--
+```sql
 SELECT id FROM Estudantes WHERE nome = 'João Leite';
 DELETE FROM Estudantes WHERE id = <id_obtido>;
--->
+```
 
 - Ao trabalhar em ambientes com Docker, Você precisa definir corretamente as seções de volumes individual e geral para garantir persistência do ambiente em contêiner, estabelecendo uma rede comum e volumes de armazenamento que preservem os dados. 
 
-
-<!--
-
+```shell
 services:
   cassandra:
     image: cassandra:latest
@@ -476,15 +474,13 @@ services:
       - cassandra_data:/var/lib/cassandra
 volumes:
   cassandra_data:
-
--->
+```
 
 - Ao tentar conectar ao Cassandra via Python (`cassandra-driver`), ocorre um erro como este: `NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1': error...})`. Verifique o IP correto do Cassandra no Docker, assim como fizemos com o MongoDB, você precisa colocar os contêineres do Cassandra na mesma rede do Jupyter (`mybridge`) e inpecionar a rede com `docker network inspect` ou o próprio contêiner com `docker inspect cassandra-container`, para descobrir qual é o IP correto associado ao contêiner. 
 
-
-<!--
+```shell
 docker inspect cassandra-container | grep "IPAddress"
--->
+```
 
 ### Conclusão
 
