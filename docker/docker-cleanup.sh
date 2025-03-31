@@ -1,3 +1,4 @@
+
 #!/bin/bash
 
 echo "Removendo containers parados..."

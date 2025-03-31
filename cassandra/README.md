@@ -456,30 +456,167 @@ Além das ferramentas de linha de comando, existem diversas ferramentas gráfica
 
 ### Entendendo Erros Comuns e Soluções 
 
-- Ao executar um comando `DELETE` ou `UPDATE`, Cassandra retorna um erro dizendo que a chave primária (`PK`) está ausente: `Invalid Request: Cannot execute DELETE query since the PRIMARY KEY is missing`. 
-
-```sql
-SELECT id FROM Estudantes WHERE nome = 'João Leite';
-DELETE FROM Estudantes WHERE id = <id_obtido>;
-```
-
 - Ao trabalhar em ambientes com Docker, Você precisa definir corretamente as seções de volumes individual e geral para garantir persistência do ambiente em contêiner, estabelecendo uma rede comum e volumes de armazenamento que preservem os dados. 
 
 ```shell
+version: '3.3'
 services:
   cassandra:
     image: cassandra:latest
     container_name: cassandra-container
+    ports:
+      - "9042:9042"
+    networks:
+      - mybridge
     volumes:
       - cassandra_data:/var/lib/cassandra
+      - ./datasets:/datasets
+
+  cassandra-web:
+    image: ipushc/cassandra-web
+    container_name: cassandra-web-container
+    ports:
+      - "3000:80"  # Mapeia a porta 3000 do host para a porta 80 do container
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
+    environment:
+      - HOST_PORT=:80
+      - READ_ONLY=false
+      - CASSANDRA_HOST=cassandra
+      - CASSANDRA_PORT=9042
+      - CASSANDRA_USERNAME=cassandra  
+      - CASSANDRA_PASSWORD=cassandra  
+    command: ["/wait-for-it.sh", "cassandra:9042", "--", "./service", "-c", "config.yaml"]  # Supondo que o config.yaml esteja correto e disponível
+    depends_on:
+      - cassandra
+    networks:
+      - mybridge
+
+networks:
+  mybridge:
+    driver: bridge
+
 volumes:
   cassandra_data:
+  datasets:
 ```
 
 - Ao tentar conectar ao Cassandra via Python (`cassandra-driver`), ocorre um erro como este: `NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1': error...})`. Verifique o IP correto do Cassandra no Docker, assim como fizemos com o MongoDB, você precisa colocar os contêineres do Cassandra na mesma rede do Jupyter (`mybridge`) e inpecionar a rede com `docker network inspect` ou o próprio contêiner com `docker inspect cassandra-container`, para descobrir qual é o IP correto associado ao contêiner. 
 
 ```shell
 docker inspect cassandra-container | grep "IPAddress"
+```
+
+- Ao executar um comando `DELETE` ou `UPDATE`, Cassandra retorna um erro dizendo que a chave primária (`PK`) está ausente: `Invalid Request: Cannot execute DELETE query since the PRIMARY KEY is missing`. Você precisa selecionar a PK e deletar a partir dela: 
+
+```sql
+SELECT id FROM Estudantes WHERE nome = 'João Leite';
+DELETE FROM Estudantes WHERE id = <id_obtido>;
+```
+
+- Geralmente você pode escrever uma função para selecionar e guardar os registros que devem ser removidos em uma variável, fazendo o loop para sua deleção. 
+
+```python
+from cassandra.cluster import Cluster
+from cassandra.auth import PlainTextAuthProvider
+from cassandra import OperationTimedOut
+
+def connect_to_cassandra(hosts, port, username, password, keyspace):
+    auth_provider = PlainTextAuthProvider(username=username, password=password)
+    cluster = Cluster(hosts, port=port, auth_provider=auth_provider)
+    session = None
+
+    try:
+        session = cluster.connect()
+        session.set_keyspace(keyspace)
+        print("Conexão estabelecida com sucesso!")
+        return session, cluster
+    except OperationTimedOut:
+        print("Falha na conexão ao servidor Cassandra")
+        if cluster:
+            cluster.shutdown()
+        raise
+
+def apply_operation_by_filter(session, table, filters, pk_field, operation, update_values=None):
+    """
+    Aplica DELETE ou UPDATE em registros de qualquer tabela, com base em múltiplos filtros.
+    
+    :param session: sessão do Cassandra
+    :param table: nome da tabela
+    :param filters: dicionário com os campos e valores de filtro (ex: {'nome': 'João', 'curso': 'Engenharia'})
+    :param pk_field: campo da chave primária
+    :param operation: 'DELETE' ou 'UPDATE'
+    :param update_values: dicionário com campos a atualizar (apenas para UPDATE)
+    """
+    if not filters:
+        raise ValueError("Você deve fornecer pelo menos um filtro para a operação.")
+
+    where_clause = ' AND '.join([f"{k} = %s" for k in filters.keys()])
+    where_values = list(filters.values())
+
+    select_query = f"SELECT {pk_field} FROM {table} WHERE {where_clause}"
+    rows = session.execute(select_query, tuple(where_values))
+    ids = [row[0] for row in rows]
+
+    if not ids:
+        print("Nenhum registro encontrado para a operação.")
+        return
+
+    for pk in ids:
+        if operation.upper() == "DELETE":
+            delete_query = f"DELETE FROM {table} WHERE {pk_field} = %s"
+            session.execute(delete_query, (pk,))
+            print(f"🗑️ DELETE: {pk_field}={pk}")
+        elif operation.upper() == "UPDATE" and update_values:
+            set_clause = ', '.join([f"{k} = %s" for k in update_values.keys()])
+            update_query = f"UPDATE {table} SET {set_clause} WHERE {pk_field} = %s"
+            values = list(update_values.values()) + [pk]
+            session.execute(update_query, tuple(values))
+            print(f"UPDATE: {pk_field}={pk}")
+        else:
+            print(f"Operação '{operation}' inválida ou sem valores de atualização.")
+
+def close_connection(session, cluster):
+    if session:
+        session.shutdown()
+    if cluster:
+        cluster.shutdown()
+    print("Conexão encerrada.")
+```
+
+```python
+from cassandra_operations import connect_to_cassandra, apply_operation_by_filter, close_connection
+
+session, cluster = connect_to_cassandra(
+    hosts=['172.23.0.2'],
+    port=9042,
+    username='cassandra',
+    password='cassandra',
+    keyspace='estudantes'
+)
+
+try:
+    # DELETE onde nome = João e curso = Engenharia
+    apply_operation_by_filter(
+        session=session,
+        table='Estudantes',
+        filters={'nome': 'João Leite', 'curso': 'Engenharia'},
+        pk_field='id',
+        operation='DELETE'
+    )
+
+    # UPDATE onde nome = Maria e curso = Sistemas
+    apply_operation_by_filter(
+        session=session,
+        table='Estudantes',
+        filters={'nome': 'Maria Souza', 'curso': 'Sistemas'},
+        pk_field='id',
+        operation='UPDATE',
+        update_values={'curso': 'Engenharia de Dados', 'matriculado': True}
+    )
+
+finally:
+    close_connection(session, cluster)
 ```
 
 ### Conclusão

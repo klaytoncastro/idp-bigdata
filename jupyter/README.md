@@ -456,39 +456,58 @@ plt.show()
 ```python
 #Análise Multivariada: Query para calcular o número de docentes por região e grau acadêmico
 result = collection.aggregate([
-    {'$group': {
-        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Graduação'},
-        'count': {'$sum': '$QT_DOC_EX_GRAD'},
-    }},
-    {'$group': {
-        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Especialização'},
-        'count': {'$sum': '$QT_DOC_EX_ESP'},
-    }},
-    {'$group': {
-        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Mestrado'},
-        'count': {'$sum': '$QT_DOC_EX_MEST'},
-    }},
-    {'$group': {
-        '_id': {'regiao': '$NO_REGIAO_IES', 'grau': 'Doutorado'},
-        'count': {'$sum': '$QT_DOC_EX_DOUT'},
-    }}
+    {
+        '$project': {
+            'NO_REGIAO_IES': 1,
+            'QT_DOC_EX_GRAD': 1,
+            'QT_DOC_EX_ESP': 1,
+            'QT_DOC_EX_MEST': 1,
+            'QT_DOC_EX_DOUT': 1
+        }
+    },
+    {
+        '$group': {
+            '_id': '$NO_REGIAO_IES',
+            'Graduação': {'$sum': '$QT_DOC_EX_GRAD'},
+            'Especialização': {'$sum': '$QT_DOC_EX_ESP'},
+            'Mestrado': {'$sum': '$QT_DOC_EX_MEST'},
+            'Doutorado': {'$sum': '$QT_DOC_EX_DOUT'}
+        }
+    }
 ])
 ```
 
 ```python
 # Convertendo o resultado para um dataframe
-# pip install pandas
 import pandas as pd
 
 data = []
 for r in result:
     data.append({
-        'regiao': r['_id']['regiao'],
-        'grau': r['_id']['grau'],
-        'count': r['count'],
+        'Região': r['_id'],
+        'Graduação': r['Graduação'],
+        'Especialização': r['Especialização'],
+        'Mestrado': r['Mestrado'],
+        'Doutorado': r['Doutorado']
     })
 
 df = pd.DataFrame(data)
+df = df.set_index('Região')
+```
+
+```python
+#Plotar o gráfico
+import matplotlib.pyplot as plt
+
+plt.figure(figsize=(12, 6))
+df.plot(kind='bar')
+plt.title('Número de Docentes por Grau Acadêmico em cada Região')
+plt.xlabel('Região')
+plt.ylabel('Número de Docentes')
+plt.xticks(rotation=45)
+plt.legend(title='Grau Acadêmico')
+plt.tight_layout()
+plt.show()
 ```
 
 ```python
@@ -529,4 +548,6 @@ A análise exploratória dos dados (AED) proporcionou alguns insights preliminar
 
 ## Conclusão 
 
-Este guia apresentou uma AED do Censo da Educação Superior de 2022, empregando Jupyter e MongoDB, com intuito de oferecer uma experiência prática abrangente, englobando desde os processos iniciais de preparação e limpeza dos dados até as etapas finais de importação, análise e exploração. Assim, ao mesmo tempo que promovemos o desenvolvimento de competências alinhadas às abordagens modernas de Big Data e bancos de dados NoSQL, buscamos facilitar a compreensão acerca da realidade da educação superior no Brasil. Finalizada a análise preliminar, lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`. 
+Este guia apresentou uma AED do Censo da Educação Superior de 2022, empregando Jupyter e MongoDB, com intuito de oferecer uma experiência prática abrangente, englobando desde os processos iniciais de preparação e limpeza dos dados até as etapas finais de importação, análise e exploração. Assim, ao mesmo tempo que promovemos o desenvolvimento de competências alinhadas às abordagens modernas de Big Data e bancos de dados NoSQL, buscamos facilitar a compreensão acerca da realidade da educação superior no Brasil. 
+
+<!--Finalizada a análise preliminar, lembre-se de encerrar corretamente o ambiente para evitar perda de dados e corrupção da VM, utilizando o comando `shutdown -h now`.--> 
