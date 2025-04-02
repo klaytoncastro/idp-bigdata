@@ -631,9 +631,6 @@ finally:
     close_connection(session, cluster)
 ```
 
-
-
-
 ### Conclusão
 
 Esta documentação fornece uma visão geral dos aspectos essenciais do Apache Cassandra, um sistema de gerenciamento de banco de dados NoSQL colunar robusto e escalável. Exploramos métodos de importação de dados, backup e restauração, bem como outras ferramentas para administração de dados. Se você deseja aprofundar seu conhecimento, consulte também a documentação oficial da ferramenta. 
