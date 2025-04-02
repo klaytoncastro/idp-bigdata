@@ -98,8 +98,9 @@ Por exemplo, utilizar o nível de consistência `QUORUM` para leituras e escrita
 
 A linguagem Cassandra Query Language (CQL)possui uma sintaxe que guarda semelhanças ao SQL, mas há algumas diferenças importantes a serem observadas:
 
-- A criação de tabelas no Cassandra envolve a definição de uma chave primária, que é crucial para manutenção do modelo de dados distribuído. As consultas CQL podem ser executadas para recuperar dados de acordo com a chave primária e outras condições, mas agregações complexas e operações de junção (JOINs) não são nativamente suportadas assim como no SQL.
-- Já no SQL, os JOINs são usados para combinar linhas de duas ou mais tabelas baseadas em uma relação entre elas, o que é extremamente útil para normalizar bancos de dados e evitar a duplicação de informações.
+- A criação de tabelas no Cassandra envolve a definição de uma chave primária, que é crucial para manutenção do modelo de dados distribuído. As consultas CQL são altamente eficientes quando orientadas à chave primária e outras condições bem definidas. Ao invés de depender de JOINs tradicionais, Cassandra adota estratégias otimizadas como modelagem orientada a consultas e o uso de views materializadas para alcançar o mesmo objetivo de forma distribuída e escalável.
+
+- Já no SQL, os `JOINs` são usados para combinar linhas de duas ou mais tabelas baseadas em uma relação entre elas, o que é útil para a intenção de normalizar bancos de dados e evitar a duplicação de informações, que é uma abordagem arquitetural distinta da proposta pelos NoSQL: 
 
 ```sql
 -- Neste exemplo, uma tabela de funcionários (employees) é unida com uma tabela de departamentos (departments) para trazer o nome do departamento de cada funcionário. Essa é uma operação comum em bancos de dados relacionais.
@@ -109,7 +110,7 @@ FROM employees
 JOIN departments ON employees.department_id = departments.department_id;
 ```
 
-- O Cassandra não suporta operações complexas de JOIN devido ao seu design distribuído. Se você precisar realizar uma operação similar no Cassandra, seria interessante denormalizar os dados ou fazer múltiplas consultas na aplicação (o que pode ser menos eficiente). Para simular o mesmo resultado do SQL acima, você poderia ter uma única tabela que incluiria tanto os dados dos funcionários quanto dos departamentos:
+- Cassandra não implementa `JOINs` relacionais de forma nativa porque sua arquitetura distribuída favorece a baixa latência, alta disponibilidade e tolerância a falhas, mesmo em grande escala. Em vez disso, a modelagem é voltada para consultas otimizadas por chave de partição, com foco no desempenho. Quando necessário, dados podem ser denormalizados estrategicamente ou organizados por meio de views materializadas, permitindo acesso eficiente a múltiplas perspectivas do mesmo conjunto de dados. Para casos que exigem operações analíticas mais elaboradas ou integrações entre diferentes fontes, ferramentas como Apache Spark podem ser utilizadas para compor ou cruzar dados fora do Cassandra, de forma escalável e compatível com grandes volumes. Para simular o mesmo resultado do SQL acima, você poderia ter uma única tabela que incluiria tanto os dados dos funcionários quanto dos departamentos:
 
 ```sql
 CREATE TABLE employees (
@@ -131,13 +132,23 @@ FROM employees
 GROUP BY department_id;
 ```
 
-- Cassandra suporta algumas funções de agregação, mas seu uso é limitado e não tão flexível quanto em SQL, especialmente quando se trata de agrupar dados distribuídos por vários nós. Você pode contar o número de funcionários em um departamento específico, mas fazer isso de forma agregada por todos os departamentos não é diretamente suportado como uma única operação eficiente: 
+- Cassandra oferece suporte a funções de agregação, priorizando intencionalmente baixa latência e eficiência em leituras locais. Essa escolha reflete seu design voltado à escalabilidade horizontal e desempenho previsível, mesmo sob cargas intensas, especialmente em consultas que envolvem grandes volumes de dados particionados. Ao contrário de bancos relacionais que concentram dados e favorecem agregações ad-hoc, Cassandra é ideal para consultas previsíveis e de alto desempenho, com estruturação prévia do modelo conforme os acessos mais frequentes. Em cenários onde agregações globais são necessárias, é comum utilizar ferramentas analíticas externas como o Apache Spark, integradas ao Cassandra de maneira nativa. Você pode contar o número de funcionários em um departamento específico, mas fazer isso de forma agregada por todos os departamentos não é diretamente suportado como uma única operação eficiente: 
 
 ```sql
 SELECT COUNT(*) FROM empregados WHERE departamento_id = '123';
 ```
 
-- Você pode fazer contagens simples por chave de partição, mas agregações complexas sobre grandes volumes de dados requerem uma abordagem diferente, podendo incluir uso de ferramentas complementares, por exemplo, o Apache Spark. 
+- Naturalmente, operações como contagens globais ou agregações complexas em grandes volumes distribuídos podem exigir abordagens complementares, podendo incluir uso do recurso nativo de `MATERIALIZED VIEWs` - MVs, ou a atuação de ferramentas complementares como, por exemplo, o Apache Spark. Uma `VIEW` materializada cria representações alternativas de uma tabela com base em diferentes chaves de partição, permitindo consultas otimizadas sem a necessidade de duplicação manual dos dados. Diferente de uma simples tabela denormalizada, as `VIEWs`materializadas são atualizadas automaticamente quando os dados da tabela base são modificados. Essa estrutura permite recuperar dados por nome, algo não possível com a tabela original se nome não fizer parte da chave primária. Vale lembrar que o uso de MV exige cuidados com consistência eventual e performance, sendo recomendado validar sua eficácia em testes controlados. Segue exemplo: 
+
+```sql
+-- Exemplo: view alternativa para consulta por nome do estudante
+CREATE MATERIALIZED VIEW IF NOT EXISTS Estudantes_por_nome AS
+  SELECT * FROM Estudantes
+  WHERE nome IS NOT NULL AND id IS NOT NULL
+  PRIMARY KEY (nome, id);
+```
+
+Ou seja, concluímos que a proposta do Cassandra — e dos bancos NoSQL em geral — não é competir diretamente com o modelo relacional, mas sim oferecer uma alternativa superior para casos de uso onde o SQL tradicional enfrenta limitações, como em ambientes com altíssimos volumes de dados, exigência de elasticidade horizontal, e baixa tolerância a pontos únicos de falha. JOINs, transações ACID e forte vinculação ao esquema, embora extremamente úteis em contextos transacionais centralizados, podem se tornar gargalos em ambientes distribuídos e escaláveis, comprometendo a tolerância ao particionamento e a performance em larga escala. Cassandra adota um modelo que privilegia desempenho previsível, resiliência e escalabilidade linear, sendo ideal para aplicações modernas baseadas em nuvem, dados em tempo real, e arquiteturas orientadas a eventos.
 
 ## 3. Prática em Laboratório 
 
@@ -475,10 +486,6 @@ services:
   cassandra-web:
     image: ipushc/cassandra-web
     container_name: cassandra-web-container
-    ports:
-      - "3000:80"  # Mapeia a porta 3000 do host para a porta 80 do container
-    volumes:
-      - ./wait-for-it.sh:/wait-for-it.sh
     environment:
       - HOST_PORT=:80
       - READ_ONLY=false
@@ -487,21 +494,26 @@ services:
       - CASSANDRA_USERNAME=cassandra  
       - CASSANDRA_PASSWORD=cassandra  
     command: ["/wait-for-it.sh", "cassandra:9042", "--", "./service", "-c", "config.yaml"]  # Supondo que o config.yaml esteja correto e disponível
-    depends_on:
-      - cassandra
+    ports:
+      - "3000:80"  # Mapeia a porta 3000 do host para a porta 80 do container
     networks:
       - mybridge
+    volumes:
+      - ./wait-for-it.sh:/wait-for-it.sh
+    depends_on:
+      - cassandra
 
 networks:
   mybridge:
     driver: bridge
+    external: true
 
 volumes:
   cassandra_data:
   datasets:
 ```
 
-- Ao tentar conectar ao Cassandra via Python (`cassandra-driver`), ocorre um erro como este: `NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1': error...})`. Verifique o IP correto do Cassandra no Docker, assim como fizemos com o MongoDB, você precisa colocar os contêineres do Cassandra na mesma rede do Jupyter (`mybridge`) e inpecionar a rede com `docker network inspect` ou o próprio contêiner com `docker inspect cassandra-container`, para descobrir qual é o IP correto associado ao contêiner. 
+- Ao tentar conectar ao Cassandra via Python (`cassandra-driver`), ocorre um erro como este: `NoHostAvailable: ('Unable to connect to any servers', {'127.0.0.1': error...})`. Assim como fizemos com o MongoDB, você precisa colocar os contêineres do Cassandra na mesma rede do Jupyter (`mybridge`) e inspecionar a rede com `docker network inspect` ou o próprio contêiner com `docker inspect cassandra-container` para descobrir qual é o IP correto associado ao contêiner. No Jupyter, você também pode referenciar o nome atribuído ao contêiner ao invés do IP, por exemplo, `cassandra-container`. 
 
 ```shell
 docker inspect cassandra-container | grep "IPAddress"
@@ -514,7 +526,7 @@ SELECT id FROM Estudantes WHERE nome = 'João Leite';
 DELETE FROM Estudantes WHERE id = <id_obtido>;
 ```
 
-- Geralmente você pode escrever uma função para selecionar e guardar os registros que devem ser removidos em uma variável, fazendo o loop para sua deleção. 
+- Para obter a funcionalidade nesse contexto, é usual adotar uma função em lingugem de programação para selecionar e guardar em uma variável os registros que devem ser removidos, realizando um `loop` para efetivar a deleção posteriormente. 
 
 ```python
 from cassandra.cluster import Cluster
@@ -618,6 +630,9 @@ try:
 finally:
     close_connection(session, cluster)
 ```
+
+
+
 
 ### Conclusão
 
