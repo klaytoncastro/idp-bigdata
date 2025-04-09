@@ -81,6 +81,8 @@ CREATE TABLE Pedidos (
 );
 ```
 
+
+
 ### Consistency Levels
 
 O Cassandra oferece a flexibilidade para equilibrar as necessidades de consistência e disponibilidade dos dados. Configurar esses níveis é crucial para desenvolver pipelines de dados eficazes, garantindo que as operações de leitura e gravação cumpram com os requisitos específicos dos sistemas suportados. Os níveis de consistência permitem que os desenvolvedores ajustem o comportamento do SGBD com base nas necessidades da aplicação: 

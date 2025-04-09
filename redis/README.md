@@ -9,6 +9,10 @@ Redis é um armazenamento de estrutura de dados em memória, usado como banco de
 - **Persistência de Dados**: O Redis oferece opções para persistir dados em disco sem comprometer a velocidade.
 - **Replicação e Particionamento**: O Redis suporta replicação e particionamento para escalabilidade horizontal.
 
+
+<!--
+
+
 ## Instalação via Docker Compose
 
 Para instalar o Redis usando Docker Compose, crie um arquivo `docker-compose.yml` com o seguinte conteúdo:
@@ -30,10 +34,14 @@ Suba o contêiner:
 ```shell
 docker-compose up -d
 ```
+-->
 
-## Aplicação de Cache em Tempo Real com Redis
 
-Aqui está um exemplo simples de como usar o Redis para cache:
+Embora o Redis seja normalmente utilizado via linha de comando ou integrado diretamente em aplicações, é possível utilizar interfaces gráficas para visualizar e manipular os dados armazenados de forma mais intuitiva. Além do Redis rodando na porta `6379`, nosso ambiente conta com o Redis Commander — uma GUI opcional para visualização dos dados, acessível em `http://localhost:8081` — e com uma aplicação Flask (`http://localhost:5000`), que será modificada ao longo da prática de laboratório.
+
+### Aplicação de Cache em Tempo Real com Redis
+
+Verifique o nosso aplicativo Flask (`app.py`). Aqui está um exemplo simples de como usar o Redis para cache:
 
 ```python
 import redis
@@ -346,3 +354,92 @@ done < dados.csv
 ```
 
 Neste script, `IFS=,` define o separador de campo interno (Internal Field Separator) como vírgula, permitindo que o read divida cada linha nas variáveis chave e valor baseado na vírgula. O script lê cada linha do arquivo `dados.txt`, extrai a chave e o valor e os envia para o Redis através da API Flask usando curl. Certifique-se de ter o Flask rodando e acessível na porta especificada para que os comandos `curl` funcionem conforme esperado.
+
+---
+
+## Comparando Respostas com e sem Redis
+
+Para visualizar a diferença entre uma rota que utiliza Redis e outra que não utiliza, adicionamos o tempo de resposta em cada rota. 
+<!--Isso permite observar que, mesmo sendo muito rápido, o Redis ainda realiza uma operação extra de rede + acesso à memória.-->
+
+### Exemplo de código:
+
+```python
+import time
+
+@app.route('/')
+def hello():
+    start = time.time()
+    count = db.incr('hits')
+    elapsed = time.time() - start
+    return f'Hello World! I have been seen {count} times.\nTempo de resposta: {elapsed:.6f} segundos'
+
+@app.route('/sem-redis')
+def hellow():
+    start = time.time()
+    response = 'Hello World! I have been seen times.'
+    elapsed = time.time() - start
+    return f'{response}\nTempo de resposta: {elapsed:.6f} segundos'
+```
+
+---
+
+## Cache Real com Redis: Implementação da Série de Fibonacci
+
+Uma das formas mais poderosas de usar Redis é armazenar resultados de cálculos pesados para não precisar refazê-los. Abaixo, criamos duas rotas: uma que calcula Fibonacci de forma tradicional e outra que usa Redis para cachear os resultados.
+
+### Código:
+
+```python
+def fib(n):
+    if n <= 1:
+        return n
+    return fib(n-1) + fib(n-2)
+
+@app.route('/fib/<int:n>')
+def fib_sem_cache(n):
+    start = time.time()
+    resultado = fib(n)
+    elapsed = time.time() - start
+    return f'[SEM CACHE] Fibonacci({n}) = {resultado} (tempo: {elapsed:.4f} segundos)'
+
+@app.route('/fib-cache/<int:n>')
+def fib_com_cache(n):
+    start = time.time()
+
+    cache_key = f"fib:{n}"
+    if db.exists(cache_key):
+        resultado = int(db.get(cache_key))
+        source = "Redis (cache)"
+    else:
+        resultado = fib(n)
+        db.set(cache_key, resultado)
+        source = "calculado e salvo no Redis"
+
+    elapsed = time.time() - start
+    return f'[COM CACHE] Fibonacci({n}) = {resultado} ({source}) (tempo: {elapsed:.4f} segundos)'
+```
+
+### Cache com Expiração
+
+Para adicionar uma expiração automática ao valor armazenado, use `setex()` em vez de `set()`:
+
+```python
+db.setex(cache_key, 60, resultado)  # cache expira em 60 segundos
+```
+
+---
+
+### Teste prático:
+
+O Redis **pode acelerar aplicações** ao evitar recomputações, o que é extremamente válido em sistemas com alta carga computacional ou chamadas repetidas.
+
+- Acesse `http://localhost:5000/fib/30` (sem cache, deve ser mais lento)
+- Acesse `http://localhost:5000/fib-cache/30` (no primeiro acesso calcula, no segundo acesso deve ser praticamente instantâneo)
+
+---
+
+## Conclusão
+
+Exploramos o Redis como uma solução prática e eficiente para armazenamento em memória, com aplicações diretas em cache, filas de mensagens e integração com APIs em Flask. Ao longo dos exemplos, pudemos observar como o Redis pode acelerar operações repetitivas, simplificar a comunicação entre partes da aplicação e reduzir o tempo de resposta de forma significativa. Também visualizamos a diferença de desempenho entre chamadas com e sem cache, utilizando um exemplo clássico de cálculo recursivo, além do uso do Redis CLI e da implementação de scripts automatizados acionados via HTTP com `curl`. 
+
