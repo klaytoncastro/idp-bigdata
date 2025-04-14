@@ -279,7 +279,6 @@ while True:
 
 Este código ilustra como enviar e receber mensagens de uma fila usando o Redis. O `brpop` é um comando bloqueante que aguarda até que uma mensagem esteja disponível na fila.
 
-
 ### Exemplos de Aplicações
 
 1. Sistema de Autenticação e Sessão de Usuários
@@ -307,7 +306,9 @@ Este código ilustra como enviar e receber mensagens de uma fila usando o Redis.
 - Valor: Detalhes do evento ou log.
 - Aplicação: Rápido armazenamento e acesso a logs ou eventos para monitoramento e análise em sistemas de grande escala.
 
-Estas são apenas algumas ideias, e a beleza do uso de um banco de dados baseado em chave-valor como o Redis é que ele é extremamente versátil e pode ser adaptado para uma variedade de aplicações em diferentes domínios. Escolher um contexto que seja relevante e interessante para seus alunos pode tornar o aprendizado mais envolvente e prático.
+<!--https://flask-caching.readthedocs.io/en/latest/-->
+
+Estas são apenas algumas ideias, um banco de dados baseado em chave-valor como o Redis é extremamente versátil e pode ser adaptado para uma variedade de aplicações em diferentes domínios. 
 
 ## 5. Monitorando Operações Redis em Tempo Real
 
