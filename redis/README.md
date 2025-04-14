@@ -212,25 +212,24 @@ docker-compose up -d
 
 Verifique o código do serviço Flask (`app.py`) e veja alguns exemplos de utilização do Redis como cache em memória para sua aplicação:
 
-
 ```python
 import redis
 import time
 
-### Conexão com o servidor Redis (ajuste o host e a porta conforme necessário)
-`db = redis.Redis(host='localhost', port=6379, db=0)`
+# Conexão com o servidor Redis (ajuste o host e a porta conforme necessário)
+db = redis.Redis(host='redis', port=6379, db=0)
 
-### Definindo uma chave com um valor e um tempo de expiração (em segundos)
-`db.setex("chave", 30, "valor")`
+# Definindo uma chave com um valor e um tempo de expiração (em segundos)
+db.setex("chave", 30, "valor")
 
-### Recuperando o valor da chave
-`valor = db.get("chave")`
-`print("Valor recuperado:", valor)`
+# Recuperando o valor da chave
+valor = db.get("chave")
+print("Valor recuperado:", valor.decode('utf-8'))  # Decodifica bytes para string
 
-### Simulando um atraso para demonstrar a expiração
-`time.sleep(31)`
-`valor_apos_expiracao = db.get("chave")`
-`print("Valor após expiração:", valor_apos_expiracao)`
+# Simulando um atraso para demonstrar a expiração
+time.sleep(31)
+valor_apos_expiracao = db.get("chave")
+print("Valor após expiração:", valor_apos_expiracao)  # None (já expirado)
 ```
 
 Este exemplo mostra como armazenar e recuperar dados no Redis, com um tempo de expiração definido.
@@ -261,7 +260,7 @@ Para o processamento de filas e streams, você pode usar as listas do Redis para
 import redis
 
 ### Conexão com o Redis
-`db = redis.Redis(host='localhost', port=6379, db=0)`
+`db = redis.Redis(host='redis', port=6379, db=0)`
 
 ### Enviando mensagens para a fila
 `db.lpush("fila", "mensagem 1")`
