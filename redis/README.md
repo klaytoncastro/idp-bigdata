@@ -2,6 +2,8 @@
 
 ## 1. Visão Geral
 
+<!--https://flask-caching.readthedocs.io/en/latest/-->
+
 Redis é um armazenamento de estrutura de dados em memória, usado como banco de dados, cache e servidor de mensagens. É conhecido por sua rapidez e eficiência.
 
 ## 2. Características
@@ -43,10 +45,9 @@ docker-compose up -d --build
 
 Isso irá construir a imagem para a sua aplicação e iniciar os serviços Flask e Redis. Com essa configuração, você estará pronto para implementar os exemplos de cache em tempo real e filas de mensagens usando Redis. 
 
-
 <!--
 
-Assegure-se de que o seu código Flask esteja configurado para se conectar ao Redis usando o hostname `redis`, que é o nome do serviço definido no `docker-compose.yml`.
+
 
 Integração básica Flask + Redis
 
@@ -154,7 +155,7 @@ Com isso, ao acessar `http://127.0.0.1:8500/usuario/Jose`, o servidor retornará
 
 >Olá, Jose!
 
-Esse tipo de rota é fundamental para construir APIs REST, pois permite que os dados façam parte da URL. Nos exemplos do nosso projeto Redis, utilizamos exatamente esse padrão:
+Esse tipo de rota é fundamental para construir APIs REST, pois permite que os dados façam parte da URL. Nos exemplos do nosso projeto Redis, utilizaremos exatamente esse padrão:
 
 ```python
 @app.route('/set/<chave>/<valor>')
@@ -168,14 +169,18 @@ def get(chave):
 ```
 Ou seja, podemos definir `/set/nome/Klayton` e armazenar o par `nome=Klayton`, e utilizar `/get/nome` para buscar o valor associado à chave nome. 
 
-Essas rotas utilizam o método HTTP GET, que é o mais simples e fácil de testar (inclusive no navegador). Em uma API REST completa, normalmente se utilizam também os métodos:
+- **Nota**: Nestes exemplos, utilizamos o método HTTP `GET` por ser o mais direto, fácil de testar no navegador e demonstrar um fluxo básico entre cliente, aplicação web e Redis. Em uma API REST real, entretanto, é importante utilizar o método HTTP apropriado conforme o tipo de operação. O uso adequado dos métodos ajuda a manter a semântica RESTful da aplicação, melhora a clareza da API e facilita a integração com outras aplicações ou sistemas front-end.
 
-- **GET**: para consultar ou recuperar dados
-- **POST**: para criar dados
-- **PUT**: para atualizar
-- **DELETE**: para remover
+### Principais Métodos HTTP
 
-Aqui, usamos apenas `GET` por simplicidade e para facilitar o entendimento do fluxo básico entre cliente, aplicação web e Redis. 
+- **GET**: consulta ou recuperação de recursos  
+- **POST**: criação de novos recursos  
+- **PUT**: substituição ou atualização completa de um recurso  
+- **PATCH**: atualização parcial de um recurso (mais granular que o PUT)  
+- **DELETE**: remoção de um recurso  
+- **HEAD**: igual ao GET, mas sem o corpo da resposta — útil para verificação rápida de existência/headers  
+- **OPTIONS**: retorna os métodos permitidos por um recurso (útil para CORS e introspecção)  
+- **TRACE / CONNECT**: raramente usados, voltados a testes e tunelamento HTTP  
 
 ## 4. Aplicação de Cache em Tempo Real com Redis
 
@@ -225,7 +230,7 @@ db.setex("chave", 30, "valor")
 # Recuperando o valor da chave
 valor = db.get("chave")
 print("Valor recuperado:", valor.decode('utf-8'))  # Decodifica bytes para string
-
+a
 # Simulando um atraso para demonstrar a expiração
 time.sleep(31)
 valor_apos_expiracao = db.get("chave")
@@ -234,9 +239,9 @@ print("Valor após expiração:", valor_apos_expiracao)  # None (já expirado)
 
 Este exemplo mostra como armazenar e recuperar dados no Redis, com um tempo de expiração definido.
 
-### Testando sua API com curl
+### Testando sua API 
 
-Você pode testar sua aplicação usando ferramentas de linha de comando no terminal. Isso ajuda a simular chamadas que seriam feitas por um frontend, outro sistema ou até por ferramentas de integração.
+Você pode testar sua aplicação usando ferramentas de linha de comando no terminal, com o comando `curl`. Isso ajuda a simular chamadas que seriam feitas por um frontend, outro sistema ou até por ferramentas de integração.
 
 ```bash
 # Contador de acessos (rota /)
@@ -306,15 +311,13 @@ Este código ilustra como enviar e receber mensagens de uma fila usando o Redis.
 - Valor: Detalhes do evento ou log.
 - Aplicação: Rápido armazenamento e acesso a logs ou eventos para monitoramento e análise em sistemas de grande escala.
 
-<!--https://flask-caching.readthedocs.io/en/latest/-->
-
 Estas são apenas algumas ideias, um banco de dados baseado em chave-valor como o Redis é extremamente versátil e pode ser adaptado para uma variedade de aplicações em diferentes domínios. 
 
 ## 5. Monitorando Operações Redis em Tempo Real
 
 ### Utilizar Logs da Aplicação Flask
 
-Você pode adicionar instruções de log no seu código Flask para demonstrar quando a aplicação está acessando o Redis. Por exemplo, ao buscar ou definir valores no Redis, você pode imprimir mensagens no console:
+Assegure-se de que o seu código Flask esteja configurado para se conectar ao Redis usando o hostname `redis`, que é o nome do serviço definido no `docker-compose.yml`. Você pode adicionar instruções de log no seu código Flask para demonstrar quando a aplicação está acessando o Redis. Por exemplo, ao buscar ou definir valores no Redis, você pode imprimir mensagens no console:
 
 ```python
 from flask import Flask
@@ -343,19 +346,7 @@ Para ver as mensagens de log em tempo real, você pode abrir um terminal e execu
 docker-compose logs -f
 ```
 
-Isso mostrará um fluxo contínuo de logs de todos os serviços definidos no seu `docker-compose.yml`, incluindo tanto o Flask quanto o Redis.
-
-### Demonstrações Interativas
-Outra forma eficaz de demonstrar é criar rotas Flask específicas para diferentes operações do Redis (como definir um valor, obter um valor, listar valores de uma fila, etc.) e acessar estas rotas através do navegador ou usando uma ferramenta como Postman. Isso permite uma interação direta e visual com a aplicação e o Redis.
-
-### Usar Redis CLI
-Você também pode abrir um terminal no container Redis para interagir diretamente com o banco de dados usando o Redis CLI. Isso pode ser feito usando o comando:
-
-```bash
-docker exec -it [NOME_DO_CONTAINER_REDIS] redis-cli
-```
-
-Aqui, você pode executar comandos do Redis para mostrar diretamente o estado do banco de dados. 
+Isso mostrará um fluxo contínuo de logs de todos os serviços definidos no seu `docker-compose.yml`, incluindo tanto o Flask quanto o Redis. 
 
 ## Interação via API e CLI
 
@@ -478,6 +469,8 @@ done < dados.csv
 ```
 
 Neste script, `IFS=,` define o separador de campo interno (Internal Field Separator) como vírgula, permitindo que o read divida cada linha nas variáveis chave e valor baseado na vírgula. O script lê cada linha do arquivo `dados.txt`, extrai a chave e o valor e os envia para o Redis através da API Flask usando curl. Certifique-se de ter o Flask rodando e acessível na porta especificada para que os comandos `curl` funcionem conforme esperado.
+
+
 
 ---
 
