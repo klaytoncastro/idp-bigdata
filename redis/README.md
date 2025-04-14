@@ -9,9 +9,7 @@ Redis é um armazenamento de estrutura de dados em memória, usado como banco de
 - **Persistência de Dados**: O Redis oferece opções para persistir dados em disco sem comprometer a velocidade.
 - **Replicação e Particionamento**: O Redis suporta replicação e particionamento para escalabilidade horizontal.
 
-
 <!--
-
 
 ## Instalação via Docker Compose
 
@@ -36,7 +34,6 @@ docker-compose up -d
 ```
 -->
 
-
 Embora o Redis seja normalmente utilizado via linha de comando ou integrado diretamente em aplicações, é possível utilizar interfaces gráficas para visualizar e manipular os dados armazenados de forma mais intuitiva. Além do Redis rodando na porta `6379`, nosso ambiente conta com o Redis Commander — uma GUI opcional para visualização dos dados, acessível em `http://localhost:8081` — e com uma aplicação Flask (`http://localhost:5000`), que será modificada ao longo da prática de laboratório.
 
 ### Aplicação de Cache em Tempo Real com Redis
@@ -49,22 +46,24 @@ import time
 ```
 
 ### Conexão com o servidor Redis (ajuste o host e a porta conforme necessário)
-r = redis.Redis(host='localhost', port=6379, db=0)
+`r = redis.Redis(host='localhost', port=6379, db=0)`
 
 ### Definindo uma chave com um valor e um tempo de expiração (em segundos)
-r.setex("chave", 30, "valor")
+`r.setex("chave", 30, "valor")`
 
 ### Recuperando o valor da chave
-valor = r.get("chave")
-print("Valor recuperado:", valor)
+`valor = r.get("chave")`
+`print("Valor recuperado:", valor)`
 
 ### Simulando um atraso para demonstrar a expiração
-time.sleep(31)
-valor_apos_expiracao = r.get("chave")
-print("Valor após expiração:", valor_apos_expiracao)
+`time.sleep(31)`
+`valor_apos_expiracao = r.get("chave")`
+`print("Valor após expiração:", valor_apos_expiracao)`
+
 Este exemplo mostra como armazenar e recuperar dados no Redis, com um tempo de expiração definido.
 
 ## Filas de Mensagens e Processamento de Streams com Redis
+
 Para o processamento de filas e streams, você pode usar as listas do Redis para simular uma fila de mensagens:
 
 ```python
@@ -72,13 +71,14 @@ import redis
 ```
 
 ### Conexão com o Redis
-r = redis.Redis(host='localhost', port=6379, db=0)
+`r = redis.Redis(host='localhost', port=6379, db=0)`
 
 ### Enviando mensagens para a fila
-r.lpush("fila", "mensagem 1")
-r.lpush("fila", "mensagem 2")
+`r.lpush("fila", "mensagem 1")`
+`r.lpush("fila", "mensagem 2")`
 
 ### Processando mensagens da fila
+```bash
 while True:
     mensagem = r.brpop("fila", 5)  # Aguarda 5 segundos por uma mensagem
     if mensagem:
@@ -86,18 +86,17 @@ while True:
     else:
         print("Nenhuma mensagem nova.")
         break
-
-
+```
 Este código ilustra como enviar e receber mensagens de uma fila usando o Redis. O `brpop` é um comando bloqueante que aguarda até que uma mensagem esteja disponível na fila.
 
 
 ## Exemplo: Flask + Redis
 
-Os exemplos acima são básicos, mas eficazes para demonstrar os conceitos de cache em tempo real e filas de mensagens usando o Redis. Para configurar um ambiente com Docker que inclua tanto o Redis quanto o Flask, você precisará de um `Dockerfile` para a aplicação Flask e um `docker-compose.yml` para orquestrar os contêineres. 
+Os exemplos acima são demonstram os conceitos de cache em tempo real e filas de mensagens usando o Redis. Para configurar um ambiente com Docker que inclua tanto o Redis quanto o Flask, você precisará de um `Dockerfile` para a aplicação Flask e um `docker-compose.yml` para orquestrar os contêineres. 
 
 
 ### Dockerfile para a Aplicação Flask
-Primeiro, crie um Dockerfile para a aplicação Flask.
+Primeiro, o Dockerfile é usado como base para a aplicação Flask que irá interagir com o Redis.
 
 ```shell
 # Usa a imagem base do Python
@@ -120,17 +119,19 @@ EXPOSE 5000
 CMD ["python", "app.py"]
 ```
 
-No arquivo `requirements.txt`, inclua:
+No arquivo `requirements.txt` contém as dependências da sua aplicação:
 
 ```shell
 flask
 redis
 ```
 
-Agora crie um arquivo `app.py` com o código da sua aplicação Flask.
+O arquivo `app.py` deve conter o código da sua aplicação Flask.
 
 ### Orquestração do Flask e Redis
-Agora, crie um arquivo docker-compose.yml que defina os serviços para o Flask e o Redis:
+
+- web: O serviço para a sua aplicação Flask. Ele constrói a imagem a partir do Dockerfile e mapeia a porta 5000 para a porta 5000 do host.
+- redis: O serviço para o Redis, usando a imagem redis:alpine. Ele mapeia a porta 6379 para a porta 6379 do host.
 
 ```yaml
 version: '3'
@@ -147,15 +148,10 @@ services:
       - "6379:6379"
 ```
 
-Este docker-compose.yml define dois serviços:
-
-- web: O serviço para a sua aplicação Flask. Ele constrói a imagem a partir do Dockerfile e mapeia a porta 5000 para a porta 5000 do host.
-- redis: O serviço para o Redis, usando a imagem redis:alpine. Ele mapeia a porta 6379 para a porta 6379 do host.
-
-Após configurar esses arquivos, você pode iniciar os serviços com o seguinte comando:
+Após visitar e entender a configuração proposta nesses arquivos, você pode iniciar os serviços com o seguinte comando:
 
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 
 Isso irá construir a imagem para a sua aplicação Flask e iniciar tanto o serviço Flask quanto o Redis. Assegure-se de que o seu código Flask esteja configurado para se conectar ao Redis usando o hostname `redis`, que é o nome do serviço definido no `docker-compose.yml`.
@@ -165,25 +161,30 @@ Com essa configuração, você poderá demonstrar os exemplos de cache em tempo 
 ### Exemplos de Aplicações
 
 1. Sistema de Autenticação e Sessão de Usuários
-Chave: ID da sessão do usuário ou token de autenticação.
-Valor: Dados associados à sessão do usuário, como ID do usuário, preferências, roles/permissões, etc.
-Aplicação: Armazenar e gerenciar sessões de usuário em um ambiente web, onde a velocidade de acesso e a expiração automática das sessões são cruciais.
-2. Catálogo de Produtos para E-commerce
-Chave: SKU ou ID do produto.
-Valor: Detalhes do produto, como nome, descrição, preço, informações do fornecedor.
-Aplicação: Rápido acesso aos dados dos produtos para exibição em um site de e-commerce, onde a performance é um fator importante.
+- Chave: ID da sessão do usuário ou token de autenticação.
+- Valor: Dados associados à sessão do usuário, como ID do usuário, preferências, roles/permissões, etc.
+- Aplicação: Armazenar e gerenciar sessões de usuário em um ambiente web, onde a velocidade de acesso e a expiração automática das sessões são cruciais.
+
+2. Catálogo de Produtos para e-Commerce
+- Chave: SKU ou ID do produto.
+- Valor: Detalhes do produto, como nome, descrição, preço, informações do fornecedor.
+- Aplicação: Rápido acesso aos dados dos produtos para exibição em um site de e-commerce, onde a performance é um fator importante.
+
 3. Sistema de Gerenciamento de Configurações
-Chave: Nome da configuração (por exemplo, "limiteDeUpload", "horárioDeManutenção").
-Valor: Valor da configuração (por exemplo, "10MB", "01:00-03:00").
-Aplicação: Armazenar configurações de aplicativos ou sistemas que podem ser alteradas dinamicamente sem a necessidade de reiniciar o sistema.
+- Chave: Nome da configuração (por exemplo, "limiteDeUpload", "horárioDeManutenção").
+- Valor: Valor da configuração (por exemplo, "10MB", "01:00-03:00").
+- Aplicação: Armazenar configurações de aplicativos ou sistemas que podem ser alteradas dinamicamente sem a necessidade de reiniciar o sistema.
+
 4. Sistema de Cache para Resultados de Pesquisa ou Análises
-Chave: Termo da pesquisa ou parâmetros da análise.
-Valor: Resultados da pesquisa ou análise.
-Aplicação: Melhorar a performance de aplicações que realizam pesquisas frequentes ou análises complexas, armazenando os resultados para recuperação rápida.
+- Chave: Termo da pesquisa ou parâmetros da análise.
+- Valor: Resultados da pesquisa ou análise.
+- Aplicação: Melhorar a performance de aplicações que realizam pesquisas frequentes ou análises complexas, armazenando os resultados para recuperação rápida.
+
 5. Registro de Atividades ou Logs
-Chave: Identificador único do evento (como timestamp ou ID de evento).
-Valor: Detalhes do evento ou log.
-Aplicação: Rápido armazenamento e acesso a logs ou eventos para monitoramento e análise em sistemas de grande escala.
+- Chave: Identificador único do evento (como timestamp ou ID de evento).
+- Valor: Detalhes do evento ou log.
+- Aplicação: Rápido armazenamento e acesso a logs ou eventos para monitoramento e análise em sistemas de grande escala.
+
 Estas são apenas algumas ideias, e a beleza do uso de um banco de dados baseado em chave-valor como o Redis é que ele é extremamente versátil e pode ser adaptado para uma variedade de aplicações em diferentes domínios. Escolher um contexto que seja relevante e interessante para seus alunos pode tornar o aprendizado mais envolvente e prático.
 
 ## Demonstração do Ambiente
