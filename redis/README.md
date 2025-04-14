@@ -1,13 +1,112 @@
 # Redis
 
+## 1. Visão Geral
+
 Redis é um armazenamento de estrutura de dados em memória, usado como banco de dados, cache e servidor de mensagens. É conhecido por sua rapidez e eficiência.
 
-## Características
+## 2. Características
 
 - **Armazenamento em Memória**: O Redis armazena dados em memória para acesso rápido.
 - **Suporte a Diversas Estruturas de Dados**: O Redis suporta várias estruturas de dados, como strings, hashes, listas, conjuntos, conjuntos ordenados, bitmaps, hyperloglogs e índices geoespaciais.
 - **Persistência de Dados**: O Redis oferece opções para persistir dados em disco sem comprometer a velocidade.
 - **Replicação e Particionamento**: O Redis suporta replicação e particionamento para escalabilidade horizontal.
+
+Embora o Redis seja normalmente utilizado via linha de comando ou integrado diretamente em aplicações, é possível utilizar interfaces gráficas para visualizar e manipular os dados armazenados de forma mais intuitiva. Além do Redis rodando na porta `6379`, nosso ambiente conta com o Redis Commander — uma GUI opcional para visualização dos dados, acessível em `http://localhost:8081` — e com uma aplicação Flask (`http://localhost:5000`), que será modificada ao longo da prática de laboratório.
+
+## 3. Utilizando o Redis com o Microframework Python Flask
+
+A arquitetura abaixo descrita foi projetada para demonstrar um ambiente orquestrado com Docker que inclua tanto o Redis quanto uma Web API integrada, como em muitas aplicações do mundo real. Para isso, o utilizamos o Docker Compose para subir os três serviços:
+
+- Um aplicativo Web Python Flask
+- Um banco de dados Redis
+- Uma GUI web para o Redis (Redis Commander)
+
+```bash
+redis/
+└── Dockerfile          # Configuração do container Flask
+└── docker-compose.yml  # Definição dos serviços (Flask + Redis + Redis-Commander)
+└── app.py              # Aplicação Flask principal
+└── requirements.txt    # Lista de dependências que o aplicativo Python irá utilizar (flask, redis, etc.)
+└── templates/          # Diretório para templates HTML (opcional, se usar Front-End / Jinja2)
+└── static/             # Arquivos estáticos (opcional, se quiser complementar com CSS, JavaScript, imagens)
+```
+
+Após visitar e entender a configuração proposta em cada um desses arquivos, você poderá iniciar os serviços com o seguinte comando:
+
+```bash
+docker-compose up -d --build
+```
+
+Isso irá construir a imagem para a sua aplicação Flask e iniciar tanto o serviço Flask quanto o Redis. Assegure-se de que o seu código Flask esteja configurado para se conectar ao Redis usando o hostname `redis`, que é o nome do serviço definido no `docker-compose.yml`. Com essa configuração, você estará pronto para implementar os exemplos de cache em tempo real e filas de mensagens usando Redis. 
+
+<!--
+
+Integração básica Flask + Redis
+
+Uso de Redis como contador (endpoint /)
+Armazenamento chave-valor simples com endpoints REST (/set/<k>/<v> e /get/<k>)
+Possibilidade de usar Redis como cache ou contador persistente
+Para configurar você precisará de um `Dockerfile` para a aplicação Flask e um `docker-compose.yml` para orquestrar os contêineres. 
+
+### Dockerfile para a Aplicação Flask
+Primeiro, o Dockerfile é usado como base para a aplicação Flask que irá interagir com o Redis.
+
+```shell
+# Usa a imagem base do Python
+FROM python:3.8-slim
+
+# Define o diretório de trabalho
+WORKDIR /app
+
+# Copia os arquivos de requisitos e instala as dependências
+COPY requirements.txt requirements.txt
+RUN pip install -r requirements.txt
+
+# Copia o restante dos arquivos da aplicação
+COPY . .
+
+# Define a porta em que a aplicação será executada
+EXPOSE 5000
+
+# Define o comando para iniciar a aplicação
+CMD ["python", "app.py"]
+```
+
+O arquivo `requirements.txt` contém as dependências da sua aplicação:
+
+```shell
+flask
+redis
+```
+
+O arquivo `app.py` deve conter o código da sua aplicação Flask.
+
+-->
+
+### Orquestração do Flask e Redis
+
+- web: O serviço para a sua aplicação Flask. Ele constrói a imagem a partir do Dockerfile e mapeia a porta 5000 para a porta 5000 do host.
+- redis: O serviço para o Redis, usando a imagem redis:alpine. Ele mapeia a porta 6379 para a porta 6379 do host.
+
+```yaml
+version: '3'
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    depends_on:
+      - redis
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
+```
+
+
+
+
+## 3. Aplicação de Cache em Tempo Real com Redis
 
 <!--
 
@@ -34,16 +133,11 @@ docker-compose up -d
 ```
 -->
 
-Embora o Redis seja normalmente utilizado via linha de comando ou integrado diretamente em aplicações, é possível utilizar interfaces gráficas para visualizar e manipular os dados armazenados de forma mais intuitiva. Além do Redis rodando na porta `6379`, nosso ambiente conta com o Redis Commander — uma GUI opcional para visualização dos dados, acessível em `http://localhost:8081` — e com uma aplicação Flask (`http://localhost:5000`), que será modificada ao longo da prática de laboratório.
-
-### Aplicação de Cache em Tempo Real com Redis
-
-Verifique o nosso aplicativo Flask (`app.py`). Aqui está um exemplo simples de como usar o Redis para cache:
+Verifique o código do nosso serviço Flask (`app.py`) e veja alguns exemplos de utilização do Redis como cache em memória para sua aplicação:
 
 ```python
 import redis
 import time
-```
 
 ### Conexão com o servidor Redis (ajuste o host e a porta conforme necessário)
 `r = redis.Redis(host='localhost', port=6379, db=0)`
@@ -59,6 +153,7 @@ import time
 `time.sleep(31)`
 `valor_apos_expiracao = r.get("chave")`
 `print("Valor após expiração:", valor_apos_expiracao)`
+```
 
 Este exemplo mostra como armazenar e recuperar dados no Redis, com um tempo de expiração definido.
 
@@ -68,7 +163,6 @@ Para o processamento de filas e streams, você pode usar as listas do Redis para
 
 ```python
 import redis
-```
 
 ### Conexão com o Redis
 `r = redis.Redis(host='localhost', port=6379, db=0)`
@@ -87,76 +181,9 @@ while True:
         print("Nenhuma mensagem nova.")
         break
 ```
+
 Este código ilustra como enviar e receber mensagens de uma fila usando o Redis. O `brpop` é um comando bloqueante que aguarda até que uma mensagem esteja disponível na fila.
 
-
-## Exemplo: Flask + Redis
-
-Os exemplos acima são demonstram os conceitos de cache em tempo real e filas de mensagens usando o Redis. Para configurar um ambiente com Docker que inclua tanto o Redis quanto o Flask, você precisará de um `Dockerfile` para a aplicação Flask e um `docker-compose.yml` para orquestrar os contêineres. 
-
-
-### Dockerfile para a Aplicação Flask
-Primeiro, o Dockerfile é usado como base para a aplicação Flask que irá interagir com o Redis.
-
-```shell
-# Usa a imagem base do Python
-FROM python:3.8-slim
-
-# Define o diretório de trabalho
-WORKDIR /app
-
-# Copia os arquivos de requisitos e instala as dependências
-COPY requirements.txt requirements.txt
-RUN pip install -r requirements.txt
-
-# Copia o restante dos arquivos da aplicação
-COPY . .
-
-# Define a porta em que a aplicação será executada
-EXPOSE 5000
-
-# Define o comando para iniciar a aplicação
-CMD ["python", "app.py"]
-```
-
-No arquivo `requirements.txt` contém as dependências da sua aplicação:
-
-```shell
-flask
-redis
-```
-
-O arquivo `app.py` deve conter o código da sua aplicação Flask.
-
-### Orquestração do Flask e Redis
-
-- web: O serviço para a sua aplicação Flask. Ele constrói a imagem a partir do Dockerfile e mapeia a porta 5000 para a porta 5000 do host.
-- redis: O serviço para o Redis, usando a imagem redis:alpine. Ele mapeia a porta 6379 para a porta 6379 do host.
-
-```yaml
-version: '3'
-services:
-  web:
-    build: .
-    ports:
-      - "5000:5000"
-    depends_on:
-      - redis
-  redis:
-    image: "redis:alpine"
-    ports:
-      - "6379:6379"
-```
-
-Após visitar e entender a configuração proposta nesses arquivos, você pode iniciar os serviços com o seguinte comando:
-
-```bash
-docker-compose up -d --build
-```
-
-Isso irá construir a imagem para a sua aplicação Flask e iniciar tanto o serviço Flask quanto o Redis. Assegure-se de que o seu código Flask esteja configurado para se conectar ao Redis usando o hostname `redis`, que é o nome do serviço definido no `docker-compose.yml`.
-
-Com essa configuração, você poderá demonstrar os exemplos de cache em tempo real e filas de mensagens usando Redis. 
 
 ### Exemplos de Aplicações
 
