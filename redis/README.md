@@ -15,9 +15,9 @@ Embora o Redis seja normalmente utilizado via linha de comando ou integrado dire
 
 ## 3. Utilizando o Microframework Python Flask 
 
-Neste ambiente, utilizamos o Flask, um microframework Python leve e poderoso para aplicações web, cuja visão é começar com o essencial e adicionar apenas os componentes necessários, à medida que você realmente precisa, abordagem ideal para projetos modulares como este. 
+Neste ambiente, utilizamos o Flask, um microframework Python leve e poderoso para aplicações web, cuja visão é começar com o essencial e adicionar apenas os componentes necessários, à medida que você realmente precisa, abordagem ideal para projetos modulares como este.  
 
->Se o Django é como um quebra-cabeça pré-montado — com todas as peças prontas, mesmo aquelas que você talvez nem precise — o Flask é uma caixa de peças de Lego: você monta com criatividade, usando só o que for necessário. Em outras palavras, enquanto Django entrega a cozinha inteira (com ingredientes, receitas e louça), Flask te dá uma cozinha vazia e acesso ao mercado: você decide o que vale a pena comprar, montar e manter.
+>"Se o Django é um buffet completo (você paga por tudo, mesmo se usar só 20%), o Flask é um cardápio à la carte: você adiciona apenas o necessário (como conexões Redis, autenticação ou templates), minimizando overhead e maximizando velocidade."
 
 A arquitetura abaixo descrita foi projetada para demonstrar um ambiente orquestrado com Docker que inclua tanto o Redis quanto uma Web API integrada, como em muitas aplicações do mundo real. Para isso, o utilizamos o Docker Compose para subir os três serviços:
 
@@ -204,7 +204,14 @@ docker-compose up -d
 ```
 -->
 
+| Operação               | Comando Redis | Uso típico em Flask          |  
+|------------------------|---------------|------------------------------|  
+| Cache de tempo limite  | `setex`       | Sessions, tokens temporários |  
+| Incrementar contador   | `incr`        | Métricas, rate limiting      |  
+| Filas                  | `lpush/rpop`  | Tasks assíncronas            |  
+
 Verifique o código do serviço Flask (`app.py`) e veja alguns exemplos de utilização do Redis como cache em memória para sua aplicação:
+
 
 ```python
 import redis
@@ -303,7 +310,7 @@ Este código ilustra como enviar e receber mensagens de uma fila usando o Redis.
 
 Estas são apenas algumas ideias, e a beleza do uso de um banco de dados baseado em chave-valor como o Redis é que ele é extremamente versátil e pode ser adaptado para uma variedade de aplicações em diferentes domínios. Escolher um contexto que seja relevante e interessante para seus alunos pode tornar o aprendizado mais envolvente e prático.
 
-## Demonstração do Ambiente
+## 5. Monitorando Operações Redis em Tempo Real
 
 ### Utilizar Logs da Aplicação Flask
 
@@ -549,7 +556,7 @@ db.setex(cache_key, 60, resultado)  # cache expira em 60 segundos
 
 ### Teste prático:
 
-O Redis **pode acelerar aplicações** ao evitar recomputações, o que é extremamente válido em sistemas com alta carga computacional ou chamadas repetidas.
+O Redis **pode acelerar aplicações** ao evitar recomputações, o que é extremamente válido em sistemas com alta carga ou chamadas repetidas.
 
 - Acesse `http://localhost:5000/fib/30` (sem cache, deve ser mais lento)
 - Acesse `http://localhost:5000/fib-cache/30` (no primeiro acesso calcula, no segundo acesso deve ser praticamente instantâneo)
