@@ -2,7 +2,11 @@
 
 ## 1. Visão Geral
 
-<!--https://flask-caching.readthedocs.io/en/latest/-->
+<!--https://flask-caching.readthedocs.io/en/latest/
+https://medium.com/@fahadnujaimalsaedi/using-flask-and-redis-to-optimize-web-application-performance-34a8ae750097
+https://flask.palletsprojects.com/en/stable/patterns/celery/
+https://redis.io/docs/latest/commands/
+-->
 
 Redis é um armazenamento de estrutura de dados em memória, usado como banco de dados, cache e servidor de mensagens. É conhecido por sua rapidez e eficiência.
 
@@ -169,9 +173,9 @@ def get(chave):
 ```
 Ou seja, podemos definir `/set/nome/Klayton` e armazenar o par `nome=Klayton`, e utilizar `/get/nome` para buscar o valor associado à chave nome. 
 
-- **Nota**: Nestes exemplos, utilizamos o método HTTP `GET` por ser o mais direto, fácil de testar no navegador e demonstrar um fluxo básico entre cliente, aplicação web e Redis. Em uma API REST real, entretanto, é importante utilizar o método HTTP apropriado conforme o tipo de operação. O uso adequado dos métodos ajuda a manter a semântica RESTful da aplicação, melhora a clareza da API e facilita a integração com outras aplicações ou sistemas front-end.
+- **Nota**: Nestes exemplos, utilizamos o método HTTP `GET` por ser o mais direto, fácil de testar no navegador e demonstrar um fluxo básico entre cliente, aplicação web e Redis. 
 
-### Principais Métodos HTTP
+Em uma API REST real, entretanto, é importante utilizar o método HTTP apropriado conforme o tipo de operação. Os métodos mais comuns incluem:
 
 - **GET**: consulta ou recuperação de recursos  
 - **POST**: criação de novos recursos  
@@ -181,6 +185,8 @@ Ou seja, podemos definir `/set/nome/Klayton` e armazenar o par `nome=Klayton`, e
 - **HEAD**: igual ao GET, mas sem o corpo da resposta — útil para verificação rápida de existência/headers  
 - **OPTIONS**: retorna os métodos permitidos por um recurso (útil para CORS e introspecção)  
 - **TRACE / CONNECT**: raramente usados, voltados a testes e tunelamento HTTP  
+
+O uso adequado desses métodos ajuda a manter a semântica RESTful da aplicação, melhora a clareza da API e facilita a integração com outras aplicações ou sistemas front-end.
 
 ## 4. Aplicação de Cache em Tempo Real com Redis
 
