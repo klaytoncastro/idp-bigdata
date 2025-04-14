@@ -13,8 +13,8 @@ services:
       - dbdata:/data/db
       - ./db-seed:/db-seed
       - ./datasets:/datasets
-        #    networks:
-        #      - mongo-network
+    networks:
+      - mybridge
 
   mongo-express:
     image: mongo-express:latest
@@ -25,17 +25,18 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:mongo@mongo:27017/
     ports:
       - "8081:8081"
-        #    networks:
-        #      - mongo-network
+    networks:
+      - mybridge
     depends_on:
       - mongo
     volumes:
       - ./wait-for-it.sh:/wait-for-it.sh
     command: ["/wait-for-it.sh", "mongo:27017", "--", "npm", "start"]
 
-    #networks:
-    #  mongo-network:
-    #    driver: bridge
+networks:
+  mybridge:
+    driver: bridge
+    external: true
 
 volumes:
   dbdata:

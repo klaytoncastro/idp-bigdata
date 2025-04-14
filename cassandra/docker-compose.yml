@@ -6,7 +6,10 @@ services:
     ports:
       - "9042:9042"
     networks:
-      - cassandra-net
+      - mybridge
+    volumes:
+      - cassandra_data:/var/lib/cassandra
+      - ./datasets:/datasets
 
   cassandra-web:
     image: ipushc/cassandra-web
@@ -26,9 +29,13 @@ services:
     depends_on:
       - cassandra
     networks:
-      - cassandra-net
+      - mybridge
 
 networks:
-  cassandra-net:
+  mybridge:
     driver: bridge
+    external: true
 
+volumes:
+  cassandra_data:
+  datasets:
