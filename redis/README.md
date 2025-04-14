@@ -13,7 +13,11 @@ Redis é um armazenamento de estrutura de dados em memória, usado como banco de
 
 Embora o Redis seja normalmente utilizado via linha de comando ou integrado diretamente em aplicações, é possível utilizar interfaces gráficas para visualizar e manipular os dados armazenados de forma mais intuitiva. Além do Redis rodando na porta `6379`, nosso ambiente conta com o Redis Commander — uma GUI opcional para visualização dos dados, acessível em `http://localhost:8081` — e com uma aplicação Flask (`http://localhost:5000`), que será modificada ao longo da prática de laboratório.
 
-## 3. Utilizando o Redis com o Microframework Python Flask
+## 3. Utilizando o Microframework Python Flask 
+
+Neste ambiente, utilizamos o Flask, um microframework Python leve e poderoso para aplicações web, cuja visão é começar com o essencial e adicionar apenas os componentes necessários, à medida que você realmente precisa, abordagem ideal para projetos modulares como este. 
+
+>Se o Django é um quebra-cabeça grande com todas as peças encaixadas, o Flask é uma caixa de peças soltas: você monta o que quiser, no seu tempo.
 
 A arquitetura abaixo descrita foi projetada para demonstrar um ambiente orquestrado com Docker que inclua tanto o Redis quanto uma Web API integrada, como em muitas aplicações do mundo real. Para isso, o utilizamos o Docker Compose para subir os três serviços:
 
@@ -31,7 +35,7 @@ redis/
 └── static/             # Arquivos estáticos (opcional, se quiser complementar com CSS, JavaScript, imagens)
 ```
 
-Após visitar e entender a configuração proposta em cada um desses arquivos, você poderá iniciar os serviços com o seguinte comando:
+Faça uma leitura cuidadosa de cada um desses arquivos. Após entender a configuração proposta, você poderá iniciar os serviços com o seguinte comando:
 
 ```bash
 docker-compose up -d --build
@@ -85,9 +89,9 @@ O arquivo `app.py` deve conter o código da sua aplicação Flask.
 
 ### Orquestração do Flask e Redis
 
-- web: O serviço para a sua aplicação Flask. Ele constrói a imagem a partir do Dockerfile e mapeia a porta 5000 para a porta 5000 do host.
-- redis: O serviço para o Redis, usando a imagem redis:alpine. Ele mapeia a porta 6379 para a porta 6379 do host.
+Uma vez que os containers estejam no ar, o serviço Flask estará escutando em `http://localhost:5000`, o Redis estará escutando na porta `6379` e o Redis Commander (GUI) estará escutando na porta `8081`. Em nosso projeto, o Flask servirá como ponte entre o usuário e o Redis. Ele define rotas como `/`, `/set/<chave>/<valor>` e `/get/<chave>`, respondendo às requisições HTTP e manipulando os dados diretamente no Redis. Isso simula, de forma prática, como o Redis é usado em um back-end real — para contadores, cache, sessões ou filas — permitindo criar seus endpoints, testar a API, trabalhar com rotas estáticas e dinâmicas, além de depurar erros durante o processo de desenvolvimento.
 
+<!--
 ```yaml
 version: '3'
 services:
@@ -102,11 +106,75 @@ services:
     ports:
       - "6379:6379"
 ```
+-->
 
+### Roteamento e visualizações
 
+Roteamento refere-se ao mapeamento de URLs específicas para funções em um aplicativo web. Em outras palavras, quando você acessa um determinado endereço em um navegador web (ou faz uma chamada via API), o aplicativo precisa saber qual função deve ser executada e o que deve ser retornado para o usuário. No Flask, isso é feito por meio de decoradores como @app.route(), que associam funções Python a URLs específicas. Exemplo:
 
+```python
+@app.route('/inicio')
+def inicio():
+    return "Página Inicial"
+```
 
-## 3. Aplicação de Cache em Tempo Real com Redis
+Dito isso, vamos adicionar mais algumas rotas ao nosso aplicativo. Edite o arquivo `app.py` e acrescente:
+
+```python
+@app.route('/sobre')
+def sobre():
+    return "Sobre o aplicativo..."
+
+@app.route('/contato')
+def contato():
+    return "Página de contato."
+```
+
+Dessa forma, você poderá acessar os endpoints `http://127.0.0.1:8500/sobre` ou `http://127.0.0.1:8500/contato` no navegador e visualizar as respectivas respostas retornadas pelo servidor. Lembre-se de manter o trecho abaixo ao final do arquivo `app.py`. Ele garante que o Flask será executado corretamente ao rodar o script principal da aplicação (no nosso caso, iniciado dentro de um container Docker):
+
+```python
+if __name__ == '__main__':
+    app.run(host='0.0.0.0', port=5000)
+```
+
+### Rotas Dinâmicas
+
+Além de rotas fixas, o Flask também permite definir rotas dinâmicas — aquelas que recebem parâmetros diretamente na URL e os repassam para a função associada. Adicione o seguinte trecho ao seu código:
+
+```python
+@app.route('/usuario/<nome>')
+def saudacao(nome):
+    return f"Olá, {nome}!"
+```
+
+Com isso, ao acessar `http://127.0.0.1:8500/usuario/Jose`, o servidor retornará:
+
+>Olá, Jose!
+
+Esse tipo de rota é fundamental para construir APIs REST, pois permite que os dados façam parte da URL. Nos exemplos do nosso projeto Redis, utilizamos exatamente esse padrão:
+
+```python
+@app.route('/set/<chave>/<valor>')
+def set(chave, valor):
+    db.set(chave, valor)
+    return "OK"
+
+@app.route('/get/<chave>')
+def get(chave):
+    return db.get(chave)
+```
+Ou seja, podemos definir `/set/nome/Klayton` e armazenar o par `nome=Klayton`, e utilizar `/get/nome` para buscar o valor associado à chave nome. 
+
+Essas rotas utilizam o método HTTP GET, que é o mais simples e fácil de testar (inclusive no navegador). Em uma API REST completa, normalmente se utilizam também os métodos:
+
+- **GET**: para consultar ou recuperar dados
+- **POST**: para criar dados
+- **PUT**: para atualizar
+- **DELETE**: para remover
+
+Aqui, usamos apenas `GET` por simplicidade e para facilitar o entendimento do fluxo básico entre cliente, aplicação web e Redis. 
+
+## 4. Aplicação de Cache em Tempo Real com Redis
 
 <!--
 
@@ -156,6 +224,24 @@ import time
 ```
 
 Este exemplo mostra como armazenar e recuperar dados no Redis, com um tempo de expiração definido.
+
+### Testando sua API com curl
+
+Você pode testar sua aplicação usando ferramentas de linha de comando no terminal. Isso ajuda a simular chamadas que seriam feitas por um frontend, outro sistema ou até por ferramentas de integração.
+
+```bash
+# Contador de acessos (rota /)
+curl http://localhost:5000/`
+
+# Armazenar uma chave
+curl http://localhost:5000/set/curso/Redis
+
+# Recuperar a chave armazenada
+curl http://localhost:5000/get/curso
+
+# Interagindo com Rota dinâmica 
+curl http://localhost:5000/usuario/Maria
+```
 
 ## Filas de Mensagens e Processamento de Streams com Redis
 
