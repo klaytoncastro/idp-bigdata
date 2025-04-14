@@ -442,5 +442,5 @@ O Redis **pode acelerar aplicações** ao evitar recomputações, o que é extre
 
 ## Conclusão
 
-Exploramos o Redis como uma solução prática e eficiente para armazenamento em memória, com aplicações diretas em cache, filas de mensagens e integração com APIs em Flask. Ao longo dos exemplos, pudemos observar como o Redis pode acelerar operações repetitivas, simplificar a comunicação entre partes da aplicação e reduzir o tempo de resposta de forma significativa. Também visualizamos a diferença de desempenho entre chamadas com e sem cache, utilizando um exemplo clássico de cálculo recursivo, além do uso do Redis CLI e da implementação de scripts automatizados acionados via HTTP com `curl`. 
+Exploramos o Redis como uma solução para armazenamento em memória, aplicações diretas em cache, filas de mensagens e integração com APIs em Flask. Pudemos observar como o Redis pode acelerar operações repetitivas, simplificar a comunicação entre partes da aplicação e reduzir o tempo de resposta de forma significativa. Também visualizamos a diferença de desempenho entre chamadas com e sem cache, utilizando um exemplo clássico de cálculo recursivo, além do uso do Redis CLI e da implementação de scripts automatizados acionados via HTTP com `curl`. 
 
