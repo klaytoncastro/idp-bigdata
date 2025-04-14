@@ -12,8 +12,17 @@ services:
       - ./data:/home/jovyan/data
       - ./config:/home/jovyan/.jupyter
 
+# Definindo as redes que serão usadas pelos serviços.
+    networks:
+      - mybridge # Nome da rede que será usada.
+
+# Configuração das redes que serão usadas no docker-compose.
+networks:
+  mybridge: # Nome da rede.
+    external: # Indica que a rede é externa e já foi criada anteriormente.
+      name: mybridge # Nome da rede externa que será usada.
+
 volumes:
   notebooks:
   data:
   config:          
-
