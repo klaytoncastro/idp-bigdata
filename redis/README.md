@@ -448,7 +448,7 @@ curl http://localhost:5000/push/minhaLista/valor1
 
 ### Carga de Dados via Loop e Arquivo
 
-Suponha que você tenha um arquivo chamado dados.txt, onde cada linha contém um par chave-valor separado por vírgula. Você pode usar um script para ler este arquivo e enviar cada par chave-valor para o Redis usando `curl`: 
+Se você quiser automatizar a inserção de dados em lote, pode usar o shell script abaixo para ler pares chave-valor de um arquivo .csv e enviar para o Redis via curl. Suponha que você tenha um arquivo chamado `dados.txt`, onde cada linha contém um par chave-valor separado por vírgula. Você pode usar um script para ler este arquivo e enviar cada par chave-valor para o Redis usando `curl`: 
 
 ```csv
 chave1,valor1
