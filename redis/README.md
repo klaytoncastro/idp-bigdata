@@ -17,7 +17,7 @@ Embora o Redis seja normalmente utilizado via linha de comando ou integrado dire
 
 Neste ambiente, utilizamos o Flask, um microframework Python leve e poderoso para aplicações web, cuja visão é começar com o essencial e adicionar apenas os componentes necessários, à medida que você realmente precisa, abordagem ideal para projetos modulares como este. 
 
->Se o Django é um quebra-cabeça grande com todas as peças encaixadas, o Flask é uma caixa de peças soltas: você monta o que quiser, no seu tempo.
+>Se o Django é como um quebra-cabeça pré-montado — com todas as peças prontas, mesmo aquelas que você talvez nem precise — o Flask é uma caixa de peças de Lego: você monta com criatividade, usando só o que for necessário. Em outras palavras, enquanto Django entrega a cozinha inteira (com ingredientes, receitas e louça), Flask te dá uma cozinha vazia e acesso ao mercado: você decide o que vale a pena comprar, montar e manter.
 
 A arquitetura abaixo descrita foi projetada para demonstrar um ambiente orquestrado com Docker que inclua tanto o Redis quanto uma Web API integrada, como em muitas aplicações do mundo real. Para isso, o utilizamos o Docker Compose para subir os três serviços:
 
@@ -41,9 +41,12 @@ Faça uma leitura cuidadosa de cada um desses arquivos. Após entender a configu
 docker-compose up -d --build
 ```
 
-Isso irá construir a imagem para a sua aplicação Flask e iniciar tanto o serviço Flask quanto o Redis. Assegure-se de que o seu código Flask esteja configurado para se conectar ao Redis usando o hostname `redis`, que é o nome do serviço definido no `docker-compose.yml`. Com essa configuração, você estará pronto para implementar os exemplos de cache em tempo real e filas de mensagens usando Redis. 
+Isso irá construir a imagem para a sua aplicação e iniciar os serviços Flask e Redis. Com essa configuração, você estará pronto para implementar os exemplos de cache em tempo real e filas de mensagens usando Redis. 
+
 
 <!--
+
+Assegure-se de que o seu código Flask esteja configurado para se conectar ao Redis usando o hostname `redis`, que é o nome do serviço definido no `docker-compose.yml`.
 
 Integração básica Flask + Redis
 
@@ -201,25 +204,25 @@ docker-compose up -d
 ```
 -->
 
-Verifique o código do nosso serviço Flask (`app.py`) e veja alguns exemplos de utilização do Redis como cache em memória para sua aplicação:
+Verifique o código do serviço Flask (`app.py`) e veja alguns exemplos de utilização do Redis como cache em memória para sua aplicação:
 
 ```python
 import redis
 import time
 
 ### Conexão com o servidor Redis (ajuste o host e a porta conforme necessário)
-`r = redis.Redis(host='localhost', port=6379, db=0)`
+`db = redis.Redis(host='localhost', port=6379, db=0)`
 
 ### Definindo uma chave com um valor e um tempo de expiração (em segundos)
-`r.setex("chave", 30, "valor")`
+`db.setex("chave", 30, "valor")`
 
 ### Recuperando o valor da chave
-`valor = r.get("chave")`
+`valor = db.get("chave")`
 `print("Valor recuperado:", valor)`
 
 ### Simulando um atraso para demonstrar a expiração
 `time.sleep(31)`
-`valor_apos_expiracao = r.get("chave")`
+`valor_apos_expiracao = db.get("chave")`
 `print("Valor após expiração:", valor_apos_expiracao)`
 ```
 
@@ -251,16 +254,16 @@ Para o processamento de filas e streams, você pode usar as listas do Redis para
 import redis
 
 ### Conexão com o Redis
-`r = redis.Redis(host='localhost', port=6379, db=0)`
+`db = redis.Redis(host='localhost', port=6379, db=0)`
 
 ### Enviando mensagens para a fila
-`r.lpush("fila", "mensagem 1")`
-`r.lpush("fila", "mensagem 2")`
+`db.lpush("fila", "mensagem 1")`
+`db.lpush("fila", "mensagem 2")`
 
 ### Processando mensagens da fila
 ```bash
 while True:
-    mensagem = r.brpop("fila", 5)  # Aguarda 5 segundos por uma mensagem
+    mensagem = db.brpop("fila", 5)  # Aguarda 5 segundos por uma mensagem
     if mensagem:
         print("Mensagem recebida:", mensagem[1])
     else:
@@ -311,12 +314,12 @@ from flask import Flask
 import redis
 
 app = Flask(__name__)
-r = redis.Redis(host='redis', port=6379, db=0)
+db = redis.Redis(host='redis', port=6379, db=0)
 
 @app.route('/')
 def hello_world():
-    r.set("alguma_chave", "algum_valor")
-    valor = r.get("alguma_chave")
+    db.set("alguma_chave", "algum_valor")
+    valor = db.get("alguma_chave")
     app.logger.info(f'Valor obtido do Redis: {valor}')
     return 'Olá, mundo!'
 
@@ -360,12 +363,12 @@ r = redis.Redis(host='redis', port=6379, db=0)
 
 @app.route('/set/<chave>/<valor>')
 def set_valor(chave, valor):
-    r.set(chave, valor)
+    db.set(chave, valor)
     return f'Valor {valor} foi armazenado com a chave {chave}'
 
 @app.route('/get/<chave>')
 def get_valor(chave):
-    valor = r.get(chave)
+    valor = db.get(chave)
     if valor:
         return f'Valor recuperado: {valor.decode("utf-8")}'
     else:
@@ -373,12 +376,12 @@ def get_valor(chave):
 
 @app.route('/push/<lista>/<valor>')
 def push_lista(lista, valor):
-    r.lpush(lista, valor)
+    db.lpush(lista, valor)
     return f'Valor {valor} adicionado à lista {lista}'
 
 @app.route('/pop/<lista>')
 def pop_lista(lista):
-    valor = r.lpop(lista)
+    valor = db.lpop(lista)
     if valor:
         return f'Valor retirado da lista {lista}: {valor.decode("utf-8")}'
     else:
@@ -386,7 +389,7 @@ def pop_lista(lista):
 
 @app.route('/listar/<lista>')
 def listar_valores(lista):
-    valores = r.lrange(lista, 0, -1)
+    valores = db.lrange(lista, 0, -1)
     return f'Valores na lista {lista}: {[valor.decode("utf-8") for valor in valores]}'
 
 if __name__ == '__main__':
