@@ -1,4 +1,4 @@
-flask
+Flask
+celery
 redis
-celery[redis]
-flower
+pika

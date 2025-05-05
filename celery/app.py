@@ -1,36 +1,24 @@
-from flask import Flask
-import redis
+from flask import Flask, request, jsonify
+from celery_redis import soma_redis
+from celery_rabbit import soma_rabbit
 
 app = Flask(__name__)
-db = redis.Redis(host='redis', port=6379)
 
-# make redis
-#redis_cache = redis.Redis(host='localhost', port=6379, db=0, password="redis_password")
+@app.route('/soma_redis', methods=['POST'])
+def somar_redis():
+    dados = request.json
+    x = dados.get('x')
+    y = dados.get('y')
+    task = soma_redis.delay(x, y)
+    return jsonify({"task_id": task.id}), 202
 
-@app.route('/')
-def hello():
-    count = db.incr('hits')
-    return 'Hello World! I have been seen {} times.\n'.format(count)
+@app.route('/soma_rabbit', methods=['POST'])
+def somar_rabbit():
+    dados = request.json
+    x = dados.get('x')
+    y = dados.get('y')
+    task = soma_rabbit.delay(x, y)
+    return jsonify({"task_id": task.id}), 202
 
-@app.route('/sem-redis')
-def hellow():
-    #count = db.incr('hits')
-    return 'Hello World! I have been seen times.'
-
-@app.route('/set/<string:key>/<string:value>')
-def set(key, value):
-    if db.exists(key):
-        pass
-    else:
-        db.set(key, value)
-    return "OK"
-
-@app.route('/get/<string:key>')
-def get(key):
-    if db.exists(key):
-        return db.get(key)
-    else:
-        return f"{key} is not exists"
-
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', debug=True)
+if __name__ == "__main__":
+    app.run(host="0.0.0.0", port=5000)
