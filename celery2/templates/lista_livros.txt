@@ -1,0 +1,13 @@
+<!-- templates/lista_livros.html -->
+
+<h1>Livros</h1>
+
+{% if livros %}
+<ul>
+    {% for livro in livros %}
+    <li>{{ livro.titulo }} por {{ livro.autor }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Nenhum livro registrado.</p>
+{% endif %}

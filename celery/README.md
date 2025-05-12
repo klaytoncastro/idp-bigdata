@@ -7,7 +7,7 @@ Neste laboratório, você irá explorar diferentes formas de realizar comunicaç
 * Redis como **broker simples** de mensagens e pub/sub
 * RabbitMQ como **broker robusto**, com fila persistente
 * Celery como **orquestrador de tarefas assíncronas**, com suporte a Redis e RabbitMQ
-* Biblioteca Pika como **cliente nativo do protocolo AMQP** para RabbitMQ
+* Python, com a biblioteca Pika como **cliente nativo do protocolo AMQP** para RabbitMQ
 
 ## 2. Objetivo
 
@@ -42,21 +42,7 @@ docker compose up -d --build
 * RabbitMQ UI: [http://localhost:15672](http://localhost:15672) (guest/guest)
 * Redis: porta 6379 (sem GUI)
 
-## 5. Testes iniciais com Celery
-
-```bash
-curl -X POST http://localhost:5000/soma_redis -H "Content-Type: application/json" -d '{"x": 2, "y": 3}'
-curl -X POST http://localhost:5000/soma_rabbit -H "Content-Type: application/json" -d '{"x": 5, "y": 7}'
-```
-
-Verifique os logs dos workers:
-
-```bash
-docker logs -f celery-worker-redis
-docker logs -f celery-worker-rabbit
-```
-
-## 6. Pub/Sub com Redis puro (sem Celery)
+## 5. Pub/Sub com Redis puro (sem Celery)
 
 ```bash
 # Terminal 1
@@ -68,7 +54,7 @@ redis-cli
 > PUBLISH canal "mensagem teste"
 ```
 
-## 7. RabbitMQ com a biblioteca Python
+## 6. RabbitMQ com a biblioteca Python
 
 ### Produtor
 
@@ -78,7 +64,7 @@ import pika
 conn = pika.BlockingConnection(pika.ConnectionParameters('rabbitmq'))
 ch = conn.channel()
 ch.queue_declare(queue='fila_demo')
-ch.basic_publish(exchange='', routing_key='fila_demo', body='mensagem pika')
+ch.basic_publish(exchange='', routing_key='fila_demo', body='mensagem via lib pika')
 conn.close()
 ```
 
@@ -102,6 +88,20 @@ Execute:
 ```bash
 python pika/consumer.py
 python pika/producer.py
+```
+
+## 7. Testes iniciais com Celery
+
+```bash
+curl -X POST http://localhost:5000/soma_redis -H "Content-Type: application/json" -d '{"x": 2, "y": 3}'
+curl -X POST http://localhost:5000/soma_rabbit -H "Content-Type: application/json" -d '{"x": 5, "y": 7}'
+```
+
+Verifique os logs dos workers:
+
+```bash
+docker logs -f celery-worker-redis
+docker logs -f celery-worker-rabbit
 ```
 
 ## 8. Encadeamento de Tarefas com Celery
@@ -135,11 +135,6 @@ Teste:
 curl -X POST http://localhost:5000/encadeado -H "Content-Type: application/json" -d '{"x": 5}'
 ```
 
-
 ## Conclusão
 
-Este laboratório apresentou diferentes abordagens para a execução de tarefas assíncronas, fundamentais em aplicações web modernas e pipelines de Big Data. Ferramentas como Redis puro ou RabbitMQ com Pika são amplamente utilizadas no mercado por sua leveza, simplicidade e eficiência em cenários específicos.
-
-No entanto, o uso do Celery — embora não seja obrigatório — agrega uma camada poderosa de orquestração, monitoramento e escalabilidade, permitindo o encadeamento de tarefas, gestão de filas, retries automáticos, e futura integração com ferramentas como o Flower, que viabiliza a visualização e controle em tempo real dos workers e tarefas.
-
-
+Este laboratório apresentou diferentes abordagens para a execução de tarefas assíncronas, fundamentais em aplicações web modernas e pipelines de Big Data. Ferramentas como Redis e RabbitMQ são amplamente utilizadas no mercado por sua leveza, simplicidade e eficiência em cenários específicos. O uso do Celery — embora não seja obrigatório — agrega uma camada poderosa de orquestração, monitoramento e escalabilidade, permitindo o encadeamento de tarefas, gestão de filas, retries automáticos, e a possibilidade de integração com ferramentas como o Flower, que permite a visualização e controle em tempo real dos workers e tarefas. 

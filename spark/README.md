@@ -6,6 +6,12 @@ https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud
 
 https://www.kaggle.com/datasets/mlg-ulb/creditcardfraud/download?datasetVersionNumber=3
 
+https://learn.microsoft.com/pt-br/azure/cosmos-db/cassandra/connect-spark-configuration
+
+https://jentekllc8888.medium.com/tutorial-integrate-spark-sql-and-cassandra-complete-with-scala-and-python-example-codes-8307fe9c2901
+
+https://jentekllc8888.medium.com/page-rank-with-apache-spark-graphx-a51964467c56
+
 -->
 
 ## Introdução

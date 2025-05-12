@@ -1,0 +1,21 @@
+# Códigos de Status HTTP
+
+Os códigos de status HTTP "vivem" nos cabeçalhos de resposta de cada solicitação HTTP feita entre um cliente (navegador, aplicativo móvel) e um servidor.
+
+Uma compreensão completa desses códigos é essencial para experiências online eficazes e o fluxo tranquilo de dados no cenário digital: no mundo da comunicação web, os códigos de status HTTP orquestram silenciosamente a troca contínua de informações, garantindo interações bem-sucedidas entre servidores web e clientes.
+
+Dessa forma, nos bastidores de cada interação com um site e API, um sistema de códigos de status HTTP funciona silenciosamente para comunicar o resultado da solicitação, seja ela bem-sucedida, resultando em um erro ou necessitando de um redirecionamento para um local diferente.
+
+<!--
+
+✅ 1xx - Informativo: "Aguarde, estamos processando sua solicitação!"
+
+🔄 2xx - Sucesso: “Tudo certo! Sua solicitação foi bem-sucedida!” (ex.: 200 OK, 201 Criado)
+
+🔁 3xx - Redirecionamento: “Vamos te levar para outro lugar!” (ex.: 301 Movido Permanentemente, 302 Encontrado)
+
+⚠️ 4xx - Erros do Cliente: “Ops! Há algo errado do seu lado!” (ex.: 400 Solicitação Inválida, 401 Não Autorizado, 404 Não Encontrado)
+
+🔥 5xx - Erros do Servidor: “Opa! Algo está quebrado do nosso lado!” (ex.: 500 Erro Interno do Servidor, 503 Serviço Indisponível)
+
+-->

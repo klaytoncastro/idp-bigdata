@@ -5,10 +5,12 @@
 <!--https://flask-caching.readthedocs.io/en/latest/
 https://medium.com/@fahadnujaimalsaedi/using-flask-and-redis-to-optimize-web-application-performance-34a8ae750097
 https://flask.palletsprojects.com/en/stable/patterns/celery/
+https://pandeyshikha075.medium.com/flask-api-and-redis-caching-improving-speed-and-scalability-with-docker-c43629144279
 https://redis.io/docs/latest/commands/
+https://www.fullstackpython.com/flask.html
 -->
 
-Redis é um armazenamento de estrutura de dados em memória, usado como banco de dados, cache e servidor de mensagens. É conhecido por sua rapidez e eficiência.
+Redis é um armazenamento de estrutura de dados em memória, usado como banco de dados, cache e servidor de mensagens. É conhecido por sua rapidez e eficiência. 
 
 ## 2. Características
 

@@ -13,6 +13,11 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                     | 12/03/2025 |
 | 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo IES                              | 19/03/2025 |
 | 05 | [Cassandra](./cassandra/)                                                            | Prática com Cassandra                                      | 26/03/2025 |
+| 06 | [Redis](./redis/)                                                                    | Prática com Redis                                          | 02/04/2025 |
+| 07 | [RabbitMQ](./rabbitmq/)                                                              | Prática com RabbitMQ                                       | 09/04/2025 |
+| 08 | [Celery](./celery/)                                                                  | Prática com Message Brokers                                | 23/04/2025 |
+| 09 | [Kafka](./kafka/)                                                                    | Prática com Kafka                                          | 30/04/2025 |
+| 10 | [Minio](.minio/)                                                                     | Prática com Armazenamento de Objetos                       | 07/05/2025 |
 
 <!--
 | 06 | [Benchmarking NoSQL: Experimentação com MongoDB e Cassandra](./performance/)         | Modelagem de Experimentos para Análise de Desempenho       | 02/04/2025 |

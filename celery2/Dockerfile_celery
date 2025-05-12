@@ -1,0 +1,30 @@
+# Use an official Python runtime as a parent image
+FROM python:3.8-slim-buster
+
+# Set the working directory in the container to /app
+WORKDIR /app
+
+# Install system dependencies required
+RUN apt-get update && apt-get install -y \
+    gcc \
+    python3-dev \
+    netcat \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Add the current directory contents into the container at /app
+COPY . /app
+
+# Copy wait-for-it script and make it executable
+COPY wait-for-it.sh /app/wait-for-it.sh
+RUN chmod +x /app/wait-for-it.sh
+
+# Install any needed packages specified in requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Make port 5554 and 5555 available to the world outside this container
+EXPOSE 5554
+EXPOSE 5555
+
+# Run the Celery worker when the container launches
+CMD ["celery", "-A", "app.celery", "worker", "--loglevel=info", "--broker=redis://redis:6379/0"]
