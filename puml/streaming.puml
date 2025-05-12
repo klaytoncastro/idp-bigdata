@@ -1,0 +1,23 @@
+@startuml
+actor Producer
+actor User
+
+component Kafka as K
+component Redis as R
+component RabbitMQ as Q
+component Celery as C
+component MinIO as M
+component Streamlit as S
+
+Producer -> K : Envia dados (sensor_raw)
+K -> C : Envia dados (sensor_raw)
+C -> R : Armazena em cache
+C -> Q : Envia alerta crítico
+C -> M : Armazena dados brutos e processados
+
+S -> R : Lê dados de cache
+S -> Q : Lê alertas críticos
+S -> M : Lê dados históricos
+
+User -> S : Visualiza dados em tempo real
+@enduml
