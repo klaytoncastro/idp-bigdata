@@ -1,8 +1,8 @@
-# Simulação de Pipeline: Ingestão e Processamento de Dados em Tempo Real 
+# Simulação de Pipeline: Ingestão e Processamento de Dados
 
 ## 1. Visão Geral 
 
-Nesta atividade, você deve implementar um pipeline completo de ingestão, processamento, armazenamento e visualização de dados em tempo real. O dataset utilizado será o Air Quality, e o fluxo de dados segue o padrão definido abaixo:
+Nesta atividade, você deve implementar um pipeline completo de ingestão, processamento, armazenamento e visualização de dados. O dataset utilizado será o Air Quality, e o fluxo de dados segue o padrão definido abaixo:
 
 1. O Producer Kafka lê o dataset Air Quality e envia os dados para o tópico `sensor_raw`.
 2. O Consumer Celery processa os dados recebidos:

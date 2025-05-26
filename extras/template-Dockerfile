@@ -1,0 +1,19 @@
+# Este template obtém o certificado digital utilizado na execução de SSL-Inspection
+# a partir de redes tipicamente corporativas. Pode ser útil para viabilizar o acesso
+# à Internet para contêineres hospedados em VMs utilizando modo Bridge, caso deseje 
+# implementar o ambiente de laboratório com este modo de configuração. 
+
+# Sua base image, exemplo:
+FROM ubuntu:20.04
+# FROM debian:buster
+
+# Instalar openssl (necessário para baixar o certificado)
+RUN apt-get update && apt-get install -y openssl
+
+# Nome do certificado
+ENV CERT_NAME firewall_certificate.crt
+
+# Baixar o certificado e adicionar aos certificados confiáveis
+RUN echo -n | openssl s_client -connect www.globo.com:443 | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > $CERT_NAME && \
+    mv $CERT_NAME /usr/local/share/ca-certificates/ && \
+    update-ca-certificates
