@@ -8,19 +8,29 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 
 | #  | Atividade                                                                            | Desafio                                                    | Prazo      |
 |----|--------------------------------------------------------------------------------------|------------------------------------------------------------|------------|
-| 01 | [MongoDB](./mongodb/)                                                                | Fundamentos do MongoDB e Administração de Dados            | 26/02/2025 |
+| 01 | [MongoDB](./mongodb/)                                                                | Prática com Banco de Dados de Documentos                   | 26/02/2025 |
 | 02 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB | 05/03/2025 |
 | 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                     | 12/03/2025 |
 | 04 | [Censo IES 2022 e 2023](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais) | Análise de Dados do Censo IES                              | 19/03/2025 |
-| 05 | [Cassandra](./cassandra/)                                                            | Prática com Cassandra                                      | 26/03/2025 |
-| 06 | [Redis](./redis/)                                                                    | Prática com Redis                                          | 02/04/2025 |
-| 07 | [RabbitMQ](./rabbitmq/)                                                              | Prática com RabbitMQ                                       | 09/04/2025 |
-| 08 | [Celery](./celery/)                                                                  | Prática com Message Brokers                                | 23/04/2025 |
-| 09 | [Kafka](./kafka/)                                                                    | Prática com Kafka                                          | 30/04/2025 |
-| 10 | [Minio](.minio/)                                                                     | Prática com Armazenamento de Objetos                       | 07/05/2025 |
+| 05 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar                         | 26/03/2025 |
+| 06 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 02/04/2025 |
+| 07 | [RabbitMQ](./rabbitmq/)                                                              | Prática com Message Broker                                 | 09/04/2025 |
+| 08 | [Celery](./celery/)                                                                  | Prática com Serviços de Mensageria                         | 23/04/2025 |
+| 09 | [Kafka](./kafka/)                                                                    | Prática com Event Broker                                   | 30/04/2025 |
+| 10 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                       | 07/05/2025 |
+| 11 | [Streamlit](./streamlit/)                                                            | Dashboards Interativos e Visualização de Dados             | 14/05/2025 |
+| 12 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines         | 21/05/2025 |
+| 13 | [Pipeline](./pipeline/)                                                              | Desenvolvimento de Pipeline com Múltiplas Ferramentas      | 28/05/2025 |
+
 
 <!--
+| 14 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                        | 04/06/2025 |
+| 15 | [Hadoop](./hadoop/)                                                                  | Fundamentos de Processamento Distribuído                   | 11/06/2025 |
+| 16 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 18/06/2025 |
+| 17 | [Grafana](./grafana/)                                                                | Prática com Monitoramento, Métricas e Observabilidade      | 25/06/2025 |
+| 18 | [Projeto Final](./spark/)                                                            | Prática com Armazenamento de Objetos                       | 07/05/2025 |
 | 06 | [Benchmarking NoSQL: Experimentação com MongoDB e Cassandra](./performance/)         | Modelagem de Experimentos para Análise de Desempenho       | 02/04/2025 |
+
 -->
 
 ## 2. Infraestrutura dos Laboratórios
