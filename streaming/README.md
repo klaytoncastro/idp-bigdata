@@ -130,11 +130,7 @@ Importante destacar que a utilização do Airflow não invalida nem substitui a 
 
 Essa integração reforça uma arquitetura flexível e robusta, onde o Airflow cuida da orquestração e controle operacional dos pipelines, enquanto a API Flask fornece uma camada de abstração, acesso e integração externa, tanto para consumo humano (dashboards, aplicações) quanto para consumo máquina (outros serviços, automações ou scripts):
 
-<!--
-
-IMAGEM
-
--->
+<img src="/img/sim_streaming.png" alt="Estrutura do Pipeline">
 
 Para garantir uma melhor assimilação dos conceitos, organização do raciocínio e avanço progressivo no desenvolvimento do pipeline, o desafio deve ser estruturado em etapas graduais, onde cada fase representa um componente funcional da arquitetura. 
 
