@@ -69,7 +69,6 @@ volumes:
   historyserver:
 ```
 
-<!--
 ```mermaid
 graph LR
     A[User Program] -->|fork| B[Master];
@@ -99,4 +98,3 @@ graph LR
     style I1 fill:#f9f,stroke:#333,stroke-width:2px
     style I2 fill:#f9f,stroke:#333,stroke-width:2px
 ```
-  -->
