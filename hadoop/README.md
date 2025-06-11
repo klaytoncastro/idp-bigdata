@@ -72,22 +72,31 @@ volumes:
 <!--
 ```mermaid
 graph LR
-    A[User Program] --> B(fork);
-    B --> C[Master];
-    C --> D{Assign map};
-    D --> E[Worker];
-    E --> F[Input Files<br/>(split 0 - 4)]; %% Corrigido aqui
-    F --> G{read};
-    G --> H[Map Function];
-    H --> I[Intermediate Files<br/>(on local disks)]; %% Corrigido aqui
-    C --> J{Assign reduce};
-    J --> K[Worker];
-    K --> L{remote read};
-    L --> I;
-    I --> M[Reduce Function];
-    M --> N[Output Files<br/>(output file 0, 1, ...)]; %% Corrigido aqui
+    A[User Program] -->|fork| B[Master];
+    
+    %% Map Phase
+    B --> C1[Map Worker 1];
+    B --> C2[Map Worker 2];
+    C1 --> D1[Input Split 1];
+    C2 --> D2[Input Split 2];
+    D1 -->|read| E1[Map Function 1];
+    D2 -->|read| E2[Map Function 2];
+    E1 --> F1[Intermediate Local Files 1];
+    E2 --> F2[Intermediate Local Files 2];
 
+    %% Reduce Phase
+    B --> G1[Reduce Worker 1];
+    B --> G2[Reduce Worker 2];
+    G1 -->|remote read| F1;
+    G2 -->|remote read| F2;
+    F1 --> H1[Reduce Function 1];
+    F2 --> H2[Reduce Function 2];
+    H1 --> I1[Output File 1];
+    H2 --> I2[Output File 2];
+
+    %% Destaques visuais (opcional)
     style A fill:#f9f,stroke:#333,stroke-width:2px
-    style N fill:#f9f,stroke:#333,stroke-width:2px
+    style I1 fill:#f9f,stroke:#333,stroke-width:2px
+    style I2 fill:#f9f,stroke:#333,stroke-width:2px
 ```
   -->
