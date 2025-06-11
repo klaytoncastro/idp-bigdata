@@ -69,3 +69,23 @@ volumes:
   historyserver:
 ```
 
+```mermaid
+graph LR
+    A[User Program] --> B(fork);
+    B --> C[Master];
+    C --> D{Assign map};
+    D --> E[Worker];
+    E --> F[Input Files\n(split 0 - 4)];
+    F --> G{read};
+    G --> H[Map Function];
+    H --> I[Intermediate Files\n(on local disks)];
+    C --> J{Assign reduce};
+    J --> K[Worker];
+    K --> L{remote read};
+    L --> I;
+    I --> M[Reduce Function];
+    M --> N[Output Files\n(output file 0, 1, ...)];
+
+    style A fill:#f9f,stroke:#333,stroke-width:2px
+    style N fill:#f9f,stroke:#333,stroke-width:2px
+  ```
