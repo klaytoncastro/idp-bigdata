@@ -93,8 +93,9 @@ graph LR
     H1 --> I1[Output File 1];
     H2 --> I2[Output File 2];
 
-    %% Destaques visuais (cores compatíveis com dark/light GitHub)
-    style A fill:#6FA8DC,stroke:#333,stroke-width:2px
-    style I1 fill:#93C47D,stroke:#333,stroke-width:2px
-    style I2 fill:#93C47D,stroke:#333,stroke-width:2px
+%% Estilos globais para o tema escuro e claro
+    classDef user fill:#6FA8DC,stroke:#333,stroke-width:2px;
+    classDef output fill:#38761D,stroke:#333,stroke-width:2px;
+    class A user;
+    class I1,I2 output;
 ```
