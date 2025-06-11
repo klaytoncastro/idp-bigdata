@@ -94,7 +94,7 @@ graph LR
     H2 --> I2[Output File 2];
 
 %% Estilos globais para o tema escuro e claro
-    classDef user fill:#6FA8DC,stroke:#333,stroke-width:2px;
+    classDef user fill:#3C78D8,stroke:#333,stroke-width:2px;
     classDef output fill:#38761D,stroke:#333,stroke-width:2px;
     class A user;
     class I1,I2 output;
