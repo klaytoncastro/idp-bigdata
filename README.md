@@ -197,7 +197,7 @@ No cenário atual de Big Data, é evidente a necessidade de plataformas integrad
 
 Diante da quantidade de informações e ferramentas envolvidas, é natural temer essa certa complexidade inicial. No entanto, o objetivo não é dominar de imediato todas as técnicas e tecnologias envolvidas, mas proporcionar uma clara compreensão dos conceitos fundamentais e apresentar ferramentas fundamentais no panorama atual da indústria em se tratando de engenharia e ciência de dados. Não se preocupe, cada tópico será abordado de forma gradual, garantindo o suporte necessário e o esclarecimento de dúvidas ao longo do processo de aprendizagem. Com dedicação e tempo, essa complexidade inicial dará lugar a uma compreensão cada vez mais profunda e intuitiva. A seguir, apresentamos um diagrama que representa a arquitetura de referência da plataforma que estamos construindo: 
 
-![Arquitetura Básica do Data Lake](puml/arch-bigdata-nosql.svg)
+![Arquitetura Básica do Data Lake](diagrams/arch-bigdata-nosql.svg)
 
 Dentro deste projeto, temos diversos diretórios, cada um representando um ambiente específico:
 
