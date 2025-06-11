@@ -94,7 +94,7 @@ graph LR
     H2 --> I2[Output File 2];
 
     %% Destaques visuais (opcional)
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style I1 fill:#f9f,stroke:#333,stroke-width:2px
-    style I2 fill:#f9f,stroke:#333,stroke-width:2px
+    style A fill:#f9f,stroke:#333,stroke-width:3px,color:#000000
+    style I1 fill:#f9f,stroke:#333,stroke-width:3px,color:#000000
+    style I2 fill:#f9f,stroke:#333,stroke-width:3px,color:#000000
 ```
