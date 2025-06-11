@@ -75,16 +75,16 @@ graph LR
     B --> C[Master];
     C --> D{Assign map};
     D --> E[Worker];
-    E --> F[Input Files\n(split 0 - 4)];
+    E --> F[Input Files<br/>(split 0 - 4)]; %% Corrigido aqui
     F --> G{read};
     G --> H[Map Function];
-    H --> I[Intermediate Files\n(on local disks)];
+    H --> I[Intermediate Files<br/>(on local disks)]; %% Corrigido aqui
     C --> J{Assign reduce};
     J --> K[Worker];
     K --> L{remote read};
     L --> I;
     I --> M[Reduce Function];
-    M --> N[Output Files\n(output file 0, 1, ...)];
+    M --> N[Output Files<br/>(output file 0, 1, ...)]; %% Corrigido aqui
 
     style A fill:#f9f,stroke:#333,stroke-width:2px
     style N fill:#f9f,stroke:#333,stroke-width:2px
