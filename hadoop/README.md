@@ -9,7 +9,7 @@ Apache Hadoop é um framework para processamento distribuído e armazenamento de
 - **Modelo de Programação MapReduce**: O modelo de programação MapReduce permite o processamento paralelo de dados.
 - **Ecossistema**: Hadoop possui um ecossistema bastante rico, incluindo ferramentas como Apache Hive, Apache HBase, Apache Pig, e outros.
 
-![Arquitetura Básica do Data Lake](img/evobigdata.png)
+![Arquitetura Básica do Data Lake](/img/evobigdata.png)
 
 
 ## Instalação via Docker Compose
