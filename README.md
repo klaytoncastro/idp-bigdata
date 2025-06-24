@@ -21,14 +21,15 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 11 | [Streamlit](./streamlit/)                                                            | Dashboards Interativos e Visualização de Dados             | 14/05/2025 |
 | 12 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines         | 21/05/2025 |
 | 13 | [Pipeline](./pipeline/)                                                              | Desenvolvimento de Pipeline com Múltiplas Ferramentas      | 28/05/2025 |
+| 14 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                        | 04/06/2025 |
+| 15 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 18/06/2025 |
+| 16 | [Projeto Final](https://ambientevirtual.idp.edu.br/courses/6031/files/848966)        | Projeto Capstone da Disciplina                             | 25/06/2025 |
 
 
 <!--
-| 14 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                        | 04/06/2025 |
+
 | 15 | [Hadoop](./hadoop/)                                                                  | Fundamentos de Processamento Distribuído                   | 11/06/2025 |
-| 16 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 18/06/2025 |
 | 17 | [Grafana](./grafana/)                                                                | Prática com Monitoramento, Métricas e Observabilidade      | 25/06/2025 |
-| 18 | [Projeto Final](./spark/)                                                            | Prática com Armazenamento de Objetos                       | 07/05/2025 |
 | 06 | [Benchmarking NoSQL: Experimentação com MongoDB e Cassandra](./performance/)         | Modelagem de Experimentos para Análise de Desempenho       | 02/04/2025 |
 
 -->
