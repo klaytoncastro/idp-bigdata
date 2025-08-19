@@ -109,31 +109,63 @@ wsl --setdefault Ubuntu-24.04
 
 | Comando | Descrição                                              | Exemplo                                |
 |---------|--------------------------------------------------------|----------------------------------------|
-| `whoami`| Exibe o nome do usuário atual                           | `whoami`                               |
-| `pwd`   | Mostra o diretório atual                                | `pwd`                                  |
-| `history`| Exibe o histórico de comandos                          | `history`                              |
-| `cd`    | Navega entre diretórios                                 | `cd /home`                             |
-| `ls`    | Lista arquivos e diretórios                             | `ls -la`                               |
-| `mkdir` | Cria um novo diretório                                  | `mkdir nova_pasta`                     |
-| `cp`    | Copia arquivos ou diretórios                            | `cp arquivo.txt /caminho/destino/`     |
-| `mv`    | Move ou renomeia arquivos e diretórios                  | `mv arquivo.txt /caminho/destino/`     |
-| `rm`    | Remove arquivos ou diretórios                           | `rm arquivo.txt`                       |
-| `cat`   | Exibe o conteúdo de um arquivo                          | `cat arquivo.txt`                      |
-| `grep`  | Pesquisa por padrões em arquivos                        | `grep "termo" arquivo.txt`             |
-| `vim`   | Editor de texto no terminal                             | `vim arquivo.txt`                      |
-| `chmod` | Altera permissões de arquivos                           | `chmod 755 arquivo.txt`                |
-| `chown` | Modifica o proprietário de um arquivo ou diretório      | `chown usuario:grupo arquivo.txt`      |
-| `ps`    | Lista processos em execução                             | `ps aux`                               |
-| `ping`  | Testa a conectividade com um host                       | `ping google.com`                      |
-| `wget`  | Baixa conteúdo da web                                   | `wget http://exemplo.com/arquivo.zip`  |
+| `whoami`| Exibe o nome do usuário atual                           | `whoami`                              |
+| `pwd`   | Mostra o diretório atual                                | `pwd`                                 |
+| `history`| Exibe o histórico de comandos                          | `history`                             |
+| `cd`    | Navega entre diretórios                                 | `cd /home`                            |
+| `ls`    | Lista arquivos e diretórios                             | `ls -la`                              |
+| `mkdir` | Cria um novo diretório                                  | `mkdir nova_pasta`                    |
+| `cp`    | Copia arquivos ou diretórios                            | `cp arquivo.txt /caminho/destino/`    |
+| `mv`    | Move ou renomeia arquivos e diretórios                  | `mv arquivo.txt /caminho/destino/`    |
+| `rm`    | Remove arquivos ou diretórios                           | `rm arquivo.txt`                      |
+| `cat`   | Exibe o conteúdo de um arquivo                          | `cat arquivo.txt`                     |
+| `grep`  | Pesquisa por padrões em arquivos                        | `grep "termo" arquivo.txt`            |
+| `vim`   | Editor de texto no terminal                             | `vim arquivo.txt`                     |
+| `chmod` | Altera permissões de arquivos                           | `chmod 755 arquivo.txt`               |
+| `chown` | Modifica o proprietário de um arquivo ou diretório      | `chown usuario:grupo arquivo.txt`     |
+| `ps`    | Lista processos em execução                             | `ps aux`                              |
+| `ping`  | Testa a conectividade com um host                       | `ping google.com`                     |
+| `wget`  | Baixa conteúdo da web                                   | `wget http://exemplo.com/arquivo.zip` |
+| `sudo`  | Executa comandos temporariamente como administrador     | `sudo su -`                           |
+| `touch` | Criar um arquivo                                        | `touch nome_do_arquivo.txt`           |
+| `clear` | Limpar a tela do terminal                               | `clear`                               |
+| `exit`  | Encerrar o terminal                                     | `exit`                                |
+
+### Estrutura de Diretórios
+
+O Linux inicia com o diretório raiz (`/`). Abaixo dele, há pastas com propósitos específicos:  
+
+| Diretório | Objetivo                                                                                   |
+|-----------|--------------------------------------------------------------------------------------------|
+| `/`       | Raiz do sistema de arquivos                                                                |
+| `/home`   | Pastas dos usuários (equivalente ao `C:\Usuários` no Windows)                              |
+| `/bin`    | Binários de comandos essenciais (como `ls`, `cp`, `mv`)                                    |
+| `/etc`    | Arquivos de configuração do sistema                                                        |
+| `/var`    | Arquivos variáveis (como logs)                                                             |
+| `/tmp`    | Arquivos temporários                                                                       |
+| `/usr`    | Programas e bibliotecas do usuário                                                         |
+| `/root`   | Diretório inicial do usuário raiz (administrador)                                          |
+| `/dev`    | Arquivos que representam os  dispositivos de hardware (discos, periféricos, etc.)          |
+| `/proc`   | Pasta dinâmica criada virtualmente pelo kernel (não está fisicamente em disco).            |
+
+**Nota:** O diretório `/proc` é um virtual, ele não ocupa espaço em disco. É criado pelo kernel em tempo de execução e contém arquivos
+que representam informações do sistema e dos processos ativos. Cada processo em execução aparece como uma subpasta numerada (`/proc/1234`), onde `1234` é o número o identificador do proceso (PID). 
 
 
-### Conclusão
+### Usuários, Permissões e Processos
+
+- **Linux é multiusuário**: cada arquivo tem um dono (Owner), um grupo (Group) e permissões para outros (Others).  
+- **Permissões**: `r` (ler), `w` (escrever), `x` (executar).  
+  - **Exemplo**: **`-rwxr-xr--`**
+  - `rwx` (owner): leitura, escrita e execução  
+  - `r-x` (group): leitura e execução  
+  - `r--` (others): apenas leitura  
+
+### Considerações Finais
 
 Pronto! Agora seu ambiente está preparado para nossos laboratórios. A partir daqui, você poderá seguir as instruções do professor para completar os exercícios práticos. Se surgir qualquer dúvida, consulte os materiais de apoio indicados no Moodle e neste repositório. 
 
 ## 3. Configuração Alternativa de Infraestrutura
-
 
 No caso dos usuários de Windows, que preferem evitar VMs devido a limitações de recursos, especialmente quando o dispositivo possui menos de 6GB de RAM, a infraestrutura depende Windows Subsystem for Linux (WSL) que apresentamos cima, e acaba sendo a alternativa mais interessante. No entanto, é importante lembrar que o WSL, embora eficiente, não oferece todas as vantagens de um sistema Linux completo e apresenta algumas nuances entre suas versões (WSL e WSL 2). Se você quiser se especializar no desenvolvimento de aplicações e infraestrutura pronta para execução em datacenters, também pode optar por instalar um sistema baseado em Linux em seu equipamento. No entanto, visando uma experiência mais uniforme, disponibilizamos como alternativa, uma máquina virtual (VM) pré-configurada. Embora o Docker possa ser executado diretamente em diversos sistemas operacionais, essa padronização por vezes é necessária para viabilizar o processo de suporte, visando oferecer soluções mais ágeis e consistentes diante de eventuais desafios técnicos.  
 
@@ -300,7 +332,7 @@ Já no VirtualBox (ambiente servidor), é praticamente mandatório o uso de cone
    git clone https://github.com/klaytoncastro/idp-bigdata
 ```
 
-2. Entre na subpasta de cada ambiente, construa e inicie os serviços usando o Docker Compose. Por exemplo, para o Jupyter/Spark:
+2. Cada ambiente deve ser montado conforme necessidade de uso e indicação do Professor. Ao entrar na subpasta correspondente a cada ambiente, basta construir e iniciar os serviços usando o Docker Compose. Por exemplo, para o Jupyter/Spark:
 
 ```bash
    cd /opt/idp-bigdata/jupyter-spark
@@ -449,20 +481,18 @@ cd caminho/para/pasta/docker
 ```bash
 chmod +x docker-cleanup.sh
 ```
-
 3. Execute o script:
 
 ```bash
 ./docker-cleanup.sh
 ```
 
-- **Nota**: Este script remove recursos não utilizados e imagens antigas para recuperar espaço. Para evitar a remoção inadvertida de recursos importantes, certifique-se de entender o que ele faz antes de executá-lo. Lembre-se que, ao executá-lo, apenas os contêineres em execução serão mantidos no armazenamento da VM. 
+- **Nota**: Este script remove recursos não utilizados e imagens antigas para recuperar espaço. Para evitar a remoção inadvertida de recursos importantes, certifique-se de entender o que ele faz antes de executá-lo. Lembre-se que, ao executá-lo, apenas os contêineres em execução serão mantidos no armazenamento da instância WSL/VM.
 
-### Desligamento Seguro do Ambiente 
+### Desligamento Seguro do Ambiente
 
 Nas VMs (configuração alternativa), precisamos evitar desligamentos abruptos, seja por interrupções forçadas ou por encerramento inadequado do VirtualBox, podem afetar a consistência dos discos virtuais, levando à perda ou corrupção de dados e desestabilizando o ambiente. Por isso, ao concluir suas atividades, é fundamental executar o comando `shutdown -h now` a partir do terminal. Esse passo garante um desligamento apropriado e a integridade do sistema operacional da VM, incluindo os contêineres Docker. Assim, todas as alterações serão preservadas, assegurando que, ao reiniciar, o sistema retorne exatamente ao estado anterior, sem a necessidade de ajustes adicionais.
 
-### Pronto! 
+### Conclusão
 
-Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br). 
-
+Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br).
