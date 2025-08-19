@@ -6,6 +6,8 @@ Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e No
 
 Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big Data e NoSQL por meio de desafios práticos. Cada desafio proporcionará uma experiência aplicada, permitindo que você consolide os conhecimentos adquiridos e aprofunde seu aprendizado de maneira progressiva. Durante essa jornada, você terá contato com ferramentas amplamente utilizadas no mercado e empregará técnicas para resolver problemas reais.
 
+<!--
+
 | #  | Atividade                                                                            | Desafio                                                    | Prazo      |
 |----|--------------------------------------------------------------------------------------|------------------------------------------------------------|------------|
 | 01 | [MongoDB](./mongodb/)                                                                | Prática com Banco de Dados de Documentos                   | 26/02/2025 |
@@ -25,6 +27,7 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 15 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 18/06/2025 |
 | 16 | [Projeto Final](https://ambientevirtual.idp.edu.br/courses/6031/files/848966)        | Projeto Capstone da Disciplina                             | 25/06/2025 |
 
+-->
 
 <!--
 
@@ -32,7 +35,7 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 17 | [Grafana](./grafana/)                                                                | Prática com Monitoramento, Métricas e Observabilidade      | 25/06/2025 |
 | 06 | [Benchmarking NoSQL: Experimentação com MongoDB e Cassandra](./performance/)         | Modelagem de Experimentos para Análise de Desempenho       | 02/04/2025 |
 
--->
+--> 
 
 ## 2. Infraestrutura dos Laboratórios
 
@@ -462,3 +465,4 @@ Nas VMs (configuração alternativa), precisamos evitar desligamentos abruptos, 
 ### Pronto! 
 
 Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br). 
+
