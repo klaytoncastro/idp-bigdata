@@ -1,6 +1,6 @@
 # Laboratórios da Disciplina
 
-Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de Big Data e NoSQL. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados à Internet. O conceito de Big Data se desenvolve em resposta a essa demanda, sendo caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, as ferramentas de Big Data e, também, os sistemas gerenciadores de bancos de dados **NoSQL** (Not-only SQL), emergem como soluções otimizadas para lidar com estas características. 
+Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de **Big Data e NoSQL**. Este repositório foi desenvolvido para facilitar a configuração e o gerenciamento das ferramentas que utilizaremos. No cenário atual de Tecnologia da Informação e Comunicação (TIC), enfrentamos o desafio de armazenar e gerenciar quantidades massivas de dados, como os mais de 2,5 quintilhões de bytes gerados diariamente por redes sociais, transações financeiras, sensores IoT e dispositivos conectados à Internet. O conceito de Big Data se desenvolve em resposta a essa demanda, sendo caracterizado não apenas pelo grande **Volume**, mas também pela **Velocidade** com que os dados são gerados e processados, a **Variedade** de formatos e fontes, a **Veracidade** dos dados e, finalmente, o potencial **Valor** que podem agregar quando analisados corretamente. Nesse contexto, as ferramentas de **Big Data** e, também, os sistemas gerenciadores de bancos de dados **NoSQL** (Not-only SQL), emergem como soluções otimizadas para lidar com estas características.
 
 ## 1. Instruções Gerais e Desafios
 
@@ -35,7 +35,7 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 17 | [Grafana](./grafana/)                                                                | Prática com Monitoramento, Métricas e Observabilidade      | 25/06/2025 |
 | 06 | [Benchmarking NoSQL: Experimentação com MongoDB e Cassandra](./performance/)         | Modelagem de Experimentos para Análise de Desempenho       | 02/04/2025 |
 
---> 
+-->
 
 ## 2. Infraestrutura dos Laboratórios
 

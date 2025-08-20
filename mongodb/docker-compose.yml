@@ -13,8 +13,8 @@ services:
       - dbdata:/data/db
       - ./db-seed:/db-seed
       - ./datasets:/datasets
-    networks:
-      - mybridge
+    #networks:
+    #  - mybridge
 
   mongo-express:
     image: mongo-express:latest
@@ -25,8 +25,8 @@ services:
       ME_CONFIG_MONGODB_URL: mongodb://root:mongo@mongo:27017/
     ports:
       - "8081:8081"
-    networks:
-      - mybridge
+    #networks:
+    #  - mybridge
     depends_on:
       - mongo
     volumes:
@@ -35,7 +35,7 @@ services:
 
 networks:
   mybridge:
-    driver: bridge
+#    driver: bridge
     external: true
 
 volumes:
