@@ -1,0 +1,44 @@
+version: "3.8"
+
+services:
+  elasticsearch:
+    build: .
+    environment:
+      - discovery.type=single-node
+      - xpack.security.enabled=false
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g
+      - ingest.geoip.downloader.enabled=false
+    ulimits:
+      memlock: { soft: -1, hard: -1 }
+    volumes:
+      - esdata:/usr/share/elasticsearch/data
+    ports: ["9200:9200","9300:9300"]
+    networks: [mybridge]
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:8.14.3
+    environment:
+      - LS_JAVA_OPTS=-Xms512m -Xmx512m
+    volumes:
+      - ./logstash/pipelines:/usr/share/logstash/pipeline
+      - ./datasets:/datasets
+    depends_on: [elasticsearch]
+    ports: ["5044:5044","9600:9600"]
+    networks: [mybridge]
+
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:8.14.3
+    environment:
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    depends_on: [elasticsearch]
+    ports: ["5601:5601"]
+    networks: [mybridge]
+
+volumes:
+  esdata:
+
+networks:
+  mybridge:
+    external: true
+
