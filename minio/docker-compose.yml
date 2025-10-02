@@ -10,11 +10,11 @@ services:
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-    volumes:
-#      - ./minio-data:/data        # Diretório local para dados do MinIO
-      - ./minio-backup:/backup    # Diretório local para armazenar backups
+ #   volumes:
+ #     - ./minio-data:/data        # Diretório local para dados do MinIO
+ #     - ./minio-backup:/backup    # Diretório local para armazenar backups
     command: server /data --console-address ":9001"
 
-volumes:
-  minio-data:
+#volumes:
+#  minio-data:
 #   minio-backup:
