@@ -196,3 +196,96 @@ https://stanford.edu/~rezab/dao/notes/L11/spark_cheat_sheet.pdf
 
 https://www.google.com/search?q=spark+commands+cheat+sheet&rlz=1C5CHFA_enBR894BR894&oq=spark+commands+&gs_lcrp=EgZjaHJvbWUqCQgBEAAYExiABDIMCAAQRRgTGBYYHhg5MgkIARAAGBMYgAQyCQgCEAAYExiABDIJCAMQABgTGIAEMgkIBBAAGBMYgAQyCggFEAAYExgWGB4yCggGEAAYExgWGB4yCggHEAAYExgWGB4yCggIEAAYExgWGB4yCggJEAAYExgWGB7SAQg2MjQwajBqN6gCALACAA&sourceid=chrome&ie=UTF-8
 -->
+
+## Atividade 2 - Análise de Dados da Fórmula 1 com PySpark e MinIO
+
+Explorar dados históricos da Fórmula 1 diretamente de um *data lake* baseado em MinIO, utilizando PySpark para realizar consultas analíticas e exportar os resultados em formato Parquet.
+
+## Estrutura do Projeto
+
+Os arquivos CSV da Fórmula 1 foram organizados no bucket `f1-datalake`, pasta `/`, conforme abaixo:
+
+```
+f1-datalake/
+├── circuits.csv
+├── constructors.csv
+├── drivers.csv
+├── races.csv
+├── results.csv
+├── driver_standings.csv
+└── seasons.csv
+```
+
+## Etapas da Atividade
+
+### 1. Inicialize o Spark com acesso ao MinIO
+
+```python
+from pyspark.sql import SparkSession
+
+spark = SparkSession.builder \
+    .appName("F1 Analytics") \
+    .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000") \
+    .config("spark.hadoop.fs.s3a.access.key", "admin") \
+    .config("spark.hadoop.fs.s3a.secret.key", "admin123") \
+    .config("spark.hadoop.fs.s3a.path.style.access", "true") \
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem") \
+    .getOrCreate()
+```
+
+### 2. Carregue os dados
+
+```python
+races = spark.read.csv("s3a://f1-datalake/races.csv", header=True, inferSchema=True)
+results = spark.read.csv("s3a://f1-datalake/results.csv", header=True, inferSchema=True)
+drivers = spark.read.csv("s3a://f1-datalake/drivers.csv", header=True, inferSchema=True)
+```
+
+### 3. Filtre apenas as corridas entre 2015 e 2021
+
+```python
+from pyspark.sql.functions import col
+
+races_periodo = races.filter((col("year") >= 2015) & (col("year") <= 2021)) \
+                     .select("raceId", "year")
+```
+
+### 4. Junte com resultados e dados de pilotos
+
+```python
+df = results.join(races_periodo, "raceId") \
+            .join(drivers, "driverId") \
+            .filter(col("positionOrder") == 1) \
+            .select("driverId", "forename", "surname", "year")
+```
+
+### 5. Calcule o top 10 de pilotos com mais vitórias no período
+
+```python
+from pyspark.sql.functions import count, desc
+
+top10 = df.groupBy("driverId", "forename", "surname") \
+          .agg(count("*").alias("wins")) \
+          .orderBy(desc("wins")) \
+          .limit(10)
+
+top10.show()
+```
+
+### 6. Exporte o resultado em formato Parquet para o MinIO
+
+```python
+top10.write.mode("overwrite") \
+     .parquet("s3a://f1-datalake/outputs/top10_pilotos.parquet")
+```
+
+### 7. Análise e Visualização de Dados
+
+```python
+# Carregue com Spark e converta para Pandas
+top10_loaded = spark.read.parquet("s3a://f1-datalake/outputs/top10_pilotos.parquet")
+top10_pd = top10_loaded.toPandas()
+
+# Visualize
+top10_pd.set_index("surname")["wins"].plot(kind="bar", title="Top 10 Pilotos com Mais Vitórias (2015–2021)")
+```

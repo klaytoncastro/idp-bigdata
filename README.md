@@ -6,6 +6,33 @@ Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de **Big Data e 
 
 Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big Data e NoSQL por meio de desafios práticos. Cada desafio proporcionará uma experiência aplicada, permitindo que você consolide os conhecimentos adquiridos e aprofunde seu aprendizado de maneira progressiva. Durante essa jornada, você terá contato com ferramentas amplamente utilizadas no mercado e empregará técnicas para resolver problemas reais.
 
+
+
+| #  | Atividade                                                                            | Desafio                                                    | Prazo      |
+|----|--------------------------------------------------------------------------------------|------------------------------------------------------------|------------|
+| 01 | [MongoDB](./mongodb/)                                                                | Prática com Banco de Dados de Documentos                   | 15/08/2025 |
+| 02 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB | 22/08/2025 |
+| 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                     | 29/08/2025 |
+| 04 | [Censo IES](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais)             | Análise de Dados do Censo IES                              | 12/09/2025 |
+| 05 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar                         | 26/09/2025 |
+| 06 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                       | 03/10/2025 |
+| 07 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 10/10/2025 |
+
+<!--
+| 08 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 17/04/2025 |
+| 06 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 02/04/2025 |
+| 07 | [RabbitMQ](./rabbitmq/)                                                              | Prática com Message Broker                                 | 09/04/2025 |
+| 08 | [Celery](./celery/)                                                                  | Prática com Serviços de Mensageria                         | 23/04/2025 |
+| 09 | [Kafka](./kafka/)                                                                    | Prática com Event Broker                                   | 30/04/2025 |
+| 10 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                       | 07/05/2025 |
+| 11 | [Streamlit](./streamlit/)                                                            | Dashboards Interativos e Visualização de Dados             | 14/05/2025 |
+| 12 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines         | 21/05/2025 |
+| 13 | [Pipeline](./pipeline/)                                                              | Desenvolvimento de Pipeline com Múltiplas Ferramentas      | 28/05/2025 |
+| 14 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                        | 04/06/2025 |
+| 15 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 18/06/2025 |
+| 16 | [Projeto Final]        | Projeto Capstone da Disciplina                             | 25/06/2025 |
+
+
 <!--
 
 | #  | Atividade                                                                            | Desafio                                                    | Prazo      |
