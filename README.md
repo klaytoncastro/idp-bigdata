@@ -12,12 +12,12 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 02 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB       | 22/08/2025 |
 | 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                           | 29/08/2025 |
 | 04 | [Censo IES](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais)             | Ingestão e Análise de Dados do Censo IES                         | 12/09/2025 |
-| 05 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar                               | 26/09/2025 |
+| 05 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar Cassandra                     | 26/09/2025 |
 | 06 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                             | 03/10/2025 |
 | 07 | [Spark](./spark/)                                                                    | Framework Spark e Prática com PySpark                            | 10/10/2025 |
+| 08 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                           | 17/10/2025 |
 
 <!--
-| 08 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 17/04/2025 |
 | 06 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 02/04/2025 |
 | 07 | [RabbitMQ](./rabbitmq/)                                                              | Prática com Message Broker                                 | 09/04/2025 |
 | 08 | [Celery](./celery/)                                                                  | Prática com Serviços de Mensageria                         | 23/04/2025 |
@@ -29,8 +29,6 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 14 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                        | 04/06/2025 |
 | 15 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 18/06/2025 |
 | 16 | [Projeto Final]        | Projeto Capstone da Disciplina                             | 25/06/2025 |
-
-
 <!--
 
 | #  | Atividade                                                                            | Desafio                                                    | Prazo      |
