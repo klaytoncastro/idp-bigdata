@@ -8,7 +8,7 @@ O crescimento do volume e da variedade de dados tornou inviável tratá-los como
 
 Historicamente, aplicações gravavam dados em discos conectados ao próprio servidor. A proximidade reduzia latência e simplificava a operação. Em contrapartida, havia acoplamento forte: falhas do servidor interrompiam acesso; expansão exigia trocas físicas; a escala era limitada aos recursos computacionais e de armazenamento de um só computador. Para aumentar desempenho e tolerância a falhas, adotaram-se controladoras e RAID (conjuntos de discos atuando como uma unidade lógica). O RAID (Redundant Array of Independent Disks)  melhora paralelismo e pode sobreviver à perda de discos, mas o armazenamento continua localmente atachado ao servidor. Ou seja, condicionado a falhas no servidor e com restrições de expansão.
 
-O passo seguinte foi movimentar os discos do servidor e centralizar em equipamento central dedicado, um storage em rede SAN (Storage Area Network). Assim, os servidores passam a “enxergar” volumes remotos para suas aplicações, e formatam neles seus sistemas de arquivos, e protocolos em nível de bloco (FCP, iSCSI), oferecendo alto desempenho e consolidação para bancos de dados e máquinas virtuais. Contudo, possui alguns limites claros para uma arquitetura monolítica: a escala predominantemente vertical, com custo e complexidade elevados e pontos de gargalo previsíveis.
+O passo seguinte foi movimentar os discos do servidor e centralizar em equipamento central dedicado, um storage em rede SAN (Storage Area Network). Assim, os servidores passam a “enxergar” volumes remotos para suas aplicações, e formatam neles seus sistemas de arquivos, e protocolos em nível de bloco (FCP, iSCSI, FCoE), oferecendo alto desempenho e consolidação para bancos de dados e máquinas virtuais. Contudo, possui alguns limites claros para uma arquitetura monolítica: a escala predominantemente vertical, com custo e complexidade elevados e pontos de gargalo previsíveis.
 
 Em paralelo, popularizou-se o NAS (Network Attached Storage), que oferece um modelo de compartilhamento de arquivos em hierarquia de pastas por protocolos de rede (SMB/CIFS no ecossistema Windows; NFS no ecossistema Linux). É excelente para colaboração e documentos. Contudo, metadados hierárquicos e atributos de segurança (permissionamento) tornam-se gargalo à medida que o número de arquivos cresce para ordens de milhares e milhões.
 
@@ -18,7 +18,7 @@ Surge então a família de sistemas de armazenamento distribuído, concebida par
 
 Paralelamente, fora do Hadoop, emergiram soluções como o GlusterFS, que buscava entregar um sistema de arquivos distribuído compatível com POSIX (Portable Operating System Interface), garantindo interoperabilidade com sistemas UNIX/Linux. O GlusterFS distribui dados em múltiplos nós via agregação de volumes, sendo atraente em ambientes que precisavam de um “filesystem global”. Entretanto, também sofria com sensibilidade a arquivos pequenos e gargalos em operações de metadados.
 
-Na sequência, destaca-se o Ceph, um dos sistemas distribuídos mais robustos, projetado sob a arquitetura de Object Storage Devices (OSDs). O Ceph fornece uma tríade de interfaces: RADOS (object storage nativo), CephFS (POSIX file system distribuído) e RBD (block device), permitindo unificação de bloco, arquivo e objeto em uma mesma plataforma distribuída e escalável (scale-out). Sua resiliência decorre do uso do algoritmo CRUSH, que elimina a necessidade de um servidor central de metadados para mapear onde os objetos estão, distribuindo de forma determinística os dados entre os nós. Essa abordagem tornou o Ceph referência em ambientes de nuvem privada (ex.: OpenStack) e clusters científicos, aproximando-se mais do paradigma atual de object storage voltado a Data Lakes.
+Na sequência, destaca-se o Ceph, um dos sistemas distribuídos mais robustos, projetado sob a arquitetura de Object Storage Devices (OSDs). O Ceph fornece uma tríade de interfaces: RADOS (object storage nativo), CephFS (POSIX file system distribuído) e RBD (block device), permitindo unificação de bloco, arquivo e objeto em uma mesma plataforma distribuída e escalável (scale-out). Sua resiliência decorre do uso do algoritmo CRUSH, que elimina a necessidade de um servidor central de metadados para mapear onde os objetos estão, distribuindo de forma determinística os dados entre os nós. Essa abordagem tornou o Ceph referência em ambientes de nuvem privada (ex.: OpenStack) e clusters científicos, aproximando-se mais do paradigma atual de object storage voltado a Data Lakes. A evolução pode ser visualizada na linha do tempo a seguir, que resume as transições arquiteturais de armazenamento até chegar ao modelo de object-storage:
 
 ```mermaid
 timeline
@@ -40,7 +40,7 @@ title Evolução do Armazenamento de Dados
 | Integração      | Ecossistema Hadoop / MapReduce              | Spark, Flink, Airflow, AI/ML frameworks             |
 | Limitações      | Sobrecarga para arquivos pequenos, acoplado | Sem hierarquia, mas escalável e cloud-native        |
 
-Essas soluções pavimentaram a transição para o armazenamento de objetos exposto via HTTP e APIs RESTful (como S3), que abandonam de vez as interfaces POSIX tradicionais para priorizar escalabilidade, simplicidade de endereçamento e integração direta com aplicações distribuídas.
+Essas soluções abriram caminho para o armazenamento de objetos acessado via HTTP e APIs RESTful (como S3), que substituem gradualmente as interfaces POSIX tradicionais em favor da escalabilidade, simplicidade de endereçamento e integração nativa com aplicações modernas. Na prática, o HDFS permanece em cenários legados, mas novos pipelines de Big Data e AI/ML já são projetados sobre object stores, graças ao suporte nativo a APIs HTTP, elasticidade e integração com frameworks atuais.
 
 ## 3. Modelos de Armazenamento
 
@@ -53,11 +53,11 @@ Como vimos na seção anterior, ao longo da evolução das arquiteturas de TI, c
 - **Armazenamento de Objetos**: Evolução natural para lidar com a explosão de dados não estruturados. Cada item é tratado como objeto independente, composto por identificador único (ID), atributos e metadados enriquecíveis, além do conteúdo binário. Ao invés de expor sistemas de arquivos ou volumes, os objetos residem em repositórios acessíveis por APIs (ex.: REST, S3), eliminando a hierarquia tradicional de diretórios. Essa simplicidade de endereçamento (buckets com chave única) favorece escalabilidade horizontal massiva, interoperabilidade entre plataformas e governança granular (retenção, imutabilidade). Por isso, tornou-se a base tecnológica de Data Lakes e do ecossistema moderno de Big Data, AI/ML, Analytics e aplicações cloud-native.
 ## Tabela — Block vs File vs Object
 
-| Critério   | Bloco (SAN/iSCSI)       | Arquivo (NFS/SMB)         | Objeto (S3/MinIO)                     |
+| Critério   | Bloco (DAS/SAN)         | Arquivo (NFS/SMB-CIFS)    | Objeto (S3/Swift)                     |
 |------------|-------------------------|---------------------------|---------------------------------------|
 | Estrutura  | Blocos fixos            | Hierarquia de pastas      | Objeto + metadados + ID               |
 | Acesso     | Driver/FS local         | FS de rede                | HTTP/REST (S3)                        |
-| Uso típico | DB/VM alta IOPS         | Colaboração simples       | Data Lake / ML / Backup / Logs        |
+| Uso típico | DBMS/VM - IOPS elevados | Colaboração simples       | Data Lake / ML / Backup / Logs        |
 | Escala     | Limitada                | Limitada                  | Scale-out elástico                    |
 
 ### Principais Vantagens e Características
@@ -336,8 +336,10 @@ mc admin policy attach local readwrite --user aluno123
 
 ## 6. Conclusão
 
-O armazenamento baseado em objetos é uma solução robusta e versátil para gerenciar o crescimento exponencial de dados não estruturados. Com segurança, escalabilidade e flexibilidade, ele é ideal para aplicações modernas, como serviços de nuvem, arquivamento de longo prazo e gerenciamento de dados críticos.
+Dominar object storage deixou de ser apenas um requisito técnico: é um diferencial competitivo, já que quase todo pipeline de dados moderno começa e termina em um bucket S3 ou compatível. Ignorar isso compromete a atuação de qualquer engenheiro ou cientista de dados. O armazenamento em objetos oferece segurança, escalabilidade e flexibilidade para lidar com o crescimento de dados não estruturados, sendo ideal para nuvem, arquivamento de longo prazo e dados críticos. Nesse cenário, o MinIO — compatível com a API S3 — destaca-se como solução eficiente e escalável em ambientes on-premises e híbridos, viabilizando datalakes integrados a ecossistemas de Big Data. Explorar o MinIO em laboratório antes de adotar serviços externos como o Amazon S3 permite validar fluxos de trabalho e garantir, desde o início, uma arquitetura cloud-native robusta e preparada para escala. Para aprofundamento e maiores informações, consulte: 
 
-Nesse contexto, o MinIO, compatível com a API S3, tem se destacado como uma solução eficiente e escalável, sendo amplamente adotado em ambientes on-premises e híbridos para criar datalakes que suportam ecossistemas de big data, facilitando o armazenamento, acesso e processamento de dados massivos.
-
-Recomenda-se explorar o MinIO para testar essas funcionalidades em um ambiente controlado antes de migrar para soluções externas, como o Amazon S3. Esse método ajuda a validar fluxos de trabalho e garante desde o começo de seus projetos uma infraestrutura escalável e eficiente, numa arquitetura cloud-native. Para mais informações, consulte a documentação oficial do [MinIO](https://min.io/docs/).
+- **Documentação Oficial** do [MinIO](https://min.io/docs/)
+- **MinIO Client** [(mc)](https://min.io/docs/minio/linux/reference/minio-mc.html)
+- **Python SDK** p/ S3/MinIO [Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
+- **AWS S3** [Developer Guide](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
+- **AWS CLI S3** [Reference Guide](https://docs.aws.amazon.com/cli/latest/reference/s3/)
