@@ -1,22 +1,10 @@
-<!--
-## Índice
-1. [O que é Armazenamento de Objetos](#o-que-é-armazenamento-de-objetos)
-2. [Conceitos do MinIO](#conceitos-do-minio)
-3. [Introdução ao S3 (Simple Storage Service)](#introdução-ao-s3-simple-storage-service)
-4. [Configuração do MinIO com Docker](#configuração-do-minio-com-docker)
-5. [Uso da API para Leitura e Gravação de Arquivos](#uso-da-api-para-leitura-e-gravação-de-arquivos)
-6. [Exemplos Práticos](#exemplos-práticos)
-7. [Conclusão](#conclusão)
--->
 # Fundamentos de Armazenamento de Dados
 
-## Introdução
+## 1. Introdução
 
 O crescimento do volume e da variedade de dados tornou inviável tratá-los como meros arquivos locais guardados em disco. A escolha da abordagem de armazenamento condiciona custo, desempenho, segurança e, sobretudo, capacidade de escala. No ecossistema de big data, consolidou-se a abordagem de armazenamento baseado em objeto. Este conceito materializa o acesso ao conteúdo via HTTP (API S3 e compatíveis, como AWS S3 e Azure Blob Storage), que sustenta data lakes e aplicações modernas de Big Data, Operações de AI/ML e BI/Analytics, tanto on-premises quanto em nuvem. Assim, cada item é um objeto identificado por um ID único, descrito por metadados e atributos, e portador de um conteúdo binário que representa dados não estruturados (imagens, vídeos, backups, logs). Projetado para arquiteturas distribuídas e para operações em larga escala, o armazenamento baseado em objeto emerge como resposta às limitações dos modelos anteriores. Antes de iniciar a prática, é essencial situar a evolução — do disco local e dos storages monolíticos para mecanismos que exigem particionamento e novos requisitos de acesso — e compreender por que a mudança ocorreu: requisitos de escalabilidade, governança e necessidade de desacoplamento do processamento e armazenamento. 
 
-## Modelos de Armazenamento
-
-### Linha do Tempo e Principais Desafios
+## 2. Linha do Tempo e Principais Desafios
 
 Historicamente, aplicações gravavam dados em discos conectados ao próprio servidor. A proximidade reduzia latência e simplificava a operação. Em contrapartida, havia acoplamento forte: falhas do servidor interrompiam acesso; expansão exigia trocas físicas; a escala era limitada aos recursos computacionais e de armazenamento de um só computador. Para aumentar desempenho e tolerância a falhas, adotaram-se controladoras e RAID (conjuntos de discos atuando como uma unidade lógica). O RAID (Redundant Array of Independent Disks)  melhora paralelismo e pode sobreviver à perda de discos, mas o armazenamento continua localmente atachado ao servidor. Ou seja, condicionado a falhas no servidor e com restrições de expansão.
 
@@ -26,25 +14,51 @@ Em paralelo, popularizou-se o NAS (Network Attached Storage), que oferece um mod
 
 Para reduzir os silos tecnológicos, grandes fabricantes como EMC, Netapp, IBM, HPE, Hitachi, dentre outros, passaram a entregar SAN (bloco) e NAS (arquivo) no mesmo chassi de equipamentos “unificados”. Isso simplifica a gestão, mas não altera o modelo: continua-se a escalar, majoritariamente, subindo a mesma caixa; backups, replicações e janelas operacionais tornam-se onerosas conforme a base cresce.
 
-Surge então a família de sistemas de armazenamento distribuído, cujo objetivo é espalhar dados por muitos nós em cluster. O exemplo mais influente no contexto de Big Data foi o HDFS (Hadoop Distributed File System), onde um arquivo é quebrado em blocos grandes (tipicamente 128–256 MB) e distribuído por DataNodes; metadados (nome, mapeamento de blocos) são mantidos pelo NameNode. A ideia é otimizar leituras sequenciais em lote (processamentos massivos). Contudo, há um custo implícito para os arquivos pequenos (milhares de itens minúsculos sobrecarregam metadados), além da complexidade de acoplamento ao ecossistema Hadoop. Fora do Hadoop, o GlusterFS surgiu para entregar sistemas de arquivos distribuídos respeitando POSIX (Interface de Sistema Operacional Portátil), um conjunto de padrões que define uma interface comum para sistemas operacionais derivados do UNIX, visando garantir um alto nível de compatibilidade entre eles, mas também sofria com a sensibilidade aos arquivos pequenos.
+Surge então a família de sistemas de armazenamento distribuído, concebida para espalhar dados por múltiplos nós em cluster e superar as limitações dos storages monolíticos. O caso mais influente no contexto de Big Data foi o HDFS (Hadoop Distributed File System), projetado como fundação do ecossistema Hadoop. Nele, cada arquivo é dividido em blocos de grande porte (tipicamente 128–256 MB) e distribuído entre os DataNodes, enquanto os metadados (nome, localização e mapeamento de blocos) são centralizados em um NameNode. Essa estratégia foi concebida para otimizar leituras sequenciais em lote, características centrais do processamento massivo em MapReduce. Contudo, o HDFS apresenta limitações: arquivos pequenos geram sobrecarga no gerenciamento de metadados, e o acoplamento estreito ao ecossistema Hadoop restringe sua flexibilidade em cenários modernos.
 
-<!--Em Gluster, servidores de armazenamento (“bricks”) são agregados logicamente e o espaço é particionado por hash (DHT), com camadas de tradução para replicação e rebalanço. A vantagem é oferecer semântica de arquivo padrão para aplicações que exigem POSIX (renomear, travas, hierarquia), facilitando migrações graduais. O custo aparece na escala de metadados (operações como rename e stat em grandes árvores), na sensibilidade a arquivos pequenos e na necessidade de planejamento cuidadoso de volumes e rebalanceamentos para manter desempenho e consistência operacional.--> 
+Paralelamente, fora do Hadoop, emergiram soluções como o GlusterFS, que buscava entregar um sistema de arquivos distribuído compatível com POSIX (Portable Operating System Interface), garantindo interoperabilidade com sistemas UNIX/Linux. O GlusterFS distribui dados em múltiplos nós via agregação de volumes, sendo atraente em ambientes que precisavam de um “filesystem global”. Entretanto, também sofria com sensibilidade a arquivos pequenos e gargalos em operações de metadados.
 
-Com a consolidação da computação em nuvem, amadurece o armazenamento de objetos. A unidade lógica passa a ser o objeto: conteúdo binário, metadados e uma chave (nome único) dentro de um bucket. Ao contrário dos sistemas de arquivos hierárquicos, baseados em sistemas locais, SAN ou NAS, que enfrentam desafios de escalabilidade, o armazenamento de objetos lida de maneira mais eficaz com grandes desafios envolvendo o volume e variedade de dados. Cada unidade de dados é tratada como um objeto independente, encapsulando seu conteúdo e metadados. O OpenStack Swift é a linhagem nativa de objeto no ecossistema OpenStack, com topologia em anel e consistência eventual, orientado a grande escala e dispersão geográfica. Historicamente, o OpenStack Swift estabeleceu os princípios que a API S3 popularizou e padronizou no mercado. 
+Na sequência, destaca-se o Ceph, um dos sistemas distribuídos mais robustos, projetado sob a arquitetura de Object Storage Devices (OSDs). O Ceph fornece uma tríade de interfaces: RADOS (object storage nativo), CephFS (POSIX file system distribuído) e RBD (block device), permitindo unificação de bloco, arquivo e objeto em uma mesma plataforma distribuída e escalável (scale-out). Sua resiliência decorre do uso do algoritmo CRUSH, que elimina a necessidade de um servidor central de metadados para mapear onde os objetos estão, distribuindo de forma determinística os dados entre os nós. Essa abordagem tornou o Ceph referência em ambientes de nuvem privada (ex.: OpenStack) e clusters científicos, aproximando-se mais do paradigma atual de object storage voltado a Data Lakes.
 
-Como um abordagem inovadora, o projeto Ceph pretende consolidar-se como vertente unificada sobre o RADOS (um objeto distribuído interno) e, a partir dele, expõe três semânticas no mesmo cluster: bloco (RBDs, para sistemas hipervisores e bancos de dados), arquivos (CephFS) e objetos (compatível com S3/Swift). Apesar de ser capaz de lidar com diferentes perfis e modelos de I/O; o preço é a complexidade operacional e a exigência de maturidade dos times técnicos para obter previsibilidade de desempenho.
+```mermaid
+timeline
+title Evolução do Armazenamento de Dados
+1980s : DAS (Direct Attached Storage)
+1990s : SAN (Storage Area Network), NAS (Network Attached Storage)
+2000s : HDFS (Hadoop Distributed File System), GlusterFS
+2010s : Ceph (RADOS, RBD, CephFS), AWS S3 e Object Storage distribuído
+2020s : Data Lakehouse (Delta Lake, Apache Iceberg, Apache Hudi)
+```
 
-<!--A distribuição e a durabilidade são regidas pelo algoritmo CRUSH, sem ponto único de falha. O ganho é um sistema capaz de lidar com diferentes perfis de I/O; o preço é a complexidade operacional (dimensionamento de daemons, monitoração, políticas de recuperação) e a exigência de maturidade de equipe para obter previsibilidade de desempenho. (com MON/MGR para controle e OSDs para dados, (CephFS, com MDS para metadados), objetos (RGW, compatível com S3/Swift)) (dimensionamento de daemons, monitoração, políticas de recuperação)-->
+### Comparação: HDFS vs Object Storage
 
-### Três modelos, três semânticas
+| Critério        | HDFS (Hadoop)                              | Object Storage (S3/MinIO)                           |
+|-----------------|---------------------------------------------|-----------------------------------------------------|
+| Modelo de acesso| File System distribuído (POSIX-like)        | API HTTP/REST (S3, compatível com nuvem)            |
+| Unidade de dados| Arquivo dividido em blocos (128–256 MB)     | Objeto (conteúdo + ID + metadados + atributos)      |
+| Otimização      | Leituras sequenciais em lote (batch)        | Acesso direto, paralelo e massivo via HTTP          |
+| Integração      | Ecossistema Hadoop / MapReduce              | Spark, Flink, Airflow, AI/ML frameworks             |
+| Limitações      | Sobrecarga para arquivos pequenos, acoplado | Sem hierarquia, mas escalável e cloud-native        |
 
-Abaixo estão as principais diferenças entre os modelos de armazenamento:
+Essas soluções pavimentaram a transição para o armazenamento de objetos exposto via HTTP e APIs RESTful (como S3), que abandonam de vez as interfaces POSIX tradicionais para priorizar escalabilidade, simplicidade de endereçamento e integração direta com aplicações distribuídas.
 
-- **Armazenamento de Bloco**: É baseado em soluções de armazenamento local ou em rede de armazenamento dedicada (SAN/iSCSI/Fibre Channel). Organiza os dados em blocos de tamanho fixo e requer um sistema de arquivos para mapeá-los. Ou seja, o storage expõe volumes de bloco; o sistema operacional do servidor é quem formata (ext4/NTFS etc.). É a base para bancos transacionais e hipervisores, onde IOPS e baixa latência são críticos. A governança (versionamento, retenção) é externa ao dispositivo lógico. Embora eficiente como plataforma para dados estruturados, não é ideal para grandes volumes de dados não estruturados. Um volume de bloco não tem noção de “arquivos”; ele apenas expõe endereços lógicos para leitura/gravação. Por isso, não há arbitragem nativa de concorrência entre hosts. Para evitar corrupção quando mais de um servidor acessa o mesmo volume, é obrigatório adotar LUN (Logical Units) expostos a único servidor, sistemas de arquivos com suporte a múltiplos hosts e recursos de bloqueio distribuído e journaling para consistência (ex: VMFS) ou protocolos de coordenação em baixo nível como (SCSI-3) e de múltiplos caminhos (ALUA/MPIO) para garantir redundância no acesso dos servidores ao storage. 
-  
-- **Armazenamento de Arquivos**: Baseia-se em servidores/appliances que exportam arquivos em hierarquias de pastas via rede, usando protocolos como NFS (Unix/Linux) e SMB/CIFS (Windows). É adequado a compartilhamento e colaboração, mas tende a perder eficiência quando o número de arquivos e operações de metadados (listar, criar, renomear) cresce para ordens de milhões. Diferente do “bloco”, em que não há arbitragem nativa entre hosts, no NAS a coordenação é feita pelo protocolo de arquivo e pelo próprio servidor que enxerga os seus volumes em nível de bloco e expõe à rede. Em analytics de larga escala, a árvore de diretórios e a pressão de escrita em metadados o tornam menos eficiente do que a abordagem baseada em objeto. Em cargas analíticas modernas, formatos colunares são preferíveis. 
-  
-- **Armazenamento de Objetos**: Armazena dados como objetos independentes e sem estrutura hierárquica, oferecendo escalabilidade e flexibilidade para gerenciar grandes volumes de dados não estruturados. Os arquivos são armazenados em um repositório acessível por uma API (Application Programming Interface), diferentemente dos sistemas tradicionais utilizados como plataforma para métodos de acesso a um nível mais baixo na pilha de infraestrutura, como os protocolos de bloco das SANs (FCP - Fibre-Channel Protocol, iSCSI - Internet Small Computer System Interface), protocolos de rede dos NAS (SMB - Server Message Block, NFS - Network File System), ou estrutura de tabelas em bancos de dados relacionais (BLOBs - Binary Large Objects).
+## 3. Modelos de Armazenamento
+
+Como vimos na seção anterior, ao longo da evolução das arquiteturas de TI, consolidaram-se três modelos fundamentais de armazenamento, cada qual com características próprias de desempenho, escalabilidade e adequação às cargas de trabalho. 
+
+- **Armazenamento de Bloco**: Baseado em soluções locais ou em redes de armazenamento dedicadas (SAN, via protocolos como iSCSI ou Fibre Channel). Os dados são organizados em blocos de tamanho fixo, e cabe ao sistema operacional do servidor formatar o volume em sistemas de arquivos (ext4, NTFS etc.). É a base de bancos de dados transacionais e hipervisores, em que latência mínima e alto IOPS são cruciais. Um volume de bloco não possui noção de arquivos, apenas de endereços lógicos; portanto, não há arbitragem nativa de concorrência. Para evitar corrupção quando múltiplos hosts acessam o mesmo volume, recorre-se a mecanismos como LUNs dedicadas a um único servidor, sistemas de arquivos com suporte a múltiplos hosts e bloqueio distribuído (ex.: VMFS), ou ainda protocolos de coordenação de baixo nível (SCSI-3) e multipath (ALUA/MPIO) para redundância de acesso. A governança (retenção, versionamento) é externa ao dispositivo lógico. Embora eficiente para dados estruturados, é pouco adequado a volumes massivos de dados não estruturados.
+
+- **Armazenamento de Arquivos**: Oferecido por servidores ou appliances especializados (NAS – Network Attached Storage), que expõem hierarquias de diretórios via rede utilizando protocolos como NFS (Unix/Linux) e SMB/CIFS (Windows). A coordenação do acesso concorrente é feita pelo próprio servidor, que enxerga seus volumes em nível de bloco e os disponibiliza em forma de arquivos. Essa abordagem favorece colaboração e compartilhamento, mas sofre limitações de desempenho quando o número de arquivos ou operações de metadados (criação, listagem, renomeação) cresce para milhões. Em cargas analíticas modernas, a estrutura hierárquica e a pressão em metadados reduzem a eficiência em comparação ao armazenamento de objetos. Por isso, em Big Data, prevalecem formatos colunares otimizados para leitura analítica massiva.
+
+- **Armazenamento de Objetos**: Evolução natural para lidar com a explosão de dados não estruturados. Cada item é tratado como objeto independente, composto por identificador único (ID), atributos e metadados enriquecíveis, além do conteúdo binário. Ao invés de expor sistemas de arquivos ou volumes, os objetos residem em repositórios acessíveis por APIs (ex.: REST, S3), eliminando a hierarquia tradicional de diretórios. Essa simplicidade de endereçamento (buckets com chave única) favorece escalabilidade horizontal massiva, interoperabilidade entre plataformas e governança granular (retenção, imutabilidade). Por isso, tornou-se a base tecnológica de Data Lakes e do ecossistema moderno de Big Data, AI/ML, Analytics e aplicações cloud-native.
+## Tabela — Block vs File vs Object
+
+| Critério   | Bloco (SAN/iSCSI)       | Arquivo (NFS/SMB)         | Objeto (S3/MinIO)                     |
+|------------|-------------------------|---------------------------|---------------------------------------|
+| Estrutura  | Blocos fixos            | Hierarquia de pastas      | Objeto + metadados + ID               |
+| Acesso     | Driver/FS local         | FS de rede                | HTTP/REST (S3)                        |
+| Uso típico | DB/VM alta IOPS         | Colaboração simples       | Data Lake / ML / Backup / Logs        |
+| Escala     | Limitada                | Limitada                  | Scale-out elástico                    |
 
 ### Principais Vantagens e Características
 
@@ -58,7 +72,7 @@ Abaixo estão as principais diferenças entre os modelos de armazenamento:
 
 - **Políticas de Retenção e Imutabilidade**: Objetos podem ser configurados para se tornarem imutáveis após a gravação, garantindo a integridade e a preservação dos dados ao longo do tempo. Com o uso de políticas de conformidade (compliance), é possível definir períodos específicos de retenção, durante os quais os dados não podem ser alterados ou excluídos, assegurando que permaneçam intactos conforme originalmente gravados. O recurso **WORM** (Write Once, Read Many) reforça essa imutabilidade, permitindo que os objetos sejam gravados uma única vez e lidos quantas vezes forem necessárias, até o fim do período de retenção estabelecido.
 
-### Como Funciona?
+## 4. Como Funciona?
 
 O armazenamento de objetos elimina a complexidade da hierarquia de diretórios, usando um espaço de endereçamento simples (Single Namespace). Um objeto contém os dados do usuário, seus metadados (como tamanho, data e permissões), e um ID de objeto exclusivo, gerado por uma função de hash que garante sua unicidade. Isso permite que os dados sejam distribuídos de forma eficiente e recuperados de maneira rápida e segura dos OSDs, desde que você possua o ID em questão e as devidas permissões de acesso.
 
@@ -72,30 +86,61 @@ O armazenamento de objetos elimina a complexidade da hierarquia de diretórios, 
 
 ### Principais Casos de Uso
 
-O armazenamento em objetos é ideal para cenários como:
+O armazenamento de objetos elimina a complexidade da hierarquia de diretórios típica dos sistemas de arquivos, utilizando um espaço de endereçamento plano (Single Namespace). Cada entidade armazenada é um objeto, composto por quatro elementos essenciais:
 
-- **Armazenamento em Nuvem**: Com o suporte para APIs baseadas em **REST** (Representational State Transfer) e **SOAP** (Simple Object Access Protocol), o armazenamento de objetos facilita o acesso de múltiplos usuários e plataformas de maneira eficiente e segura.
-- **Arquivamento de Conteúdos**: Sistemas como **CAS** (Content Addressable Storage) são otimizados para armazenar grandes volumes de conteúdo fixo, como arquivos de imagem médica e registros financeiros, com alta integridade e políticas de retenção rígidas.
-- **Metadados**: Cada objeto pode conter metadados personalizados, que tornam o processo de gerenciamento e busca mais eficiente, proporcionando mais controle sobre o conteúdo armazenado.
-- **Endereçamento via URL**: Cada objeto é acessível por meio de uma URL única, o que facilita sua localização e acesso, especialmente em ambientes distribuídos e em nuvem.
+- **ID Único**: identificador exclusivo (gerado, em geral, por função de hash) que garante unicidade e permite acesso direto ao objeto.
 
-Nos últimos anos, o armazenamento de objetos tem se tornado uma peça fundamental na composição de **datalakes** e fluxos de trabalho para **big data**, devido à sua capacidade de armazenar grandes volumes de dados em diversos formatos e acessá-los de maneira eficiente. Ele é amplamente utilizado em ecossistemas de big data para suportar arquiteturas distribuídas, onde ferramentas como **Apache Spark**, **Airflow** e **Kafka** são frequentemente integradas para processar, orquestrar e analisar grandes conjuntos de dados. Um exemplo típico desse ecossistema inclui:
+- **Metadados**: informações técnicas (tamanho, data de criação, permissões) e descritivas, que podem ser enriquecidas de acordo com a aplicação.
 
-- **Apache Airflow**: Para orquestração de fluxos de trabalho complexos e automação de pipelines de dados.
-- **Apache Spark**: Para processamento de dados em larga escala, incluindo operações de **ETL** (extração, transformação e carga) e análise de dados massivos.
-- **Apache Kafka**: Para ingestão de dados em tempo real, permitindo o processamento contínuo de streams de dados.
-- **MinIO**: Para armazenamento escalável de objetos, facilitando o gerenciamento de grandes volumes de dados não estruturados.
+- **Atributos**: parâmetros de governança (ex.: política de retenção, imutabilidade, criptografia).
 
-## Prática com MinIO
+- **Conteúdo**: os dados binários (BLOB) em si (ex.: uma imagem, vídeo, documento ou log).
 
-**MinIO** é uma solução de armazenamento de objetos de alto desempenho compatível com a API do Amazon S3 (Simple Storage Service), um serviço de armazenamento de objetos da Amazon Web Services (AWS), projetado para armazenar e recuperar qualquer quantidade de dados de qualquer lugar na Internet, cujos principais conceitos estão listados a seguir: 
+Esse modelo abstrai a noção de diretórios e organiza os objetos em buckets, estruturas lógicas de armazenamento que facilitam o particionamento e a escalabilidade horizontal.
 
-- **Buckets**: Contêineres onde os objetos são armazenados.
-- **Objetos**: Unidades de dados que são armazenadas nos buckets.
-- **Chaves**: Identificadores únicos para cada objeto dentro de um bucket.
-- **Metadados**: Informações adicionais armazenadas com cada objeto.
+### Ciclo de Operações
 
-Cada objeto dentro de um bucket é identificado por uma chave única, que funciona como o caminho completo para o arquivo, similar a um nome de arquivo em um sistema de arquivos tradicional. O MinIO foi projetado para aplicações de grande escala e pode ser usado tanto em infraestruturas de nuvem quanto em ambientes on-premises.
+- **Upload**: O cliente envia um arquivo; o sistema divide dados de usuário e metadados.
+
+- **Geração de ID**: É atribuído um identificador exclusivo, que funcionará como chave de acesso.
+
+- **Armazenamento**: Metadados e ID ficam em servidores de metadados; o conteúdo binário é persistido nos OSDs (Object Storage Devices).
+
+- **Confirmação**: O sistema retorna ao cliente o ID ou a URL do objeto.
+
+- **Recuperação**: Quando solicitado, o sistema consulta o ID no servidor de metadados, localiza o objeto e o devolve ao cliente pela API.
+
+Essa lógica simples permite escalar para bilhões de objetos sem degradação acentuada de desempenho.
+
+### Principais Casos de Uso
+
+- **Armazenamento em Nuvem**: Base de serviços como AWS S3, Azure Blob e Google Cloud Storage, acessados via APIs REST ou SOAP, garantindo interoperabilidade entre plataformas.
+
+- **Arquivamento de Conteúdo**: Soluções CAS (Content Addressable Storage) asseguram retenção imutável para dados regulatórios, registros médicos ou logs financeiros.
+
+- **Metadados Enriquecidos**: Possibilidade de incluir descrições, etiquetas ou atributos adicionais, facilitando busca e governança.
+
+- **Endereçamento via URL**: Cada objeto pode ser acessado diretamente por um endereço único, o que simplifica integração em sistemas distribuídos.
+
+### Papel no Ecossistema Big Data
+
+O armazenamento de objetos tornou-se elemento central em arquiteturas de Data Lake, permitindo retenção e acesso eficiente a grandes volumes de dados heterogêneos. Ele serve como fundação para pipelines modernos, integrando-se a ferramentas como:
+
+- Apache Kafka: ingestão de dados em tempo real (streams).
+- Apache Spark: processamento distribuído em larga escala (ETL, análise, ML).
+- Apache Airflow: orquestração e automação de pipelines.
+- MinIO: alternativa on-premises e compatível com S3 para provisionar repositórios escaláveis de objetos.
+
+No estágio mais avançado, Data Lakes modernos incorporam Delta Lake, Iceberg, Hudi e query engines como Trino e Presto.
+
+- Delta Lake / Apache Iceberg / Apache Hudi – camadas de gerenciamento sobre object storage, trazendo ACID, versionamento e esquema evolutivo (fundamentais para Data Lakes confiáveis).
+- Trino (antigo PrestoSQL) – query engine distribuído para consultar dados diretamente no object storage via SQL, sem mover dados.
+- Hive / Impala – no legado Hadoop, mas ainda úteis para mostrar a ponte entre HDFS e object storage.
+- Flink – alternativa ao Spark para processamento de streams com baixa latência.
+
+## 5. Prática com MinIO
+
+**MinIO** é uma solução de armazenamento de objetos de alto desempenho, totalmente compatível com a API do Amazon S3 (Simple Storage Service), serviço de nuvem amplamente usado no mercado. O MinIO foi projetado para armazenar e recuperar qualquer quantidade de dados em larga escala, podendo ser executado tanto em nuvem quanto em ambientes on-premises, inclusive em cenários de produção. Antes de partir para os comandos, é importante compreender o propósito da atividade: estamos definindo uma infraestrutura que reproduz os mesmos padrões de API adotados pelo S3, mas em ambiente controlado e sem custo. Isso permite aprender e praticar os fundamentos do armazenamento de objetos de forma realista, utilizando uma ferramenta que também é empregada em produção em Data Lakes corporativos. Atualmente, boa parte dos pipelines modernos de Big Data, Analytics, AI/ML ou BI começam carregando ou salvando dados em object storage acessado via HTTP, de modo que estará exercitando os mesmos fluxos de trabalho utilizados em infraestruturas reais de nuvem pública e híbrida e desenvolvendo habilidades diretamente aplicáveis ao mercado.
 
 ### Benefícios do MinIO
 
@@ -111,62 +156,50 @@ Cada objeto dentro de um bucket é identificado por uma chave única, que funcio
 - **DELETE**: Remover um objeto de um bucket.
 - **LIST**: Listar objetos em um bucket.
 
-## Configuração com Docker
+### Configuração
 
-Para configurar e iniciar um servidor MinIO usando Docker, siga as etapas abaixo.
+O container executará o serviço principal do MinIO, expondo:
 
-### Pré-requisitos
+- Porta 9000 – API S3 (para integração via bibliotecas, Python/Boto3, mc, curl etc.);
+- Porta 9001 – Console Web (GUI de administração e navegação nos buckets).
 
-- Docker e Docker Compose instalados.
+Para iniciar o servidor MinIO no ambiente de prática, utilizaremos o Docker Compose, conforme o padrão estabelecido no projeto:
 
-### docker-compose.yml
-
-```yaml
-version: '3.7'
-
-services:
-  minio:
-    image: minio/minio
-    container_name: minio
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-    volumes:
-      - minio-data:/data        # Volume para dados do MinIO
-      - minio-backup:/backup    # Volume para armazenar backups
-    command: server /data --console-address ":9001"
-
-volumes:
-  minio-data:
-  minio-backup:
+```bash
+cd /opt/idp-bigdata/minio
+docker-compose up -d
 ```
 
-### Leitura e Gravação de Arquivos
+A aplicação está disponível na porta `9000` (API compatível com S3 em `http://localhost:9000`) e na porta `9001` (console administrativo via navegador em `http://localhost:9001`).
+ 
+**Usuário:** minioadmin
+**Senha:** minioadmin
 
-O MinIO utiliza uma API compatível com S3 para realizar operações via chamadas HTTP, como upload, download, criação de buckets e listagem de arquivos, de forma semelhante à AWS. Para usar o MinIO com Python, a biblioteca recomendada é o Boto3, que facilita a comunicação com o servidor MinIO. O nome "Boto" faz referência ao boto-cor-de-rosa, um golfinho da Amazônia, escolhido de forma divertida por Mitch Garnaat, criador da biblioteca, comparando-a ao boto navegando pelos serviços da nuvem.
+Conforme já explicado em sala de aula, um ponto essencial é a persistência dos volumes: ao mapearmos diretórios locais do host para dentro do container, garantimos que os dados armazenados sobrevivam a reinícios ou recriações do container. Essa prática é fundamental para simular o comportamento de um serviço de armazenamento durável em produção e permite testar estratégias de backup e recuperação de dados. Além disso, o serviço MinIO será configurado na mesma rede lógica utilizada pelas demais aplicações do ambiente de prática (ex.: Jupyter Notebook ou outras ferramentas de análise). Isso assegura que os pipelines e notebooks possam acessar diretamente o storage, reproduzindo o cenário real de integração entre camada de dados e camada de processamento em arquiteturas de Big Data. Verifique o arquivo `docker-compose.yml` e promova os ajustes, para fixar este conhecimento. Acione o Professor em caso de dúvidas. 
 
-### Instalação da Boto3
+### Terminologia
 
-Você pode instalar a Boto3 usando o pip:  
+- **Objetos**: Unidades de dados/itens que são armazenadas nos buckets. Cada objeto dentro de um bucket é identificado por uma chave única, que funciona como o caminho completo para o arquivo, similar a um nome de arquivo em um sistema de arquivos tradicional. O controle de acesso baseia-se em usuários, grupos, políticas granulares e ACLs/IAM, permitindo restringir quem pode ler, gravar ou apagar objetos — algo essencial em pipelines de Big Data e Data Lakes com múltiplos times e diferentes regras de confidencialidade e uso. 
+- **Buckets**: Um bucket não é apenas uma pasta ou diretório, mas um espaço de nomes (namespace) global. Dentro dele, cada objeto tem uma chave única, que funciona como identificador absoluto. Diferente da hierarquia de diretórios (árvore), no S3/MinIO não há “subpastas reais”: a separação por `/` é apenas parte do nome da chave. 
+- **Chaves**: Identificadores únicos para cada objeto dentro de um bucket. 
+- **Metadados e Atributos**: Informações adicionais armazenadas com cada objeto. Isso permite que o armazenamento de objetos seja mais do que um “repositório de bits”: ele pode organizar e classificar os dados de acordo com a lógica da aplicação ou da empresa, enriquecendo sua governança (ex: content-type, owner, classification): 
+
+| Campo      | Valor                                                                                     |
+|------------|-------------------------------------------------------------------------------------------|
+| Objeto     | contrato123.pdf                                                                           |
+| Metadados  | {`"owner":"juridico", "classification":"confidencial", "content-type":"application/pdf"`} |
+
+
+### API Python: Boto3
+
+O MinIO utiliza uma API compatível com S3 para realizar operações via chamadas HTTP, como upload, download, criação de buckets e listagem de arquivos, de forma semelhante à AWS. Para usar o MinIO com Python, a biblioteca recomendada é o Boto3, que facilita a comunicação com o servidor MinIO. O nome "Boto" faz referência ao boto-cor-de-rosa, um golfinho da Amazônia, escolhido de forma divertida por Mitch Garnaat, criador da biblioteca, comparando-a ao boto navegando pelos serviços da nuvem. Você pode instalar a Boto3 usando o `pip` ou configurando o Dockerfile da IDE Jupyter, como vimos em sala de aula.   
 
 ```python
-
 pip install boto3
-
 ```
-
-<!--
-```python
-
-```
--->
 ### Definição do Client
 
 ```python
-
 import boto3
 from botocore.client import Config
 
@@ -180,28 +213,37 @@ s3 = boto3.client(
 )
 ```
 
+### Criando um Bucket
+
+No console, crie um bucket chamado meuprimeirobucket. Essa etapa simula o início da construção de um Data Lake: um espaço de endereçamento único para objetos. Em seguida, realize um upload simples (ex.: crie um arquivo `teste.txt`). Observe como o MinIO automaticamente associa ID, metadados e conteúdo ao objeto, diferentemente de um sistema de arquivos tradicional. A criação também pode ser feita via API: 
+
+```python
+# Exemplo de criação de um bucket
+s3.create_bucket(Bucket='meu-novo-bucket')
+```
+
 ### Exemplo de Gravação (PUT)
 
 ```python
-# Gravar um arquivo
+# Gravar um arquivo (substitua pelo nome do seu bucket e objeto)
 s3.upload_file('localfile.txt', 'meu-bucket', 'localfile.txt')
 ```
 
 ### Exemplo de Leitura (GET)
 
 ```python
-
-# Ler um arquivo
+# Ler um arquivo (substitua pelo nome do seu bucket e objeto)
 s3.download_file('meu-bucket', 'localfile.txt', 'baixado_localfile.txt')
-
 ```
 
-### Criando um Bucket
+### Testando com curl
 
-```python
+Em sua máquina, faça uma requisição ao objeto via terminal: 
 
-s3.create_bucket(Bucket='meu-novo-bucket')
-
+```bash
+# Exemplo de download usando a API S3 (substitua pelo nome do seu bucket e objeto)
+curl -O http://localhost:9000/meuprimeirobucket/teste.txt \
+     -u minioadmin:minioadmin
 ```
 
 ### Listando Objetos em um Bucket
@@ -216,12 +258,83 @@ for obj in response.get('Contents', []):
 ### Deletando um Objeto
 
 ```python
-
 s3.delete_object(Bucket='meu-bucket', Key='localfile.txt')
-
 ```
 
-## Conclusão
+### Gerando Presigned URLs com Python
+
+Uma Presigned URL é um link temporário e autenticado que dá acesso direto a um objeto em um bucket, sem expor credenciais; isso é útil em Big Data e Cloud porque permite compartilhar dados de forma segura e controlada entre sistemas, pipelines e usuários, evitando cópias desnecessárias e reduzindo custos de transferência e gerenciamento de permissões. Após configurar o cliente `boto3` como visto antes, basta usar `generate_presigned_url` para criar o link. 
+
+```python
+import boto3
+from botocore.client import Config
+
+s3 = boto3.client(
+    's3',
+    endpoint_url='http://localhost:9000',
+    aws_access_key_id='minioadmin',
+    aws_secret_access_key='minioadmin',
+    config=Config(signature_version='s3v4'),
+    region_name='us-east-1'
+)
+
+# Gerar URL temporária para download
+url = s3.generate_presigned_url(
+    'get_object',
+    Params={'Bucket': 'meu-novo-bucket', 'Key': 'localfile.txt'},
+    ExpiresIn=3600  # segundos (1h)
+)
+
+print("URL temporária:", url)
+```
+
+### MinIO Client
+
+O `mc` é o utilitário de linha de comando do MinIO. Ele é análogo ao AWS CLI, mas funciona com qualquer serviço compatível com a API S3, incluindo Azure BLOB Storage, Google Cloud Storage e o próprio MinIO. Na VM, baixe com o comando abaixo: 
+
+```bash
+wget https://dl.min.io/client/mc/release/linux-amd64/mc
+chmod +x mc
+sudo mv mc /usr/local/bin/
+```
+
+<!--# MacOS
+brew install minio/stable/mc--> 
+
+O primeiro passo é configurar uma conexão para seu servidor MinIO local, por meio de um alias: 
+
+```bash
+mc alias set local http://localhost:9000 minioadmin minioadmin
+```
+
+Depois você pode realizar as operações básicas: 
+
+```bash
+#Listar buckets:
+mc ls local
+
+#Criar bucket:
+mc mb local/meu-bucket
+
+#Upload de arquivo:
+mc cp dados.csv local/meu-bucket/
+
+#Download de arquivo:
+mc cp local/meu-bucket/dados.csv .
+
+#Listar objetos de um bucket:
+mc ls local/meu-bucket
+
+#Presigned URL
+mc alias set local http://localhost:9000 minioadmin minioadmin
+mc presign local/meu-bucket/dados.csv --expire 2h
+
+# Simular IAM, criando usuários e políticas de acesso
+mc admin user add local aluno123 senha123
+mc admin policy attach local readwrite --user aluno123
+```
+
+## 6. Conclusão
 
 O armazenamento baseado em objetos é uma solução robusta e versátil para gerenciar o crescimento exponencial de dados não estruturados. Com segurança, escalabilidade e flexibilidade, ele é ideal para aplicações modernas, como serviços de nuvem, arquivamento de longo prazo e gerenciamento de dados críticos.
 
