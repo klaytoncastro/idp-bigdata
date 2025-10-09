@@ -31,8 +31,14 @@ RUN wget -q https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/ha
     wget -q https://repo1.maven.org/maven2/com/datastax/spark/spark-cassandra-connector_2.12/3.0.0/spark-cassandra-connector_2.12-3.0.0.jar -P /usr/local/spark/jars/ && \
     wget -q https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.12/3.0.0/mongo-spark-connector_2.12-3.0.0.jar -P /usr/local/spark/jars/
 
+RUN wget --no-check-certificate https://github.com/minio/mc/releases/latest/download/mc -O /usr/local/bin/mc && \
+    chmod +x /usr/local/bin/mc && \
+ #   mc --version
+
 # Define o usuário padrão do Jupyter como root para evitar permissões no Jupyter
 RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/jovyan
+
+
 
 # Troca para o usuário padrão do Jupyter
 USER jovyan
