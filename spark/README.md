@@ -275,7 +275,11 @@ Ao utilizar o Spark, você atua com os principais fundamentos da computação di
 A Databricks, empresa fundada pelos próprios criadores do Spark, é atualmente a principal mantenedora do projeto e responsável por sua evolução contínua. Além disso, disponibiliza o Spark como serviço em provedores como AWS, Azure e Google Cloud, o que reforça sua importância como tecnologia-base para engenheiros e cientistas de dados. Para maior aprofundamento técnico e experimentação, consulte:
 
 [Documentação Oficial do Apache Spark](https://spark.apache.org/docs/latest/)
+
 [Repositório do Projeto no GitHub](https://github.com/apache/spark)
+
 [Guia do PySpark](https://spark.apache.org/docs/latest/api/python/index.html)
+
 [Documentação da Databricks sobre Spark](https://docs.databricks.com/en/getting-started/spark.html)
+
 [Tutoriais da Apache Software Foundation](https://spark.apache.org/examples.html)
