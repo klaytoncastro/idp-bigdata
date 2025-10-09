@@ -5,23 +5,23 @@ services:
     build:
       context: .
     ports:
-      - "8889:8888"  # Porta padrão da IDE Jupyter (Alterando para 8889)
-      - "4040:4040"  # Porta padrão do Spark UI (Disponível após inicialização do Spark, via IDE ou script)
-      - "7077:7077"  # Porta padrão da Spark API (Acesso Externo)
+      - "8889:8888"  # IDE Jupyter (Alterando para 8889)
+      - "4040:4040"  # Spark UI    (Após inicialização via IDE ou script)
+      - "7077:7077"  # Spark API   (Acesso Externo)
     volumes:
       - ./notebooks:/home/jovyan/work
       - ./data:/home/jovyan/data
       - ./config:/home/jovyan/.jupyter
 
     networks:
-      - mybridge # Nome da rede.
+      - mybridge     # Nome da rede.
+
+networks:
+  mybridge:          # Nome da rede indicada no serviço.
+    external:        # Indica que a rede é externa e já foi criada anteriormente.
+      name: mybridge # Nome da rede externa que será usada.
 
 volumes:
   notebooks:
   data:
-  config:          
-
-networks:
-  mybridge: # Nome da rede indicada no serviço.
-    external: # Indica que a rede é externa e já foi criada anteriormente.
-      name: mybridge # Nome da rede externa que será usada.
+  config:
