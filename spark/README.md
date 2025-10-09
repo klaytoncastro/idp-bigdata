@@ -190,7 +190,7 @@ Essas integrações ampliam o alcance do Spark para além do contexto de process
 A seguir, iniciaremos a configuração prática do ambiente, utilizando contêineres Docker para simular um cluster local de Spark integrado à IDE Jupyter. O objetivo é validar o funcionamento do motor de computação distribuída, que possibilitará evoluirmos para exercícios com Data Lakes e formatos de armazenamento otimizados. Para começar, construa o contêiner do Spark e posteriormente acesse a IDE Jupyter (`http://localhost:8889`). Aqui, alteramos a porta para `8889` para evitar conflitos com a instância do Jupyter que estávamos utilizando anteriomente, onde o Spark não estava habitado.
 
 ```bash
-cd /opt/ceub-bigdata/spark
+cd /opt/idp-bigdata/spark
 chmod +x permissions.sh && ./permissions.sh
 docker-compose up -d --build
 ```
