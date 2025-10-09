@@ -33,7 +33,7 @@ RUN wget -q https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/ha
 
 # Instale o MinIO Client (mc)
 RUN wget --no-check-certificate https://dl.min.io/client/mc/release/linux-amd64/mc -O /usr/local/bin/mc && \
-    chmod +x /usr/local/bin/mc && \
+    chmod +x /usr/local/bin/mc
 
 # Defina o usuário padrão do Jupyter como root para evitar erros de elevação de permissões no Jupyter
 RUN echo "jovyan ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/jovyan
@@ -43,3 +43,4 @@ USER jovyan
 
 # Configure o diretório de trabalho padrão para os notebooks
 WORKDIR /home/jovyan/work
+
