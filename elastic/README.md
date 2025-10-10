@@ -31,8 +31,7 @@ O surgimento do Elasticsearch (2010) rompeu essa fronteira. Ao transformar o Luc
 
 Historicamente, a monitoração de sistemas envolvia a coleta pontual de métricas como uso de CPU, memória, latência e tempo de resposta, oferecendo uma visão parcial do comportamento da infraestrutura. Esse modelo era adequado à era dos administradores de sistemas (Sysadmins), focados em servidores físicos e topologias estáticas. Com a adoção de infraestrutura virtualizada e pipelines contínuos, emergiu a cultura DevOps, que unificou desenvolvimento e operações e passou a tratar desempenho e disponibilidade como responsabilidades compartilhadas. Nesse contexto, o monitoramento tradicional evoluiu para o conceito de observabilidade — a capacidade de entender o estado interno de um sistema distribuído a partir de seus sinais externos, ou seja, logs, métricas e traces (os chamados *three pillars of observability*).
 
-A transição de monitoramento para observabilidade marca a passagem de um modelo reativo — centrado em alarmes e métricas pontuais — para um modelo proativo, orientado à compreensão contextual do sistema.
-Enquanto o monitoramento responde à pergunta: 
+A transição de monitoramento para observabilidade marca a passagem de um modelo reativo — centrado em alarmes e métricas pontuais — para um modelo proativo, orientado à compreensão contextual do sistema. O monitoramento tradicional visa responder à pergunta: 
 
 >“o sistema está funcionando?”
 
