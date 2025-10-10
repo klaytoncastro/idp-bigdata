@@ -17,9 +17,27 @@ A pilha completa (Elastic Stack) combina três componentes principais:
 Essa combinação permite criar pipelines completos de observabilidade, desde a coleta de logs brutos até a análise interativa em dashboards.  
 A Stack também serve como base para módulos complementares, como **Filebeat, Metricbeat e APM Server**, ampliando a coleta para métricas e traces de aplicações distribuídas.
 
-## 2. Arquitetura e Conceitos Chave 
+## 2. Arquitetura e Conceitos Chave
 
-Além SGBD de documentos (Elastic Search), temos a ferramenta Logstash, usada quando há necessidade de transformação complexa (ex: parsing avançado com Grok, enriquecimento de dados com lookups, normalização). Em fluxos mais simples, o Filebeat pode enviar os dados diretamente para o Elasticsearch, usando processadores de ingestão internos do ES para transformações leves. 
+Na construção de sistemas escaláveis e data-intensive, vimos as vantagens de modelos NoSQL. Ao estudarmos o contexto da família de SGBDs orientados a documentos, vimos que o MongoDB foi projetado como um general-purpose Data Store, focado em alta vazão de escritas e atualizações (Writes/Updates), consistência e ser a fonte primária de dados (Source of Truth). O Elasticsearch é uma Search and Analytics Engine, projetada para baixa latência em buscas textuais (Full-Text Search), agregação de dados em larga escala e alta vazão de leituras (Reads). Sua arquitetura é intrinsecamente otimizada para o consumo massivo e analítico de dados, atuando frequentemente como um índice secundário desnormalizado de dados gerados por sistemas transacionais. 
+
+A diferença fundamental reside na estrutura de índice utilizada, que define o trade-off de desempenho. O MongoDB utiliza principalmente estruturas de índice B-Tree (ou variantes, dependendo do motor de armazenamento), que são otimizadas para: 
+
+- Consultas por Chave Primária e Range Queries: A estrutura em árvore balanceada (B-Tree) permite localizar eficientemente documentos com base em chaves ou intervalos de valores (e.g., _id ou timestamp BETWEEN X AND Y).
+
+- Eficiência de Escrita: As atualizações (in-place updates) em B-Tree são relativamente eficientes, pois afetam apenas um subconjunto de nós, mantendo a integridade transacional.
+
+- Consistência e Durabilidade Opcionais (ACID-like properties): É o componente ideal para manter a integridade e o estado atual da aplicação.
+
+Por sua vez, o Elasticsearch é construído sobre a engine Lucene, que utiliza o Índice Invertido. Esta estrutura foca em: 
+
+- Busca Full-Text e Relevância (Scoring): O índice invertido mapeia cada termo (palavra tokenizada) para a lista de documentos em que ele aparece. Isso permite localizar instantaneamente todos os documentos que contêm um termo, essencial para a busca textual rápida e o cálculo de relevância (scoring).
+
+- Agregações e Análise em Larga Escala: Embora os índices invertidos não sejam ideais para agregações numéricas diretas, o ES utiliza estruturas auxiliares como Doc Values e Field Data para permitir a execução de funções estatísticas e agregações (e.g., contagem, média, percentis) em terabytes de dados com latência submilisegundo.
+
+- Imutabilidade e Alta Taxa de Leitura: Os segmentos de Lucene (unidades do índice invertido) são imutáveis, o que permite caching agressivo no sistema operacional e garante um alto desempenho de leitura. Uma atualização em um documento exige a reindexação do documento inteiro, um trade-off aceitável para priorizar a performance de leitura.
+
+Além do SGBD de documentos (Elastic Search), temos a ferramenta Logstash, usada quando há necessidade de transformação complexa (ex: parsing avançado com Grok, enriquecimento de dados com lookups, normalização). Em fluxos mais simples, o Filebeat pode enviar os dados diretamente para o Elasticsearch, usando processadores de ingestão internos do ES para transformações leves. 
 
 ```mermaid
 flowchart LR
