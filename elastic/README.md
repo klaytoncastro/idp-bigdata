@@ -38,9 +38,9 @@ Enquanto o monitoramento responde à pergunta:
 
 Já a observabilidade permite investigar: 
 
->“por que o sistema está se comportando assim?”. 
+>“por que o sistema está se comportando assim?”
 
-A evolução da ELK Stack desempenhou papel central nessa transição, fornecendo as bases técnicas para coletar, armazenar e correlacionar esses três pilares em escala. Essa integração foi determinante para o surgimento de novas funções operacionais, conforme abaixo: 
+A evolução da ELK Stack desempenhou papel central nessa transição, fornecendo as bases técnicas para coletar, armazenar e correlacionar esses três pilares em escala. Essa integração foi determinante para o surgimento de novas funções operacionais, conforme abaixo:
 
 | Período    | Papel Profissional                  | Perfil técnico predominamente                                                              | Ferramentas típicas                     |
 |------------|-------------------------------------|--------------------------------------------------------------------------------------------|-----------------------------------------|
