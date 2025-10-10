@@ -266,9 +266,4 @@ O **Cerebro** é uma interface web para administração direta do Elasticsearch 
 
 ## 4. Conclusão
 
-A **Elastic Stack** consolida-se como uma plataforma unificada para **busca, análise e observabilidade de dados em larga escala**, integrando **coleta, processamento, armazenamento e visualização** em um único ecossistema.  
-Sua arquitetura modular — composta por **Logstash**, **Elasticsearch** e **Kibana** — permite construir **pipelines de dados distribuídos**, capazes de lidar com **altos volumes, variedade e velocidade de informação**, características típicas de ambientes de **Big Data**.
-
-Além de sustentar cenários de observabilidade e monitoramento em tempo real, a Elastic Stack estende-se ao domínio analítico, viabilizando **consultas agregadas, correlação de eventos e exploração interativa de grandes datasets** com baixa latência.
-
-Essa integração proporciona **visibilidade operacional, diagnóstico inteligente e suporte à tomada de decisão baseada em dados**, consolidando a Elastic Stack como uma das **principais plataformas abertas para análise e observabilidade em ecossistemas de Big Data**.
+Em um panorama técnico dominado por sistemas distribuídos e fluxos contínuos de informação, a **Elastic Stack** afirma-se como uma das principais plataformas abertas e escaláveis, provendo a ponte necessária entre a performance analítica e as demandas de monitoramento inteligente. Ou seja, a solução consolida de forma eficiente as trajetórias de Big Data e Observabilidade de Sistemas ao unificar a coleta, o processamento, o armazenamento e a busca em um ecossistema distribuído, abordagem fundamental para lidar de modo eficiente com os desafios do Volume, Variedade e Velocidade dos dados modernos. Tendo o Elasticsearch como seu motor central e uma arquitetura modular, complementada por Logstash e Kibana, a Stack oferece a escalabilidade e a baixa latência, características essenciais para análise em tempo real. Ela cumpre, assim, o papel de uma infraestrutura de dados estratégica, que serve tanto à inteligência operacional quanto à exploração analítica de dados massivos.
