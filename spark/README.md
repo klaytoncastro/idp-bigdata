@@ -141,7 +141,7 @@ Diferentemente dos sistemas de arquivos hierárquicos, o Object Storage com MinI
 
 - **Escalabilidade horizonal**: Projetado para armazenar e servir datasets de múltiplos PetaBytes, sem pontos únicos de falha ou limitação decorrente de metadados centralizados.
 
-- **Desempenho Superior**: Capaz de atingir mais de 2,6Tbps em leituras e 1,3 Tbps em gravações, fornecendo throughput adequado para workloads analíticos, IA/ML e processamento distribuído em memória.
+- **Desempenho Superior**: Capaz de atingir mais de 2,6Tbps em leituras e 1,3Tbps em gravações, fornecendo throughput adequado para workloads analíticos, IA/ML e processamento distribuído em memória.
 
 - **Durabilidade e Resiliência**: Adota algoritmos de Erasure Coding e replicação automática entre nós, assegurando integridade mesmo em caso de falhas físicas.
 
@@ -187,13 +187,24 @@ Essas integrações ampliam o alcance do Spark para além do contexto de process
 
 ## 3. Atividade Prática
 
-A seguir, iniciaremos a configuração prática do ambiente, utilizando contêineres Docker para simular um cluster local de Spark integrado à IDE Jupyter. O objetivo é validar o funcionamento do motor de computação distribuída, que possibilitará evoluirmos para exercícios com Data Lakes e formatos de armazenamento otimizados. Para começar, construa o contêiner do Spark e posteriormente acesse a IDE Jupyter (`http://localhost:8889`). Aqui, alteramos a porta para `8889` para evitar conflitos com a instância do Jupyter que estávamos utilizando anteriomente, onde o Spark não estava habitado.
+A seguir, iniciaremos a configuração prática do ambiente, utilizando contêineres Docker para simular um cluster local de Spark integrado à IDE Jupyter. O objetivo é validar o funcionamento do motor de computação distribuída, que possibilitará evoluirmos para exercícios com Data Lakes e formatos de armazenamento otimizados. Para começar, construa o contêiner do Spark e posteriormente acesse a IDE Jupyter (`http://localhost:8889`). Aqui, alteramos a porta para `8889` para evitar conflitos com a instância do Jupyter que estávamos utilizando anteriomente, onde o Spark não estava habitado. Lembre-se de fazer `git pull` ou, se já tiver alterado o conteúdo do repositório, execute o bloco abaixo antes de começar: 
+
+```bash
+cd /opt/idp-bigdata/spark
+rm Dockerfile docker-compose.yml
+wget https://raw.githubusercontent.com/klaytoncastro/idp-bigdata/refs/heads/main/spark/docker-compose.yml
+wget https://raw.githubusercontent.com/klaytoncastro/idp-bigdata/refs/heads/main/spark/Dockerfile
+```
+
+Com a certeza dos arquivos atualizados, levante o ambiente:
 
 ```bash
 cd /opt/idp-bigdata/spark
 chmod +x permissions.sh && ./permissions.sh
-docker-compose up -d --build
+docker-compose build
+docker-compose up -d
 ```
+
 Caso seja o seu primeiro acesso a esta instância do Jupyter, lembre-se de executar o comando a seguir para visualizar os logs e identificar o token para obter acesso à IDE. Utilize o comando abaixo para recuperar o token e definir sua própria senha da GUI. 
 
 ```bash
