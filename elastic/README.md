@@ -118,12 +118,12 @@ flowchart LR
 | Conceito           | Descrição                                                                                              | Analogia (SQL)          |
 |--------------------|--------------------------------------------------------------------------------------------------------|-------------------------|
 | Documento          | Unidade básica de informação, representada como um objeto JSON armazenado em um índice.                | Linha / Registro        |
-| Index              | Coleção de documentos que compartilham um propósito comum.                                             | Banco de Dados / Tabela |
+| Index              | Coleção de documentos que compartilham um propósito comum.                                             | Tabela                  |
 | Shard              | Instância física do índice, menor unidade de escalabilidade e distribuição.                            | Partição de Tabela      |
-| Replica            | Cópia redundante de um *shard*, usada para alta disponibilidade e tolerância a falhas.                 | Replicação de Banco     |
+| Replica            | Cópia redundante de um *shard*, usada para alta disponibilidade e tolerância a falhas.                 | Replicação              |
 | Inverted Index     | Estrutura de dados que mapeia cada termo para os documentos onde ele aparece, permitindo busca rápida. | Índice de Tabela        |
 
-Recentemente, o Elasticsearch expandiu suas capacidades ao incorporar nativamente a Busca Vetorial (*Vector Search*), um conceito-chave em Inteligência Artificial e Processamento de Linguagem Natural (NLP). Documentos e consultas são transformados em vetores numéricos de alta dimensão (*embeddings*) por modelos de *Machine Learning*. Ao invés de usar o Índice Invertido para buscar por palavras-chave exatas, o Elasticsearch usa o índice de Vetores (como o HNSW - *Hierarchical Navigable Small World*) para buscar por similaridade semântica. Isso permite aplicações avançadas em Big Data e IA, tais como:
+Recentemente, o Elasticsearch expandiu suas capacidades ao incorporar nativamente a Busca Vetorial (*Vector Search*), um conceito-chave em Inteligência Artificial e Processamento de Linguagem Natural (NLP). Documentos e consultas são transformados em vetores numéricos de alta dimensão (*embeddings*) visando a utilização por modelos de *Machine Learning*. Ao invés de usar o Índice Invertido para buscar por palavras-chave exatas, o Elasticsearch usa o índice de Vetores (como o HNSW - *Hierarchical Navigable Small World*) para buscar por similaridade semântica. Isso permite aplicações avançadas em Big Data e IA, tais como:
 
 - Busca Semântica: Onde o significado do texto é mais importante que as palavras literais.
 - Recomendação de Conteúdo: Encontrar itens (items) ou documentos similares a partir de um perfil vetorial do usuário.
