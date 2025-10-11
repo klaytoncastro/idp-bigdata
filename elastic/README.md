@@ -60,10 +60,10 @@ Assim, fundou-se o alicerce para práticas modernas de monitoramento avançado, 
 
 ## 3. Arquitetura e Conceitos-Chave
 
-Na construção de sistemas escaláveis e *data-intensive*, observamos as vantagens que os modelos NoSQL oferecem: são projetados para entregar alto desempenho e grande flexibilidade na composição de ambientes distribuídos. Dentro da família de bancos orientados a documentos, duas soluções se destacam:
+Na construção de sistemas escaláveis e *data-intensive*, observamos as vantagens que os modelos NoSQL oferecem: são projetados para entregar alto desempenho e grande flexibilidade na composição de ambientes distribuídos. Dentro da família de bancos orientados a documentos, duas soluções se destacam em popularidade:
 
-- **MongoDB**: projetado como um general-purpose Data Store, voltado a alta vazão de escritas e atualizações (Writes/Updates), consistência e persistência do estado atual da aplicação (Source of Truth).
-- **Elasticsearch**: concebido como uma Search and Analytics Engine, otimizada para baixa latência em consultas textuais, agregações em larga escala e alta vazão de leituras (Reads).
+- MongoDB: projetado como um general-purpose Data Store, voltado a alta vazão de escritas e atualizações (Writes/Updates), consistência e persistência do estado atual da aplicação (Source of Truth).
+- Elasticsearch: concebido como uma Search and Analytics Engine, otimizada para baixa latência em consultas textuais, agregações em larga escala e alta vazão de leituras (Reads).
 
 O MongoDB atua como a camada transacional primária: 
 
@@ -135,11 +135,11 @@ Este ambiente de laboratório permite compreender na prática:
 - A estrutura e funcionamento de pipelines de observabilidade e monitoramento.
 
 ```bash
-opt/elastic/
+/opt/idp-bigdata/elastic/
 │
 ├── Dockerfile               # Adiciona ingest-attachment plugin (Apache Tika)
 ├── docker-compose.yml       # Stack principal: Elasticsearch, Logstash, Kibana
-├── permissions.sh           # Script opcional de criação e ajuste de pastas
+├── permissions.sh           # Script para criação e ajuste de diretórios e permissões
 │
 ├── datasets/                # Logs e datasets de teste (ex: apache_access.log)
 │
@@ -278,4 +278,4 @@ Como complemento ao Kibana na parte de administração do ambiente da Elastic St
 
 ## 5. Conclusão
 
-Em um panorama técnico dominado por sistemas distribuídos e fluxos contínuos de informação, a **Elastic Stack** afirma-se como uma das principais plataformas abertas e escaláveis, provendo a ponte necessária entre a performance analítica e as demandas de monitoramento inteligente. Ou seja, a solução consolida de forma eficiente as trajetórias de Big Data e Observabilidade de sistemas ao unificar a coleta, o processamento, o armazenamento e a busca em um ecossistema distribuído, constituindo uma abordagem fundamental para lidar de modo eficiente com os desafios do Volume, Variedade e Velocidade dos dados modernos. Tendo o Elasticsearch como seu motor central e uma arquitetura modular, complementada por Logstash e Kibana, a Stack oferece a escalabilidade e a baixa latência, características essenciais para análise em tempo real. Ela cumpre, assim, o papel de uma infraestrutura de dados estratégica, que serve tanto à inteligência artificial, à gestão operacional e à exploração analítica de dados massivos.
+Em um panorama técnico dominado por sistemas distribuídos e fluxos contínuos de informação, a **Elastic Stack** afirma-se como uma das principais plataformas abertas e escaláveis, provendo a ponte necessária entre a performance analítica e as demandas de monitoramento inteligente. Ou seja, a solução consolida de forma eficiente as trajetórias de Big Data e Observabilidade de sistemas ao unificar a coleta, o processamento, o armazenamento e a busca em um ecossistema distribuído, constituindo uma abordagem fundamental para lidar de modo eficiente com os desafios do Volume, Variedade e Velocidade dos dados modernos. Tendo o Elasticsearch como seu motor central e uma arquitetura modular, complementada por Logstash e Kibana, a Stack oferece a escalabilidade e a baixa latência, características essenciais para análise em tempo real. Ela cumpre, assim, o papel de uma infraestrutura de dados estratégica, que serve tanto à inteligência artificial, quanto à gestão operacional e à exploração analítica de dados massivos.
