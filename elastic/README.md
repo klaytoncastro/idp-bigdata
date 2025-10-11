@@ -118,6 +118,14 @@ flowchart LR
 | **Replica**        | Cópia redundante de um *shard*, usada para alta disponibilidade e tolerância a falhas.                 | Replicação de Banco     |
 | **Index Inverted** | Estrutura de dados que mapeia cada termo para os documentos onde ele aparece, permitindo busca rápida. | Índice de Tabela        |
 
+Recentemente, o Elasticsearch expandiu suas capacidades ao incorporar nativamente a Busca Vetorial (Vector Search), um conceito-chave em Inteligência Artificial e Processamento de Linguagem Natural (NLP). Documentos e consultas são transformados em vetores numéricos de alta dimensão (embeddings) por modelos de Machine Learning. Ao invés de usar o Índice Invertido para buscar por palavras-chave exatas, o Elasticsearch usa o índice de Vetores (como o HNSW - Hierarchical Navigable Small World) para buscar por similaridade semântica. Isso permite aplicações avançadas em Big Data, como:
+
+- **Busca Semântica:** Onde o significado do texto é mais importante que as palavras literais.
+- **Recomendação de Conteúdo:** Encontrar itens (items) ou documentos similares a partir de um perfil vetorial do usuário.
+- **RAG (Retrieval-Augmented Generation):** Servir como o data store rápido e escalável para recuperar contexto relevante para Large Language Models (LLMs).
+
+Essa funcionalidade consolida o Elasticsearch não apenas como um analytics engine para dados operacionais, mas também como um motor central para as cargas de trabalho de IA em escala no ecossistema de Big Data.
+
 ## 3. Descrição do Ambiente
 
 Este ambiente de laboratório permite compreender na prática:
