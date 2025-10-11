@@ -45,14 +45,14 @@ a observabilidade permite investigar
 
 A evolução da Elastic Stack desempenhou papel central nessa transição, fornecendo as bases técnicas para coletar, armazenar e correlacionar dados em larga escala, sendo determinante para a consolidação de novos papéis e atribuições no mercado de TIC:  
 
-| Período    | Papel Profissional                  | Perfil técnico predominante                                                                | Ferramentas típicas                     |
-|------------|-------------------------------------|--------------------------------------------------------------------------------------------|-----------------------------------------|
-| **2000s**  | **Sysadmin**                        | Administração de servidores físicos, com foco em disponibilidade e estabilidade.           | Nagios, Cacti, MRTG, Zabbix                     |
-| **2010s**  | **DevOps**                          | Integração de desenvolvimento e operações, promovendo entrega contínua e automação.        | Jenkins, Ansible, ELK                   |
-| **2015+**  | **SRE (Site Reliability Engineer)** | Confiabilidade e automação inteligente, com foco em resiliência, SLOs e redução de MTTR.   | Prometheus, Grafana, Elastic APM        |
-| **2020s**  | **Platform Engineer**               | Abstração e padronização da infraestrutura, oferecendo *Observability as a Service* (OaaS).| Kubernetes, Elastic Stack, OpenTelemetry|
+| Período    | Papel Profissional                  | Perfil técnico predominante                                                                | Ferramentas típicas                      |
+|------------|-------------------------------------|--------------------------------------------------------------------------------------------|------------------------------------------|
+| **2000s**  | **Sysadmin**                        | Administração de servidores físicos, com foco em disponibilidade e estabilidade.           | Nagios, Cacti, MRTG                      |
+| **2010s**  | **DevOps**                          | Integração de desenvolvimento e operações, promovendo entrega contínua e automação.        | Jenkins, Ansible, Zabbix, ELK            |
+| **2015+**  | **SRE (Site Reliability Engineer)** | Confiabilidade e automação inteligente, com foco em resiliência, SLOs e redução de MTTR.   | Docker, Prometheus, Grafana, Elastic APM |
+| **2020s**  | **Platform Engineer**               | Abstração e padronização da infraestrutura, oferecendo *Observability as a Service* (OaaS).| Kubernetes, OpenTelemetry, Elastic Stack |
 
-Assim, fundou-se o alicerce para práticas modernas de monitoramento avançado, correlação de eventos e diagnóstico em tempo real — elementos que caracterizam a observabilidade contemporânea. Mais do que um mecanismo de indexação de documentos, o Elastic tornou-se o núcleo de inteligência operacional em muitas arquiteturas distribuídas, sustentando diagnósticos automáticos, alertas inteligentes e análises preditivas — capacidades que pavimentam o caminho para o paradigma de AIOps (Artificial Intelligence for IT Operations). Essa consolidação tecnológica e conceitual deve-se a três fatores fundamentais: 
+Assim, fundou-se o alicerce para práticas modernas de monitoramento avançado, correlação de eventos e diagnóstico em tempo real — elementos que caracterizam a observabilidade contemporânea. Mais do que um mecanismo de indexação de documentos, o Elastic tornou-se o núcleo de inteligência operacional em muitas arquiteturas distribuídas, sustentando diagnósticos automáticos, alertas inteligentes e análises preditivas — capacidades que pavimentam o caminho para o paradigma de **AIOps** (*Artificial Intelligence for IT Operations*). Essa consolidação tecnológica e conceitual deve-se a três fatores fundamentais: 
 
 - **Unificação dos sinais**:combina logs, métricas e traces em um único *pipeline* distribuído.
 - **Elasticidade horizontal**: adapta-se dinamicamente à escala e volatilidade de *workloads* modernos.
@@ -67,17 +67,17 @@ Na construção de sistemas escaláveis e *data-intensive*, observamos as vantag
 
 O MongoDB atua como a camada transacional primária: 
 
-- Consultas por Chave Primária e Range Queries: A estrutura em árvore balanceada (B-Tree) permite localizar eficientemente documentos com base em chaves ou intervalos de valores (e.g., _id ou timestamp BETWEEN X AND Y).
-- Eficiência de Escrita: As atualizações (in-place updates) em B-Tree são relativamente eficientes, pois afetam apenas um subconjunto de nós, mantendo a integridade transacional.
-- Consistência e Durabilidade Opcionais (ACID-like properties): É o componente ideal para manter a integridade e o estado atual da aplicação.
+- Consultas por Chave Primária e *Range Queries*: A estrutura em árvore balanceada (B-Tree) permite localizar eficientemente documentos com base em chaves ou intervalos de valores (e.g., `_id` ou `timestamp BETWEEN X AND Y`).
+- Eficiência de Escrita: As atualizações (*in-place updates*) em B-Tree são relativamente eficientes, pois afetam apenas um subconjunto de nós, mantendo a integridade transacional.
+- Consistência e Durabilidade Opcionais (*ACID-like properties*): É o componente ideal para manter a integridade e o estado atual da aplicação.
 
 Já o Elasticsearch funciona como um índice secundário desnormalizado, especializado em leitura analítica e busca textual em tempo real sobre grandes volumes de dados. Ao invés de B-Trees, a ferramenta utiliza o Índice Invertido, estrutura que foca em: 
 
-- Busca Full-Text e Relevância (Scoring): O índice invertido mapeia cada termo (palavra tokenizada) para a lista de documentos em que ele aparece. Isso permite localizar instantaneamente todos os documentos que contêm um termo, essencial para a busca textual rápida e o cálculo de relevância (scoring).
-- Agregações e Análise em Larga Escala: Embora os índices invertidos não sejam ideais para agregações numéricas diretas, o ES utiliza estruturas auxiliares como Doc Values e Field Data para permitir a execução de funções estatísticas e agregações (e.g., contagem, média, percentis) em terabytes de dados com latência submilisegundo.
-- Imutabilidade e Alta Taxa de Leitura: Os segmentos de Lucene (unidades do índice invertido) são imutáveis, o que permite caching agressivo no sistema operacional e garante um alto desempenho de leitura. Uma atualização em um documento exige a reindexação do documento inteiro, um trade-off aceitável para priorizar a performance de leitura.
+- Busca *Full-Text* e Relevância (*Scoring*): O índice invertido mapeia cada termo (palavra *tokenizada*) para a lista de documentos em que ele aparece. Isso permite localizar instantaneamente todos os documentos que contêm um termo, essencial para a busca textual rápida e o cálculo de relevância (scoring).
+- Agregações e Análise em Larga Escala: Embora os índices invertidos não sejam ideais para agregações numéricas diretas, o Elasticsearch utiliza estruturas auxiliares como `Doc Values` e `Field Data` para permitir a execução de funções estatísticas e agregações (e.g., contagem, média, percentis) em *TeraBytes* de dados com latência em submilisegundo.
+- Imutabilidade e Alta Taxa de Leitura: Os segmentos de Lucene (unidades do índice invertido) são imutáveis, o que permite *caching* agressivo no sistema operacional, garantindo um alto desempenho de leitura. Uma atualização em um documento exige a reindexação do documento inteiro, um *trade-off* aceitável para priorizar a performance de leitura.
 
-Dessa forma, enquanto o MongoDB prioriza operações transacionais e consistência, o Elasticsearch é projetado para consulta, análise e exploração em tempo real — pilares fundamentais da observabilidade moderna. Além do SGBD de documentos (Elastic Search), temos a ferramenta Logstash, usada quando há necessidade de transformação complexa (ex: parsing avançado com Grok, enriquecimento de dados com lookups, normalização). Em fluxos mais simples, o Filebeat pode enviar os dados diretamente para o Elasticsearch, usando processadores de ingestão internos do ES para transformações leves. 
+Dessa forma, enquanto o MongoDB prioriza operações transacionais e consistência, o Elasticsearch é projetado para consulta, análise e exploração em tempo real. Além do SGBD de documentos (Elastic Search), temos a ferramenta Logstash, usada quando há necessidade de transformação complexa (ex: *parsing* avançado com Grok, enriquecimento de dados com *lookups*, normalização). Em fluxos mais simples, o Filebeat pode enviar os dados diretamente para o Elasticsearch, usando processadores de ingestão internos do Elasticsearch para transformações leves. 
 
 ```mermaid
 flowchart LR
@@ -112,21 +112,21 @@ flowchart LR
 
 | Conceito           | Descrição                                                                                              | Analogia (SQL)          |
 |--------------------|--------------------------------------------------------------------------------------------------------|-------------------------|
-| **Documento**      | Unidade básica de informação, representada como um objeto JSON armazenado em um índice.                | Linha / Registro        |
-| **Index**          | Coleção de documentos que compartilham um propósito comum.                                             | Banco de Dados / Tabela |
-| **Shard**          | Instância física do índice, menor unidade de escalabilidade e distribuição.                            | Partição de Tabela      |
-| **Replica**        | Cópia redundante de um *shard*, usada para alta disponibilidade e tolerância a falhas.                 | Replicação de Banco     |
-| **Index Inverted** | Estrutura de dados que mapeia cada termo para os documentos onde ele aparece, permitindo busca rápida. | Índice de Tabela        |
+| Documento          | Unidade básica de informação, representada como um objeto JSON armazenado em um índice.                | Linha / Registro        |
+| Index              | Coleção de documentos que compartilham um propósito comum.                                             | Banco de Dados / Tabela |
+| Shard              | Instância física do índice, menor unidade de escalabilidade e distribuição.                            | Partição de Tabela      |
+| Replica            | Cópia redundante de um *shard*, usada para alta disponibilidade e tolerância a falhas.                 | Replicação de Banco     |
+| Inverted Index     | Estrutura de dados que mapeia cada termo para os documentos onde ele aparece, permitindo busca rápida. | Índice de Tabela        |
 
-Recentemente, o Elasticsearch expandiu suas capacidades ao incorporar nativamente a Busca Vetorial (Vector Search), um conceito-chave em Inteligência Artificial e Processamento de Linguagem Natural (NLP). Documentos e consultas são transformados em vetores numéricos de alta dimensão (embeddings) por modelos de Machine Learning. Ao invés de usar o Índice Invertido para buscar por palavras-chave exatas, o Elasticsearch usa o índice de Vetores (como o HNSW - Hierarchical Navigable Small World) para buscar por similaridade semântica. Isso permite aplicações avançadas em Big Data, como:
+Recentemente, o Elasticsearch expandiu suas capacidades ao incorporar nativamente a Busca Vetorial (*Vector Search*), um conceito-chave em Inteligência Artificial e Processamento de Linguagem Natural (NLP). Documentos e consultas são transformados em vetores numéricos de alta dimensão (*embeddings*) por modelos de *Machine Learning*. Ao invés de usar o Índice Invertido para buscar por palavras-chave exatas, o Elasticsearch usa o índice de Vetores (como o HNSW - *Hierarchical Navigable Small World*) para buscar por similaridade semântica. Isso permite aplicações avançadas em Big Data e IA, tais como:
 
-- **Busca Semântica:** Onde o significado do texto é mais importante que as palavras literais.
-- **Recomendação de Conteúdo:** Encontrar itens (items) ou documentos similares a partir de um perfil vetorial do usuário.
-- **RAG (Retrieval-Augmented Generation):** Servir como o data store rápido e escalável para recuperar contexto relevante para Large Language Models (LLMs).
+- Busca Semântica: Onde o significado do texto é mais importante que as palavras literais.
+- Recomendação de Conteúdo: Encontrar itens (items) ou documentos similares a partir de um perfil vetorial do usuário.
+- RAG (*Retrieval-Augmented Generation*): Servir como o data store rápido e escalável para recuperar contexto relevante para Large Language Models (LLMs).
 
 Essa funcionalidade consolida o Elasticsearch não apenas como um analytics engine para dados operacionais, mas também como um motor central para as cargas de trabalho de IA em escala no ecossistema de Big Data.
 
-## 3. Descrição do Ambiente
+## 4. Descrição do Ambiente
 
 Este ambiente de laboratório permite compreender na prática:
 
@@ -151,7 +151,7 @@ opt/elastic/
     └── pipelines/           # Definição dos pipelines (.conf)
 ```
 
-### 3.1. Inicialização
+### 4.1. Inicialização
 
 ```bash
 cd /opt/elastic
@@ -164,13 +164,13 @@ Verifique se os containers estão ativos:
 docker ps
 ```
 
-### 3.2. Acesso às ferramentas
+### 4.2. Acesso às ferramentas
 
-| Serviço           | Porta Padrão          | Descrição                           |
-|-------------------|-----------------------|-------------------------------------|
-| **Elasticsearch** | 9200                  | API REST e armazenamento de índices |
-| **Kibana**        | 5601                  | Interface de análise e dashboards   |
-| **Logstash**      | 5044 / 9600           | Entrada de logs / API interna       |
+| Serviço           | Porta Padrão            | Descrição                           |
+|-------------------|-------------------------|-------------------------------------|
+| Elasticsearch     | `9200`                  | API REST e armazenamento de índices |
+| Kibana            | `5601`                  | Interface de análise e dashboards   |
+| Logstash          | `5044` / `9600`         | Entrada de logs / API interna       |
 
 Baixe um dataset de logs de exemplo:
 
@@ -214,7 +214,7 @@ Acompanhe os logs:
 docker compose logs -f logstash
 ```
 
-### 3.3. Verificação no Kibana
+### 4.3. Verificação no Kibana
 
 Acesse `http://localhost:5601`
 
@@ -226,7 +226,7 @@ Clique em `Create data view`
 
 Os documentos devem aparecer automaticamente.
 
-### 3.4. Extensões e ferramentas do ecossistema ELK
+### 4.4. Extensões e ferramentas do ecossistema ELK
 
 O **Filebeat** é um agente leve projetado para a coleta e o envio de logs. Ele pode ser adicionado ao ambiente sem qualquer modificação na stack principal, sendo ideal para testes de ingestão direta de dados. Atua como um *shipper*, ou seja, lê arquivos de log locais — como `/var/log/*.log`, registros de aplicações ou access logs de servidores — e encaminha os eventos coletados diretamente para o Elasticsearch ou, opcionalmente, para o Logstash, que pode realizar transformações adicionais. Entre suas principais vantagens está o consumo mínimo de recursos: tipicamente menos de 50 MB de memória e uso de CPU praticamente insignificante. Por essa razão, é amplamente utilizado em cenários onde se busca simplicidade, eficiência e baixo impacto sobre o sistema monitorado. Para utilizá-lo, crie um `filebeat.yml`: 
 
@@ -272,10 +272,10 @@ docker rm -f filebeat
 
 Por sua vez, o **Metricbeat** é uma agente voltado à coleta de métricas de sistema e aplicações. Mede CPU, memória, rede, I/O, e também integra com serviços como PostgreSQL, Nginx, Redis, etc. Assim, pode substituir o antigo `top + iostat + netstat` em ambientes distribuídos. Como saída, temos os índices `metricbeat-*` no Elasticsearch.Em observabilidade serve como fonte para dashboards de infraestrutura e aplicações no Kibana (SO Linux, NodeJS, Java, etc.).
 
-Outra importante ferramenta é o **APM Server**, componente da Elastic para APM (Application Performance Monitoring). Recebe traces, métricas e spans de aplicações instrumentadas (Python, Java, Node, etc.) via agente. Captura latência, erros, tempo de resposta, dependências entre serviços. A integração é direta em `Kibana → Observability → APM`. Cria índices `apm-*` e `traces-*`.
+Outra importante ferramenta é o **APM Server**, componente da Elastic Stack para APM (Application Performance Monitoring). Recebe traces, métricas e spans de aplicações instrumentadas (Python, Java, Node, etc.) via agente. Captura latência, erros, tempo de resposta, dependências entre serviços. A integração é direta em `Kibana → Observability → APM`. Cria índices `apm-*` e `traces-*`.
 
-O **Cerebro** é uma interface web para administração direta do Elasticsearch para visualizar índices, shards, cluster health, executar queries, alterar settings. Outra alternativa nesse sentido é o **ElasticHQ**, ferramenta similar ao Cerebro, que oferece visualização de cluster, índices e métricas, podendo rodar dentro do mesmo container da stack.
+Como complemento ao Kibana na parte de administração do ambiente da Elastic Stack, temos o **Cerebro**, uma interface web para visualizar índices, shards, cluster health, executar queries e ajustar parâmetros. Outra alternativa nesse sentido é o **ElasticHQ**, ferramenta similar ao Cerebro, que oferece visualização de cluster, índices e métricas. 
 
-## 4. Conclusão
+## 5. Conclusão
 
-Em um panorama técnico dominado por sistemas distribuídos e fluxos contínuos de informação, a **Elastic Stack** afirma-se como uma das principais plataformas abertas e escaláveis, provendo a ponte necessária entre a performance analítica e as demandas de monitoramento inteligente. Ou seja, a solução consolida de forma eficiente as trajetórias de Big Data e Observabilidade de Sistemas ao unificar a coleta, o processamento, o armazenamento e a busca em um ecossistema distribuído, abordagem fundamental para lidar de modo eficiente com os desafios do Volume, Variedade e Velocidade dos dados modernos. Tendo o Elasticsearch como seu motor central e uma arquitetura modular, complementada por Logstash e Kibana, a Stack oferece a escalabilidade e a baixa latência, características essenciais para análise em tempo real. Ela cumpre, assim, o papel de uma infraestrutura de dados estratégica, que serve tanto à inteligência operacional quanto à exploração analítica de dados massivos.
+Em um panorama técnico dominado por sistemas distribuídos e fluxos contínuos de informação, a **Elastic Stack** afirma-se como uma das principais plataformas abertas e escaláveis, provendo a ponte necessária entre a performance analítica e as demandas de monitoramento inteligente. Ou seja, a solução consolida de forma eficiente as trajetórias de Big Data e Observabilidade de sistemas ao unificar a coleta, o processamento, o armazenamento e a busca em um ecossistema distribuído, constituindo uma abordagem fundamental para lidar de modo eficiente com os desafios do Volume, Variedade e Velocidade dos dados modernos. Tendo o Elasticsearch como seu motor central e uma arquitetura modular, complementada por Logstash e Kibana, a Stack oferece a escalabilidade e a baixa latência, características essenciais para análise em tempo real. Ela cumpre, assim, o papel de uma infraestrutura de dados estratégica, que serve tanto à inteligência artificial, à gestão operacional e à exploração analítica de dados massivos.
