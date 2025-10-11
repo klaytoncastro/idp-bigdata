@@ -15,7 +15,6 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 05 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar Cassandra                     | 26/09/2025 |
 | 06 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                             | 03/10/2025 |
 | 07 | [Spark](./spark/)                                                                    | Framework Spark e Prática com PySpark                            | 10/10/2025 |
-| 08 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                           | 17/10/2025 |
 
 <!--
 | 06 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 02/04/2025 |
@@ -517,5 +516,6 @@ chmod +x docker-cleanup.sh
 Nas VMs (configuração alternativa), precisamos evitar desligamentos abruptos, seja por interrupções forçadas ou por encerramento inadequado do VirtualBox, podem afetar a consistência dos discos virtuais, levando à perda ou corrupção de dados e desestabilizando o ambiente. Por isso, ao concluir suas atividades, é fundamental executar o comando `shutdown -h now` a partir do terminal. Esse passo garante um desligamento apropriado e a integridade do sistema operacional da VM, incluindo os contêineres Docker. Assim, todas as alterações serão preservadas, assegurando que, ao reiniciar, o sistema retorne exatamente ao estado anterior, sem a necessidade de ajustes adicionais.
 
 ### Conclusão
+
 
 Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br).
