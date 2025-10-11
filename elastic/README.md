@@ -299,7 +299,11 @@ Hoje, a Elastic Stack estende-se também como serviço gerenciado em nuvem (Elas
 Mais do que um conjunto de ferramentas, a solução sintetiza duas décadas de evolução na engenharia de dados: da indexação de texto à análise inteligente em escala. Em um cenário dominado por volume, variedade e velocidade, a Elastic Stack permanece como uma das expressões mais consistentes e maduras do conceito de Big Data. Para aprofundamento, consulte os links abaixo: 
 
 [Página oficial do Elasticsearch](https://www.elastic.co/elasticsearch)
+
 [Elastic Docs (documentação oficial da Elastic Stack)](https://www.elastic.co/guide/index.html)
+
 [Guia do Elasticsearch (referência da API e funcionamento interno)](https://www.elastic.co/guide/en/elasticsearch/reference/index.html)
+
 [Entrevista com Doug Cutting sobre origem de Lucene/Hadoop](https://opensource.com/business/14/10/interview-doug-cutting-cloudera)
+
 [Artigo sobre Doug Cutting e a evolução do Hadoop](https://medium.com/s-c-a-l-e/hadoop-creator-doug-cutting-on-evolving-and-succeeding-in-open-source-3277a42e5b6e)
