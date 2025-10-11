@@ -58,12 +58,17 @@ Assim, fundou-se o alicerce para práticas modernas de monitoramento avançado, 
 - **Elasticidade horizontal**: adapta-se dinamicamente à escala e volatilidade de *workloads* modernos.
 - **Interface analítica integrada**: o Kibana oferece visualização exploratória e *dashboards* correlacionáveis em tempo real.
 
-## 3. Arquitetura e Conceitos-Chave
+## 3. Bancos de Dados de Documentos: Arquiteturas, Conceitos-Chave e Comparativo
 
-Na construção de sistemas escaláveis e *data-intensive*, observamos as vantagens que os modelos NoSQL oferecem: são projetados para entregar alto desempenho e grande flexibilidade na composição de ambientes distribuídos. Dentro da família de bancos orientados a documentos, duas soluções se destacam em popularidade:
+Na construção de sistemas escaláveis e data-intensive, observamos as vantagens que os modelos NoSQL oferecem: são projetados para entregar alto desempenho e grande flexibilidade em ambientes distribuídos. Dentro da família de bancos orientados a documentos, algumas soluções se destacam em popularidade e propósito:
 
-- MongoDB: projetado como um general-purpose Data Store, voltado a alta vazão de escritas e atualizações (Writes/Updates), consistência e persistência do estado atual da aplicação (Source of Truth).
-- Elasticsearch: concebido como uma Search and Analytics Engine, otimizada para baixa latência em consultas textuais, agregações em larga escala e alta vazão de leituras (Reads).
+- MongoDB: General-purpose Data Store, voltado a alta vazão de escritas e atualizações (writes/updates), consistência e persistência do estado atual da aplicação (source of truth).
+- Elasticsearch: Search and Analytics Engine, otimizado para baixa latência em consultas textuais, agregações em larga escala e alta vazão de leituras (reads).
+- Couchbase: híbrido entre chave-valor e documento, emprega arquitetura shared-nothing e replicação de memória distribuída para workloads interativos.
+- ArangoDB e RavenDB: bancos multimodelo, capazes de armazenar documentos e grafos na mesma instância, mesclando paradigmas NoSQL em um mesmo backend.
+- AWS DocumentDB e Azure Cosmos DB: implementações compatíveis com o modelo de documentos (e parcialmente com a API MongoDB), porém com engines internas baseadas em log-structured storage.
+
+### Comparativo: Abordagem MongoDB x Elasticsearch
 
 O MongoDB atua como a camada transacional primária: 
 
@@ -124,7 +129,16 @@ Recentemente, o Elasticsearch expandiu suas capacidades ao incorporar nativament
 - Recomendação de Conteúdo: Encontrar itens (items) ou documentos similares a partir de um perfil vetorial do usuário.
 - RAG (*Retrieval-Augmented Generation*): Servir como o data store rápido e escalável para recuperar contexto relevante para Large Language Models (LLMs).
 
-Essa funcionalidade consolida o Elasticsearch não apenas como um analytics engine para dados operacionais, mas também como um motor central para as cargas de trabalho de IA em escala no ecossistema de Big Data.
+Essa funcionalidade consolida o Elasticsearch não apenas como um analytics engine para dados operacionais, mas também como um motor central para as cargas de trabalho de IA em escala no ecossistema de Big Data. Abaixo segue um comparativo entre as estruturas de indexação em ferramentas bastante populares e suas abordagens: 
+
+| Engine / Banco                                | Estrutura Primária                       | Proposta                                  | Natureza das Operações              |
+|-----------------------------------------------|------------------------------------------|-------------------------------------------|-------------------------------------|
+| MongoDB                                       | B-Tree                                   | Escritas e atualizações rápidas           | Capacidade Transacional (ACID-like) |
+| Cassandra/ScyllaDB                            | LSM-Tree (SSTables)                      | Altas taxas de escrita sequencial         | Eventual consistency                |
+| Elasticsearch                                 | Índice Invertido + BKD                   | Busca textual e analítica                 | Imutável, otimizado para leitura    |
+| Couchbase                                     | B-Tree + camada Memcached                | Latência baixa em leitura interativa      | In-memory + disco                   |
+| ArangoDB                                      | B-Tree + Índice de Grafo                 | Documento e grafo no mesmo backend        | Multimodelo                         |
+| Vector Engines (Elasticsearch/Qdrant/Pinecone)| HNSW / IVF                               | Busca semântica (IA / embeddings)         | Similaridade vetorial               |
 
 ## 4. Descrição do Ambiente
 
