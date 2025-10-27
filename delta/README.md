@@ -127,7 +127,7 @@ Esses arquivos JSON descrevem de forma detalhada os commits, especificando quais
 Outro pilar dessa arquitetura é o schema enforcement, que impede a gravação de dados com estrutura incompatível com o esquema declarado, e o schema evolution, que permite alterar o formato da tabela (por exemplo, adicionando novas colunas) de maneira controlada e registrada no log. Essas funcionalidades tornam o Delta Lake particularmente adequado a ambientes de dados corporativos, nos quais a rastreabilidade, a integridade e a governança de schema são requisitos essenciais.
 
 O fluxo operacional do Delta Lake é regido pelo princípio de controle de versões imutáveis, em que cada operação de escrita cria uma nova versão da tabela, preservando o histórico completo de modificações. Em vez de sobrescrever dados, o sistema registra incrementalmente as alterações no diretório `_delta_log/`, garantindo que versões anteriores permaneçam acessíveis e reprodutíveis. Essa abordagem viabiliza o recurso de time travel, que permite consultar o estado exato de uma tabela em qualquer ponto no tempo, com base no número de versão (version number) ou no instante temporal (timestamp) da transação.
-Quando uma operação de escrita é executada (como INSERT, UPDATE, DELETE ou MERGE INTO), o Spark realiza os seguintes passos:
+Quando uma operação de escrita é executada (como `INSERT`, `UPDATE`, `DELETE` ou `MERGE`), o Spark realiza os seguintes passos:
 
 - Criação dos arquivos de dados em formato Parquet, contendo os novos blocos de registros.
 - Geração de um arquivo de log JSON no diretório `_delta_log/`, descrevendo os arquivos adicionados e removidos, além dos metadados de operação.
@@ -203,15 +203,15 @@ spark.sql("SELECT version()").show()
 
 Nesta etapa, aplicaremos o **Delta Lake** sobre os dados brutos da **Fórmula 1**, já utilizados no laboratório anterior. O objetivo é **evoluir da camada Bronze para a camada Silver**, introduzindo **controle transacional e versionamento** sobre os arquivos armazenados no **MinIO**, consolidando o ambiente **Lakehouse**. Os arquivos CSV localizados em `/home/jovyan/data/` contêm entidades básicas da base pública **Ergast F1 Dataset**, representando corridas, pilotos, equipes e resultados.
 
-| Arquivo | Conteúdo | Exemplo de colunas |
-|----------|-----------|--------------------|
-| `drivers.csv` | Cadastro de pilotos | `driverId`, `driverRef`, `forename`, `surname` |
-| `constructors.csv` | Equipes e fabricantes | `constructorId`, `name`, `nationality` |
-| `races.csv` | Corridas por temporada | `raceId`, `year`, `circuitId`, `name`, `date` |
-| `circuits.csv` | Circuitos e países | `circuitId`, `name`, `location`, `country` |
-| `results.csv` | Resultados das provas | `raceId`, `driverId`, `constructorId`, `position`, `points` |
+| Arquivo            | Conteúdo              | Exemplo de colunas                                          |
+|--------------------|-----------------------|-------------------------------------------------------------|
+| `drivers.csv`      | Cadastro de pilotos   | `driverId`, `driverRef`, `forename`, `surname`              |
+| `constructors.csv` | Equipes e fabricantes | `constructorId`, `name`, `nationality`                      |
+| `races.csv`        | Corridas por temporada| `raceId`, `year`, `circuitId`, `name`, `date`               |
+| `circuits.csv`     | Circuitos e países    | `circuitId`, `name`, `location`, `country`                  |
+| `results.csv`      | Resultados das provas | `raceId`, `driverId`, `constructorId`, `position`, `points` |
 
-Esses arquivos representam a **Camada Bronze** do Data Lake — o ponto de aterrissagem dos dados brutos **sem controle transacional**, onde o objetivo principal é preservar a **integridade e rastreabilidade** das informações extraídas diretamente da fonte. O primeiro passo consiste em ler os arquivos CSV e registrá-los como DataFrames Spark, permitindo consultas e transformações em memória: 
+Esses arquivos representam a **Camada Bronze** do Data Lake — o ponto de aterrissagem dos dados brutos **sem controle transacional**, onde o objetivo principal é preservar a **integridade e rastreabilidade** das informações extraídas diretamente da fonte. O primeiro passo consiste em ler os arquivos CSV e registrá-los como DataFrames Spark, permitindo consultas e transformações em memória:
 
 ```python
 drivers = spark.read.option("header", True).csv("/home/jovyan/data/drivers.csv")
@@ -283,7 +283,6 @@ Essa estrutura confirma que a tabela foi convertida em formato Delta.
 Agora podemos ler a tabela Delta diretamente do MinIO, verificando seu conteúdo e propriedades.
 
 ```python
-
 from delta.tables import DeltaTable
 
 tabela_delta = DeltaTable.forPath(spark, delta_path)
@@ -353,7 +352,7 @@ graph LR
     style Consumo fill:#fff7d6,stroke:#b29700,stroke-width:1px
 ```
 
-Embora o Delta Lake seja uma das soluções mais maduras para Data Lakehouse, cumpre destacar que isso nem sempre significa que ele representa a abordagem ideal para todos os cenários. Por exemplo, se o pipeline depende de Flink, Trino ou Presto, o Iceberg oferece melhor interoperabilidade. Nos projetos com orçamento restrito, a manutenção de logs, checkpoints e catálogos adiciona complexidade e custo operacional. Em contextos de baixa latência em streaming, quando há necessidade de atualizações contínuas em segundos, o Hudi tende a ser mais eficiente. Já em ambientes reduzidos ou com recursos limitados, o overhead do Spark pode ser desnecessário e, nesses casos, utilizar DuckDB ou Dremio diretamente sobre arquivos Parquet representa uma alternativa prática e econômica. Com o pipeline completo implementado e validado, torna-se possível refletir sobre o impacto estratégico dessa arquitetura e sobre como o modelo Lakehouse redefine as fronteiras entre armazenamento, governança e análise de dados em escala. 
+Embora o Delta Lake seja uma das soluções mais maduras para Data Lakehouse, cumpre destacar que isso nem sempre significa que ele representa a abordagem ideal para todos os cenários. Por exemplo, se o pipeline depende de Flink, Trino ou Presto, o Iceberg oferece melhor interoperabilidade. Nos projetos com orçamento restrito, a manutenção de logs, checkpoints e catálogos adiciona complexidade e custo operacional. Em contextos de baixa latência em streaming, quando há necessidade de atualizações contínuas em segundos, o Hudi tende a ser mais eficiente. Já em ambientes reduzidos ou com recursos limitados, o overhead do Spark pode ser desnecessário e, nesses casos, utilizar DuckDB ou Dremio diretamente sobre arquivos Parquet representa uma alternativa prática e econômica. Com o pipeline completo implementado e validado, torna-se possível refletir sobre o impacto estratégico dessa arquitetura e sobre como o modelo Lakehouse redefine as fronteiras entre armazenamento, governança e análise de dados em escala.
 
 # 5. Conclusão
 
