@@ -15,7 +15,7 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 05 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar Cassandra                     | 26/09/2025 |
 | 06 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                             | 03/10/2025 |
 | 07 | [Spark](./spark/)                                                                    | Framework Spark e Prática com PySpark                            | 10/10/2025 |
-| 06 | [Delta Lake](./delta/)                                                               | Prática com Delta Lake                                           | 17/10/2025 |
+| 08 | [Delta Lake](./delta/)                                                               | Prática com Delta Lake                                           | 17/10/2025 |
 
 <!--
 | 06 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 02/04/2025 |
