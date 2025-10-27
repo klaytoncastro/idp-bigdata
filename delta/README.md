@@ -82,9 +82,9 @@ Entre as principais soluções que atendem a esses requisitos destacam-se o Delt
 
 Em suma, embora Hudi e Iceberg ofereçam vantagens específicas — ingestão incremental e interoperabilidade multi-engine, respectivamente —, o Delta Lake destaca-se pela maturidade do ecossistema e pela integração profunda ao Apache Spark, fatores decisivos para sua adoção em ambientes educacionais e corporativos.
 
-Importante destacar que a consolidação das tecnologias de Data Lakehouse não é apenas fruto de avanços acadêmicos, mas de necessidades concretas enfrentadas por empresas que operam em escala massiva de dados. Cada framework nasceu em um contexto distinto, refletindo as prioridades técnicas e operacionais de sua organização criadora.
-
 ### 2.3. Casos Reais de Adoção e Resultados
+
+Importante destacar que a consolidação das tecnologias de Data Lakehouse não é apenas fruto de avanços acadêmicos, mas de necessidades concretas enfrentadas por empresas que operam em escala massiva de dados. Cada framework nasceu em um contexto distinto, refletindo as prioridades técnicas e operacionais de sua organização criadora:
 
 | Empresa | Framework | Contexto e Motivação | Solução Técnica | Impacto / Resultados |
 |----------|------------|----------------------|------------------|----------------------|
