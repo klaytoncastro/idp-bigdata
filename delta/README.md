@@ -23,6 +23,31 @@ Para organizar a evolução dos dados dentro desse ecossistema distribuído, sur
 A proposta do Medallion reflete essa trajetória. Ela transpõe para o contexto do armazenamento em nuvem as boas práticas de consistência, versionamento e governança que faltavam aos data lakes tradicionais. Dividido em três camadas — Bronze, Silver e Gold — o modelo estabelece uma progressão de qualidade e confiabilidade dos dados, do estágio bruto até o consumo analítico. Na camada Bronze, concentram-se os dados brutos, diretamente extraídos das fontes, preservando integridade e rastreabilidade. A camada Silver aplica processos de limpeza, normalização e padronização, transformando os dados em estruturas analíticas consistentes. Por fim, a camada Gold consolida dados agregados e otimizados, prontos para alimentar painéis, relatórios ou modelos de machine learning.
 Do ponto de vista da engenharia de dados, o modelo Medallion não é apenas uma convenção organizacional, mas uma estratégia operacional de governança: separa responsabilidades, garante versionamento previsível e reduz o acoplamento entre ingestão, transformação e consumo. 
 
+```mermaid
+flowchart TD
+    subgraph BRONZE["Camada Bronze – Dados Brutos"]
+        A1["Fontes de Dados\n(CSV, APIs, Logs, DBs)"]
+        A2["Object Store (MinIO / S3)\nArmazenamento Bruto"]
+    end
+
+    subgraph SILVER["Camada Silver – Dados Tratados"]
+        B1["Spark / PySpark\nTransformações e Limpeza"]
+        B2["Delta Lake\nTransações ACID + Versionamento"]
+    end
+
+    subgraph GOLD["Camada Gold – Dados Analíticos"]
+        C1["Consultas SQL / BI / ML"]
+        C2["Dremio / Trino / Grafana"]
+    end
+
+    A1 --> A2 --> B1 --> B2 --> C1 --> C2
+
+    style BRONZE fill:#f4e3b2,stroke:#a17a2f,stroke-width:1px
+    style SILVER fill:#e0e0e0,stroke:#777,stroke-width:1px
+    style GOLD fill:#ffef9f,stroke:#b29700,stroke-width:1px
+```
+
+
 Em termos práticos, em nosso último laboratório já estruturamos a camada Bronze, responsável pela captura e armazenamento dos dados brutos sobre o object store. Essa camada garante rastreabilidade e preservação da integridade, mas ainda carece de um mecanismo transacional capaz de assegurar consistência entre múltiplos processos de leitura e escrita. À medida que evoluímos para as camadas Silver e Gold, torna-se indispensável introduzir um framework de armazenamento confiável, que ofereça transações ACID, controle de versionamento e gerenciamento de metadados — elementos fundamentais para um Data Lakehouse plenamente operacional. 
 
 Entre as principais soluções que atendem a esses requisitos destacam-se o Delta Lake (Databricks), o Apache Hudi (Uber) e o Apache Iceberg (Netflix). Todos surgiram para suprir as limitações dos data lakes tradicionais, trazendo controle transacional e rastreabilidade sobre object stores. O Hudi prioriza a ingestão incremental e o atualização eficiente de registros, sendo amplamente usado em cenários de streaming analytics. O Iceberg, por sua vez, enfatiza a independência do catálogo de metadados e o suporte nativo a múltiplos motores de consulta, como Spark, Flink e Trino. Já o Delta Lake combina simplicidade operacional, profunda integração com o Spark e maturidade de ecossistema, o que o consolidou como a escolha predominante para a maior parte das arquiteturas modernas de Data Lakehouse.
@@ -45,8 +70,6 @@ Entre as principais soluções que atendem a esses requisitos destacam-se o Delt
 | **Governança e compatibilidade** | Foco em Databricks | Foco em ingestão incremental | Foco em interoperabilidade aberta |
 | **Ponto forte** | Estabilidade, maturidade e integração Spark | Ingestão contínua (CDC/Streaming) | Escalabilidade e governança multi-engine |
 | **Licença** | Apache 2.0 (Linux Foundation) | Apache 2.0 | Apache 2.0 |
-
-
 
 ### 2.2. Quando Utilizar Cada Framework?
 
