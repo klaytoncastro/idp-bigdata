@@ -319,7 +319,31 @@ LIMIT 10
 """).show()
 ```
 
-Essas consultas exemplificam a etapa final do fluxo Bronze → Silver → Gold, em que os dados tratados e padronizados passam a servir diretamente às análises de negócio e à visualização de indicadores. 
+Essas consultas exemplificam a etapa final do fluxo Bronze → Silver → Gold, em que os dados tratados e padronizados passam a servir diretamente às análises de negócio e à visualização de indicadores.
+
+```mermaid
+graph LR
+    subgraph Ingestão
+        A["Fontes de Dados\nAPIs / CSV / DBs"]
+        B["MinIO (Object Store)"]
+    end
+
+    subgraph Processamento
+        C["Apache Spark"]
+        D["Delta Lake"]
+    end
+
+    subgraph Consumo
+        E["Dremio / Trino / Grafana"]
+        F["Usuários / Aplicações BI"]
+    end
+
+    A --> B --> C --> D --> E --> F
+
+    style Ingestão fill:#e7f0ff,stroke:#467fcf,stroke-width:1px
+    style Processamento fill:#f3f3f3,stroke:#555,stroke-width:1px
+    style Consumo fill:#fff7d6,stroke:#b29700,stroke-width:1px
+```
 
 # 5. Conclusão
 
