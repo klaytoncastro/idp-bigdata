@@ -1,5 +1,7 @@
 # Data Lakehouse: Transações ACID sobre Object Stores
 
+## 1. Visão Geral 
+
 A popularização dos Data Lakes e o amadurecimento das implementações em larga escala evidenciaram uma nova necessidade: oferecer sobre os object stores as mesmas garantias de consistência, integridade e controle de esquema antes restritas aos Data Warehouses. Embora eficientes para ingestão e armazenamento de dados brutos — estruturados, semiestruturados ou não estruturados —, os data lakes careciam de mecanismos nativos de controle transacional, validação de esquema e versionamento temporal. Essa ausência comprometia a confiabilidade e a reprodutibilidade das análises, expondo o ambiente a riscos como corrupção de dados em operações concorrentes, impossibilidade de rollback, falta de time travel e propagação de anomalias estruturais.
 
 Em termos práticos, os data lakes se comportavam como armazéns sem organização: era possível armazenar grandes volumes de dados, mas sem controle sobre mudanças. A evolução para o conceito de Data Lakehouse surge justamente para corrigir essa lacuna — transformando o object store em uma camada transacional governada, com controle sobre quem altera, o que altera e quando. Ou seja, um Data Lakehouse pode ser definido como uma plataforma moderna de dados que combina a flexibilidade de armazenamento de dados brutos típica dos Data Lakes com as garantias de consistência e governança dos Data Warehouses, integrando ambas em uma arquitetura unificada.
@@ -225,7 +227,7 @@ print(f"Drivers: {drivers.count()} | Results: {results.count()}")
 
 A partir desse ponto, os dados brutos estão carregados e prontos para integração. 
 
-### 4.2.2. Transformação e Integração (Silver)
+### 4.2. Transformação e Integração (Silver)
 
 Nesta etapa, criaremos uma visão integrada dos resultados da temporada 2022, unindo informações de pilotos, equipes e circuitos. Essa operação representa o refinamento dos dados — característica essencial da camada Silver.
 
@@ -260,7 +262,7 @@ f1_2022.show(5, truncate=False)
 print(f"Total de registros: {f1_2022.count()}")
 ```
 
-### 4.2.3. Escrita no Delta Lake (Silver)
+### 4.2.1. Escrita no Delta Lake
 Com o dataset consolidado, salvamos o resultado no formato Delta Lake, armazenando os arquivos tratados dentro do bucket datalake do MinIO.
 
 ```python
@@ -278,7 +280,7 @@ Após a execução, verifique no MinIO (`http://localhost:9001`) o novo diretór
 
 Essa estrutura confirma que a tabela foi convertida em formato Delta.
 
-### 4.2.4. Leitura e Validação
+### 4.2.2. Leitura e Validação
 
 Agora podemos ler a tabela Delta diretamente do MinIO, verificando seu conteúdo e propriedades.
 
@@ -301,7 +303,7 @@ tabela_delta.history().select("version", "timestamp", "operation", "operationMet
 
 Esse histórico mostra as operações realizadas — por exemplo, a escrita inicial da tabela (WRITE) e versões subsequentes (UPDATE, MERGE etc.).
 
-### 4.2.5. Consultas Analíticas (Gold)
+### 4.3. Consultas Analíticas (Gold)
 
 Mesmo antes de introduzir ferramentas como o Dremio, que atuam na camada conceitual Gold, é possível realizar consultas SQL diretas no Spark, simulando-a.
 Por exemplo, rankings de pilotos e construtores.
