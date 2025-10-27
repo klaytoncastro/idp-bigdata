@@ -1,4 +1,4 @@
-# Data Lakehouse: Estruturação Transacional sobre Object Stores
+# Data Lakehouse: Realizando Transações sobre Object Stores
 
 ## 1. Visão Geral
 
