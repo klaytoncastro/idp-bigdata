@@ -1,24 +1,14 @@
 # Data Lakehouse: Transações ACID sobre Object Stores
 
-A popularização dos Data Lakes e o amadurecimento das implementações em larga escala evidenciaram uma nova necessidade: oferecer sobre os object stores as mesmas garantias de consistência, integridade e controle de esquema antes restritas aos Data Warehouses.
+A popularização dos Data Lakes e o amadurecimento das implementações em larga escala evidenciaram uma nova necessidade: oferecer sobre os object stores as mesmas garantias de consistência, integridade e controle de esquema antes restritas aos Data Warehouses. Embora eficientes para ingestão e armazenamento de dados brutos — estruturados, semiestruturados ou não estruturados —, os data lakes careciam de mecanismos nativos de controle transacional, validação de esquema e versionamento temporal. Essa ausência comprometia a confiabilidade e a reprodutibilidade das análises, expondo o ambiente a riscos como corrupção de dados em operações concorrentes, impossibilidade de rollback, falta de time travel e propagação de anomalias estruturais.
 
-Embora eficientes para ingestão e armazenamento de dados brutos — estruturados, semiestruturados ou não estruturados —, os data lakes careciam de mecanismos nativos de controle transacional, validação de esquema e versionamento temporal. Essa ausência comprometia a confiabilidade e a reprodutibilidade das análises, expondo o ambiente a riscos como corrupção de dados em operações concorrentes, impossibilidade de rollback, falta de time travel e propagação de anomalias estruturais.
+Em termos práticos, os data lakes se comportavam como armazéns sem organização: era possível armazenar grandes volumes de dados, mas sem controle sobre mudanças. A evolução para o conceito de Data Lakehouse surge justamente para corrigir essa lacuna — transformando o object store em uma camada transacional governada, com controle sobre quem altera, o que altera e quando. Ou seja, um Data Lakehouse pode ser definido como uma plataforma moderna de dados que combina a flexibilidade de armazenamento de dados brutos típica dos Data Lakes com as garantias de consistência e governança dos Data Warehouses, integrando ambas em uma arquitetura unificada.
 
-Em termos práticos, os data lakes se comportavam como armazéns sem organização: era possível armazenar grandes volumes de dados, mas sem controle sobre mudanças. A evolução para o conceito de Data Lakehouse surge justamente para corrigir essa lacuna — transformando o object store em uma camada transacional governada, com controle sobre quem altera, o que altera e quando.
+Essa convergência entre flexibilidade (típica dos data lakes) e confiabilidade (característica dos data warehouses) impulsionou o surgimento de três projetos de código aberto que se tornaram pilares dessa nova geração de arquiteturas de dados distribuídos: Delta Lake, Apache Hudi e Apache Iceberg. Essas soluções agregam ao armazenamento distribuído as propriedades ACID — Atomicidade, Consistência, Isolamento e Durabilidade —, bem como recursos avançados de schema enforcement, schema evolution, time travel e catálogos transacionais otimizados. Assim, permitem navegar entre versões históricas, realizar upserts e merges incrementais, e integrar múltiplas engines analíticas em um mesmo repositório consistente e auditável.
 
-Essa convergência entre flexibilidade (típica dos data lakes) e confiabilidade (característica dos data warehouses) impulsionou o surgimento de três projetos de código aberto que se tornaram pilares dessa nova geração de arquiteturas de dados distribuídos: Delta Lake, Apache Hudi e Apache Iceberg.
+Historicamente, havia uma separação clara entre sistemas OLTP (Online Transaction Processing), voltados a transações rápidas e consistentes, e OLAP (Online Analytical Processing), dedicados à consolidação e análise de grandes volumes históricos. Com a popularização das arquiteturas distribuídas e o baixo custo de armazenamento, emergiu a abordagem ELT (Extract, Load, Transform), na qual os dados são primeiro carregados em estado bruto no data lake e posteriormente transformados conforme as necessidades analíticas. A essência de um Transactional Data Lake está justamente na capacidade de aplicar sobre o armazenamento distribuído — geralmente implementado em AWS S3, Azure Blob Storage, MinIO ou HDFS — uma camada lógica que ofereça essas garantias ACID, reconciliando escalabilidade com governança. O Apache Spark e os sistemas de arquivos distribuídos, como o HDFS e o MinIO, surgiram para resolver limitações de desempenho e escalabilidade das arquiteturas centralizadas, explorando paralelismo e tolerância a falhas — fundamentos da engenharia de dados moderna.
 
-Essas soluções agregam ao armazenamento distribuído as propriedades ACID — Atomicidade, Consistência, Isolamento e Durabilidade —, bem como recursos avançados de schema enforcement, schema evolution, time travel e catálogos transacionais otimizados. Assim, permitem navegar entre versões históricas, realizar upserts e merges incrementais, e integrar múltiplas engines analíticas em um mesmo repositório consistente e auditável.
-
-A essência de um Transactional Data Lake está justamente na capacidade de aplicar sobre o armazenamento distribuído — geralmente implementado em AWS S3, Azure Blob Storage, MinIO ou HDFS — uma camada lógica que ofereça essas garantias ACID, reconciliando escalabilidade com governança.
-
-O Apache Spark e os sistemas de arquivos distribuídos, como o HDFS e o MinIO, surgiram para resolver limitações de desempenho e escalabilidade das arquiteturas centralizadas, explorando paralelismo e tolerância a falhas — fundamentos da engenharia de dados moderna. Historicamente, havia uma separação clara entre sistemas OLTP (Online Transaction Processing), voltados a transações rápidas e consistentes, e OLAP (Online Analytical Processing), dedicados à consolidação e análise de grandes volumes históricos.
-
-Com a popularização das arquiteturas distribuídas e o baixo custo de armazenamento, emergiu a abordagem ELT (Extract, Load, Transform), na qual os dados são primeiro carregados em estado bruto no data lake e posteriormente transformados conforme as necessidades analíticas.
-
-No entanto, conforme analistas e cientistas de dados passaram a usar os data lakes para finalidades além da simples computação distribuída — tentando reproduzir comportamentos de governança e versionamento típicos de sistemas OLAP —, o cenário se tornou caótico. A ausência de suporte nativo a transações ACID, de catálogos de metadados consistentes e de garantias de integridade gerava ambientes frágeis e de difícil manutenção.
-
-As soluções de Data Lakehouse — como Delta Lake, Hudi e Iceberg — surgem para restabelecer a previsibilidade e o controle nesse contexto. Elas padronizam transações, versionamento e governança de esquema, reconciliando o mundo da engenharia de dados (OLTP/ELT) com as demandas de consistência e governança do contexto analítico (OLAP/ETL), inaugurando um modelo unificado e confiável para processamento de dados em escala.
+No entanto, conforme analistas e cientistas de dados passaram a usar os data lakes para finalidades além da simples computação distribuída — tentando reproduzir comportamentos de governança e versionamento típicos de sistemas OLAP —, o cenário se tornou caótico. A ausência de suporte nativo a transações ACID, de catálogos de metadados consistentes e de garantias de integridade gerava ambientes frágeis e de difícil manutenção. As soluções de Data Lakehouse — como Delta Lake, Hudi e Iceberg — surgem para restabelecer a previsibilidade e o controle nesse contexto. Elas padronizam transações, versionamento e governança de esquema, reconciliando o mundo da engenharia de dados (OLTP/ELT) com as demandas de consistência e governança do contexto analítico (OLAP/ETL), inaugurando um modelo unificado e confiável para processamento de dados em escala.
 
 ## 2. Frameworks de Data Lakehouse e Arquitetura Medallion
 
@@ -56,22 +46,22 @@ Em termos práticos, em nosso último laboratório já estruturamos a camada Bro
 
 Entre as principais soluções que atendem a esses requisitos destacam-se o Delta Lake (Databricks), o Apache Hudi (Uber) e o Apache Iceberg (Netflix). Todos surgiram para suprir as limitações dos data lakes tradicionais, trazendo controle transacional e rastreabilidade sobre object stores. O Hudi prioriza a ingestão incremental e o atualização eficiente de registros, sendo amplamente usado em cenários de streaming analytics. O Iceberg, por sua vez, enfatiza a independência do catálogo de metadados e o suporte nativo a múltiplos motores de consulta, como Spark, Flink e Trino. Já o Delta Lake combina simplicidade operacional, profunda integração com o Spark e maturidade de ecossistema, o que o consolidou como a escolha predominante para a maior parte das arquiteturas modernas de Data Lakehouse.
 
-| Aspecto | Delta Lake | Apache Hudi | Apache Iceberg |
-|----------|--------------------------|--------------|----------------|
-| **Desenvolvedor Original** | Databricks | Uber | Netflix |
-| **Padrão de metadados** | Arquivo `_delta_log` em JSON + Parquet | Timeline com commits incrementais | Manifest + Metadata JSON + Snapshot |
-| **Transações ACID** | Sim (via log no storage) | Sim (timeline de commits) | Sim (snapshot atomic) |
-| **Schema enforcement** | Sim | Sim | Sim |
-| **Time Travel (versões antigas)** | Sim (por versão ou timestamp) | Sim (via instant) | Sim (via snapshot-id ou timestamp) |
-| **Merge/Upsert nativo** | Sim (com `MERGE INTO`) | Sim (nativo e mais eficiente) | Sim (a partir da versão 1.4 |
-| **Indexação interna** | Não (usa estatísticas do Parquet) | Sim (Bloom + Column stats) | Sim (Manifest pruning) |
-| **Integração com Spark** | Altíssima (plugin nativo) | Alta | Alta |
-| **Integração com Presto/Trino/Flink** | Boa | Muito boa | Excelente |
-| **Modos de atualização suportados** | Batch e Streaming (unificado) | Batch e Streaming | Batch e Streaming |
-| **Catálogo** | Hive Metastore, Glue, Unity Catalog | Hive Metastore | Nessie, Glue, Hive, REST |
-| **Governança e compatibilidade** | Foco em Databricks | Foco em ingestão incremental | Foco em interoperabilidade aberta |
-| **Ponto forte** | Estabilidade, maturidade e integração Spark | Ingestão contínua (CDC/Streaming) | Escalabilidade e governança multi-engine |
-| **Licença** | Apache 2.0 (Linux Foundation) | Apache 2.0 | Apache 2.0 |
+| Aspecto                               | Delta Lake                                  | Apache Hudi                       | Apache Iceberg                           |
+|---------------------------------------|---------------------------------------------|-----------------------------------|------------------------------------------|
+| **Desenvolvedor Original**            | Databricks                                  | Uber                              | Netflix                                  |
+| **Padrão de metadados**               | Arquivo `_delta_log` em JSON + Parquet      | Timeline com commits incrementais | Manifest + Metadata JSON + Snapshot      |
+| **Transações ACID**                   | Sim (via log no storage)                    | Sim (timeline de commits)         | Sim (snapshot atomic)                    |
+| **Schema enforcement**                | Sim                                         | Sim                               | Sim                                      |
+| **Time Travel (versões antigas)**     | Sim (por versão ou timestamp)               | Sim (via instant)                 | Sim (via snapshot-id ou timestamp)       |
+| **Merge/Upsert nativo**               | Sim (com `MERGE INTO`)                      | Sim (nativo e mais eficiente)     | Sim (a partir da versão 1.4              |
+| **Indexação interna**                 | Não (usa estatísticas do Parquet)           | Sim (Bloom + Column stats)        | Sim (Manifest pruning)                   |
+| **Integração com Spark**              | Altíssima (plugin nativo)                   | Alta                              | Alta                                     |
+| **Integração com Presto/Trino/Flink** | Boa                                         | Muito boa                         | Excelente                                |
+| **Modos de atualização suportados**   | Batch e Streaming (unificado)               | Batch e Streaming                 | Batch e Streaming                        |
+| **Catálogo**                          | Hive Metastore, Glue, Unity Catalog         | Hive Metastore                    | Nessie, Glue, Hive, REST                 |
+| **Governança e compatibilidade**      | Foco em Databricks                          | Foco em ingestão incremental      | Foco em interoperabilidade aberta        |
+| **Ponto forte**                       | Estabilidade, maturidade e integração Spark | Ingestão contínua (CDC/Streaming) | Escalabilidade e governança multi-engine |
+| **Licença**                           | Apache 2.0 (Linux Foundation)               | Apache 2.0                        | Apache 2.0                               |
 
 ### 2.2. Quando Utilizar Cada Framework?
 
@@ -87,7 +77,7 @@ Em suma, embora Hudi e Iceberg ofereçam vantagens específicas — ingestão in
 
 Nesse cenário, cada um dos principais frameworks de Data Lakehouse surgiu em um contexto corporativo distinto, refletindo desafios reais de ingestão contínua, interoperabilidade multi-engine e controle transacional em ambientes de alta complexidade operacional. A seguir, exploraremos como esses frameworks consolidam o modelo Lakehouse e de que forma o padrão arquitetural Medallion organiza as etapas de maturação dos dados — da camada bruta (Bronze), passando pela refinada (Silver), até a analítica (Gold) — estabelecendo uma trilha lógica entre ingestão, padronização e consumo analítico. É fundamental destacar que a consolidação das tecnologias de Data Lakehouse não resulta apenas de avanços conceituais ou acadêmicos, mas de necessidades concretas enfrentadas por empresas que operam em escala massiva de dados. Cada framework nasceu em um contexto operacional específico, traduzindo as prioridades técnicas e de negócio de sua organização criadora: eficiência transacional e ingestão contínua no Uber (Hudi), governança e interoperabilidade multi-engine na Netflix (Iceberg) e integração nativa e previsibilidade sobre Spark na Databricks (Delta Lake).
 
-| Empresa | Framework | Contexto e Motivação | Solução Técnica | Impacto / Resultados |
+| Empresa  | Framework | Contexto e Motivação | Solução Técnica | Impacto / Resultados |
 |----------|------------|----------------------|------------------|----------------------|
 | **Uber** | **Apache Hudi** | Criado para resolver o problema de atualização incremental e baixa latência em *data lakes*. As corridas e preços mudam constantemente, exigindo atualizações parciais sem reprocessar todo o histórico. | Introduziu o conceito de **commit timeline**, permitindo **upserts nativos**, **integração batch + streaming** e auditoria completa das alterações. | **Tempo de atualização:** de 6+ horas para minutos. **Custo de armazenamento:** redução de 60%. **Processamento:** passou de reprocessamento completo para incremental. |
 | **Netflix** | **Apache Iceberg** | Desenvolvido para lidar com milhões de arquivos Parquet distribuídos, evitando a lentidão e inconsistência do Hive Metastore. Criado para suportar múltiplos motores (Spark, Flink, Presto, Trino). | Implementou **snapshots atômicos**, **schema evolution estável** e **catálogo independente**, garantindo consistência entre diferentes engines. | **Leitura consistente**, **governança distribuída** e **eliminação de gargalos do Hive**. |
@@ -100,7 +90,7 @@ Compreendidos os diferentes contextos e soluções, passamos agora ao aprofundam
 
 ## 3. Entendendo o Delta Lake
 
-Mantido pela Linux Foundation e fortemente associado à Databricks, o Delta Lake foi o primeiro framework amplamente adotado a implementar transações ACID sobre object stores. Seu núcleo baseia-se em um log transacional, denominado `delta_log`, que registra de forma incremental todas as operações executadas em uma tabela. Esse log, composto por arquivos JSON (metadados de commits) e Parquet (snapshots otimizados), permite isolamento total entre sessões Spark, assegurando consistência e reprodutibilidade mesmo em ambientes distribuídos.
+Mantido pela Linux Foundation e fortemente associado à Databricks, o Delta Lake foi o primeiro framework amplamente adotado a implementar transações ACID sobre object stores. Seu núcleo baseia-se em um log transacional, denominado `_delta_log`, que registra de forma incremental todas as operações executadas em uma tabela. Esse log, composto por arquivos JSON (metadados de commits) e Parquet (snapshots otimizados), permite isolamento total entre sessões Spark, assegurando consistência e reprodutibilidade mesmo em ambientes distribuídos.
 
 Em ambientes de dados dinâmicos, especialmente aqueles que recebem atualizações frequentes de diversas fontes, é comum a necessidade de combinar informações novas com registros já existentes. Tradicionalmente, isso exigiria duas operações distintas: INSERT, para adicionar novos dados, e UPDATE, para modificar os existentes. Para simplificar esse processo, surgiu o termo UPSERT — uma junção de UPDATE e INSERT — que designa uma operação capaz de atualizar o que já existe e inserir o que ainda não existe, de forma automatizada e atômica.
 
@@ -108,7 +98,7 @@ No Delta Lake, cada escrita ou atualização gera uma nova versão do log, o que
 
 Assim, ao combinar desempenho, governança e compatibilidade com o ecossistema Spark, o Delta Lake tornou-se a base conceitual e prática das arquiteturas Lakehouse modernas, oferecendo as seguintes funcionalidades:
 
-- Transações ACID completas sobre object storage;
+- Transações ACID completas sobre object store;
 - Time Travel nativo via `versionAsOf` ou `timestampAsOf`;
 - Schema enforcement e schema evolution controlados no próprio log;
 - Compatibilidade total com Apache Spark e integração com Presto, Trino, Hive e Flink;
@@ -118,7 +108,7 @@ Assim, ao combinar desempenho, governança e compatibilidade com o ecossistema S
 A arquitetura do Delta Lake é fundamentada em um modelo de armazenamento transacional baseado em logs, projetado para oferecer consistência, isolamento e versionamento sobre object stores como S3, ADLS ou MinIO. Diferentemente dos data lakes convencionais, que armazenam apenas arquivos Parquet ou ORC sem metadados de controle, o Delta Lake adiciona uma camada de metadados transacionais, responsável por registrar cada modificação realizada na tabela. Essa camada transforma diretórios de arquivos em tabelas versionadas, permitindo reconstruir o estado dos dados em qualquer ponto no tempo. No nível físico, cada tabela Delta é composta por dois elementos principais:
 
 - Arquivos de dados, geralmente em formato Parquet, que armazenam o conteúdo efetivo das linhas e colunas.
-- Diretório _delta_log/, que contém o histórico transacional completo da tabela.
+- Diretório `_delta_log/`, que contém o histórico transacional completo da tabela.
 
 Dentro do diretório `_delta_log/`, cada operação de escrita (como `INSERT`, `UPDATE`, `DELETE` ou `MERGE`) gera um novo arquivo de log numerado sequencialmente, por exemplo:
 
@@ -129,18 +119,18 @@ Dentro do diretório `_delta_log/`, cada operação de escrita (como `INSERT`, `
 
 Esses arquivos JSON descrevem de forma detalhada os commits, especificando quais arquivos de dados foram adicionados ou removidos, as alterações de esquema e os metadados associados à transação. Para otimizar o desempenho e reduzir o custo de leitura desses logs, o Delta Lake cria periodicamente checkpoints, armazenados em formato Parquet. Cada checkpoint consolida o estado cumulativo das operações até um determinado ponto, permitindo que o Spark recupere rapidamente a versão mais recente da tabela sem processar todos os commits anteriores. Esse mecanismo é fundamental para garantir eficiência e escalabilidade em ambientes com grandes volumes de dados e alta frequência de atualização. A partir desses componentes, o Delta Lake implementa as quatro propriedades ACID: 
 
-- Atomicidade: cada transação é aplicada por completo ou revertida, nunca parcialmente.
-- Consistência: o log assegura que o estado final da tabela obedeça às restrições de esquema e integridade.
-- Isolamento: múltiplas sessões Spark podem ler e escrever simultaneamente sem interferência, graças ao controle de versões.
-- Durabilidade: as alterações registradas no `_delta_log` permanecem persistentes mesmo após falhas ou reinicializações.
+- **Atomicidade**: cada transação é aplicada por completo ou revertida, nunca parcialmente.
+- **Consistência**: o log assegura que o estado final da tabela obedeça às restrições de esquema e integridade.
+- **Isolamento**: múltiplas sessões Spark podem ler e escrever simultaneamente sem interferência, graças ao controle de versões.
+- **Durabilidade**: as alterações registradas no `_delta_log` permanecem persistentes mesmo após falhas ou reinicializações.
 
 Outro pilar dessa arquitetura é o schema enforcement, que impede a gravação de dados com estrutura incompatível com o esquema declarado, e o schema evolution, que permite alterar o formato da tabela (por exemplo, adicionando novas colunas) de maneira controlada e registrada no log. Essas funcionalidades tornam o Delta Lake particularmente adequado a ambientes de dados corporativos, nos quais a rastreabilidade, a integridade e a governança de schema são requisitos essenciais.
 
-O fluxo operacional do Delta Lake é regido pelo princípio de controle de versões imutáveis, em que cada operação de escrita cria uma nova versão da tabela, preservando o histórico completo de modificações. Em vez de sobrescrever dados, o sistema registra incrementalmente as alterações no diretório _delta_log/, garantindo que versões anteriores permaneçam acessíveis e reprodutíveis. Essa abordagem viabiliza o recurso de time travel, que permite consultar o estado exato de uma tabela em qualquer ponto no tempo, com base no número de versão (version number) ou no instante temporal (timestamp) da transação.
+O fluxo operacional do Delta Lake é regido pelo princípio de controle de versões imutáveis, em que cada operação de escrita cria uma nova versão da tabela, preservando o histórico completo de modificações. Em vez de sobrescrever dados, o sistema registra incrementalmente as alterações no diretório `_delta_log/`, garantindo que versões anteriores permaneçam acessíveis e reprodutíveis. Essa abordagem viabiliza o recurso de time travel, que permite consultar o estado exato de uma tabela em qualquer ponto no tempo, com base no número de versão (version number) ou no instante temporal (timestamp) da transação.
 Quando uma operação de escrita é executada (como INSERT, UPDATE, DELETE ou MERGE INTO), o Spark realiza os seguintes passos:
 
 - Criação dos arquivos de dados em formato Parquet, contendo os novos blocos de registros.
-- Geração de um arquivo de log JSON no diretório _delta_log/, descrevendo os arquivos adicionados e removidos, além dos metadados de operação.
+- Geração de um arquivo de log JSON no diretório `_delta_log/`, descrevendo os arquivos adicionados e removidos, além dos metadados de operação.
 - Atualização do commit sequence number, que identifica a nova versão da tabela.
 - Geração de checkpoint periódico (em Parquet), consolidando as mudanças para acelerar futuras leituras.
 
@@ -161,14 +151,14 @@ Internamente, o Delta Lake garante isolamento entre sessões concorrentes atrav�
 Por fim, o recurso de vacuum é utilizado para remoção periódica de arquivos obsoletos (antigas versões de dados e logs), evitando acúmulo excessivo de metadados e otimizando o desempenho de leitura. Essa limpeza, porém, respeita um intervalo de retenção configurável — normalmente 7 dias —, preservando as versões recentes para time travel e recuperação.
 
 O Delta Lake não apenas controla transações e versões, mas também assegura a integridade estrutural dos dados por meio de dois mecanismos complementares: schema enforcement e schema evolution. Esses recursos são fundamentais para manter a coerência entre os arquivos armazenados no object store e o modelo lógico das tabelas, evitando erros silenciosos e garantindo a governança de dados em escala.
-O schema enforcement atua como uma camada de validação automática que impede a gravação de dados incompatíveis com o esquema previamente definido. Em outras palavras, antes que uma operação de escrita seja confirmada, o Delta Lake verifica se a estrutura (colunas, tipos e restrições) do novo lote de dados é consistente com o esquema da tabela. Caso haja divergência — como uma coluna ausente, um tipo incorreto ou um campo adicional não declarado — a operação é bloqueada. Esse comportamento evita a introdução acidental de anomalias que, em sistemas distribuídos tradicionais, poderiam corromper análises ou gerar resultados inconsistentes.
-Por exemplo:
+
+O schema enforcement atua como uma camada de validação automática que impede a gravação de dados incompatíveis com o esquema previamente definido. Em outras palavras, antes que uma operação de escrita seja confirmada, o Delta Lake verifica se a estrutura (colunas, tipos e restrições) do novo lote de dados é consistente com o esquema da tabela. Caso haja divergência — como uma coluna ausente, um tipo incorreto ou um campo adicional não declarado — a operação é bloqueada. Esse comportamento evita a introdução acidental de anomalias que, em sistemas distribuídos tradicionais, poderiam corromper análises ou gerar resultados inconsistentes. Por exemplo:
 
 ```python
 df.write.format("delta").mode("append").save("s3://datalake/sales")
 ```
 
-Se o DataFrame contiver colunas diferentes da definição original da tabela sales, o Delta emitirá um erro de incompatibilidade de esquema, protegendo a integridade do conjunto de dados. Já o schema evolution complementa esse mecanismo ao permitir que mudanças estruturais legítimas sejam aplicadas de forma controlada. Quando habilitado, ele registra no delta_log a adição, remoção ou modificação de colunas, preservando o histórico completo dessas alterações. Isso possibilita a evolução gradual dos modelos de dados sem a necessidade de recriar tabelas, facilitando a adaptação a novas fontes e requisitos de negócio. A opção pode ser ativada explicitamente:
+Se o DataFrame contiver colunas diferentes da definição original da tabela sales, o Delta emitirá um erro de incompatibilidade de esquema, protegendo a integridade do conjunto de dados. Já o schema evolution complementa esse mecanismo ao permitir que mudanças estruturais legítimas sejam aplicadas de forma controlada. Quando habilitado, ele registra no `_delta_log` a adição, remoção ou modificação de colunas, preservando o histórico completo dessas alterações. Isso possibilita a evolução gradual dos modelos de dados sem a necessidade de recriar tabelas, facilitando a adaptação a novas fontes e requisitos de negócio. A opção pode ser ativada explicitamente:
 
 ```python
 df.write.option("mergeSchema", "true").format("delta").mode("append").save("s3://datalake/sales")
@@ -363,20 +353,16 @@ graph LR
     style Consumo fill:#fff7d6,stroke:#b29700,stroke-width:1px
 ```
 
-Observe que, embora o Delta Lake seja uma das soluções mais maduras para Data Lakehouse, ele não é adequado para todos os cenários. Por exemplo, se o pipeline depende de Flink, Trino ou Presto, o Iceberg oferece melhor interoperabilidade. Em cenários de baixa latência em streaming, quando há necessidade de atualizações contínuas em segundos, o Hudi é mais eficiente.
-
-Já em ambientes pequenos ou com recursos limitados, o overhead do Spark pode ser desnecessário. Utilizar DuckDB ou Dremio diretamente sobre arquivos Parquet é uma opção nesse caso. Em projetos com orçamento restrito, a manutenção de logs, checkpoints e catálogos adiciona complexidade e custo operacional.
+Embora o Delta Lake seja uma das soluções mais maduras para Data Lakehouse, cumpre destacar que isso nem sempre significa que ele representa a abordagem ideal para todos os cenários. Por exemplo, se o pipeline depende de Flink, Trino ou Presto, o Iceberg oferece melhor interoperabilidade. Nos projetos com orçamento restrito, a manutenção de logs, checkpoints e catálogos adiciona complexidade e custo operacional. Em contextos de baixa latência em streaming, quando há necessidade de atualizações contínuas em segundos, o Hudi tende a ser mais eficiente. Já em ambientes reduzidos ou com recursos limitados, o overhead do Spark pode ser desnecessário e, nesses casos, utilizar DuckDB ou Dremio diretamente sobre arquivos Parquet representa uma alternativa prática e econômica. Com o pipeline completo implementado e validado, torna-se possível refletir sobre o impacto estratégico dessa arquitetura e sobre como o modelo Lakehouse redefine as fronteiras entre armazenamento, governança e análise de dados em escala. 
 
 # 5. Conclusão
 
-A adoção do Delta Lake como camada transacional sobre object stores representa o ponto de convergência entre os modelos de Data Lake e Data Warehouse, materializando o conceito de Data Lakehouse.
+O Data Lakehouse é uma evolução natural dos modelos anteriores de armazenamento e análise de dados. Ele combina a flexibilidade e o baixo custo dos Data Lakes com a governança e consistência dos Data Warehouses, criando uma infraestrutura unificada capaz de lidar simultaneamente com ingestão bruta, processamento analítico e aprendizado de máquina. Essa integração elimina os silos históricos entre Data Lakes e Warehouses, permitindo um fluxo contínuo entre armazenamento bruto e consumo analítico. Com suporte a formatos abertos (como Parquet e ORC), separação entre computação e armazenamento e controle transacional ACID, o Lakehouse oferece uma base moderna e escalável para workloads híbridas — batch, streaming e interativas.
 
-Antes, os data lakes funcionavam como depósitos desorganizados: armazenavam grandes volumes de dados, mas sem controle de alterações, versionamento ou integridade de esquema. Com as novas camadas transacionais, essa limitação foi superada — agora é possível rastrear quem modificou, o que foi alterado e quando, com o mesmo nível de previsibilidade e consistência antes restrito a bancos relacionais.
+A adoção do Delta Lake como camada transacional sobre object stores representa o ponto de convergência entre os modelos de Data Lake e Data Warehouse, materializando o conceito de Data Lakehouse. Antes, os data lakes funcionavam como depósitos desorganizados: armazenavam grandes volumes de dados, mas sem controle de alterações, versionamento ou integridade de esquema. Com as novas camadas transacionais, essa limitação foi superada — agora é possível rastrear quem modificou, o que foi alterado e quando, com o mesmo nível de previsibilidade e consistência antes restrito a bancos relacionais.
 
-Ao incorporar controle de versão, isolamento transacional e evolução de esquema, o Delta Lake transforma um repositório essencialmente estático em uma base dinâmica, confiável e auditável, capaz de sustentar pipelines analíticos e operacionais sob os princípios de atomicidade e durabilidade.
-
-Os mecanismos de schema enforcement e schema evolution equilibram estabilidade e adaptabilidade, assegurando integridade estrutural sem comprometer a evolução natural dos modelos de dados. O log transacional (_delta_log/) e o time travel garantem reprodutibilidade e rastreabilidade, tornando o armazenamento distribuído temporalmente navegável — requisito fundamental para auditoria, depuração e governança.
+Ao incorporar controle de versão, isolamento transacional e evolução de esquema, o Delta Lake transforma um repositório essencialmente estático em uma base dinâmica, confiável e auditável, capaz de sustentar pipelines analíticos e operacionais sob os princípios de atomicidade e durabilidade. Os mecanismos de schema enforcement e schema evolution equilibram estabilidade e adaptabilidade, assegurando integridade estrutural sem comprometer a evolução natural dos modelos de dados. O log transacional (`_delta_log/`) e o time travel garantem reprodutibilidade e rastreabilidade, tornando o armazenamento distribuído temporalmente navegável — requisito fundamental para auditoria, depuração e governança.
 
 Quando integrado a catálogos de metadados corporativos (Hive Metastore, Glue, Unity Catalog), o Delta Lake amplia seu alcance técnico e assume papel estratégico ao conectar armazenamento físico e controle lógico. Essa integração unifica acesso, segurança e versionamento, consolidando o modelo Medallion — da ingestão bruta (Bronze), passando pelo refinamento e consistência (Silver), até a exploração analítica (Gold).
 
-Ao combinar desempenho distribuído, governança auditável e interoperabilidade, o Delta Lake consolida-se como o alicerce prático do modelo Lakehouse — uma infraestrutura unificada, resiliente e preparada para as demandas contemporâneas de engenharia e inteligência de dados.
+Ao combinar desempenho distribuído, governança auditável e interoperabilidade, o Delta Lake consolida-se como o alicerce do modelo Lakehouse na prática — uma infraestrutura unificada, resiliente e preparada para as demandas contemporâneas de engenharia e inteligência de dados.
