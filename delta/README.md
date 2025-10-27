@@ -26,13 +26,13 @@ Do ponto de vista da engenharia de dados, o modelo Medallion não é apenas uma 
 ```mermaid
 flowchart TD
     subgraph BRONZE["Camada Bronze – Dados Brutos"]
-        A1["Fontes de Dados\n(CSV, APIs, Logs, DBs)"]
-        A2["Object Store (MinIO / S3)\nArmazenamento Bruto"]
+        A1["Fontes de Dados (CSV, APIs, Logs, DBs)"]
+        A2["Object Store (MinIO / S3) Armazenamento Bruto"]
     end
 
     subgraph SILVER["Camada Silver – Dados Tratados"]
-        B1["Spark / PySpark\nTransformações e Limpeza"]
-        B2["Delta Lake\nTransações ACID + Versionamento"]
+        B1["Spark / PySpark Transformações e Limpeza"]
+        B2["Delta Lake Transações ACID + Versionamento"]
     end
 
     subgraph GOLD["Camada Gold – Dados Analíticos"]
@@ -324,7 +324,7 @@ Essas consultas exemplificam a etapa final do fluxo Bronze → Silver → Gold, 
 ```mermaid
 graph LR
     subgraph Ingestão
-        A["Fontes de Dados\nAPIs / CSV / DBs"]
+        A["Fontes de Dados APIs / CSV / DBs"]
         B["MinIO (Object Store)"]
     end
 
