@@ -1,6 +1,8 @@
 # Data Lakehouse: Transações ACID sobre Object Stores
 
-## 1. Visão Geral 
+>Após compreender o papel dos object stores como MinIO/S3, que fornecem a base de armazenamento distribuído, e a função do Spark como motor de computação distribuída e processamento em larga escala, avança-se agora para a camada transacional que conecta ambos. Essa evolução representa a transição natural do simples armazenamento de dados (Data Lake) para um ambiente governado e consistente (Data Lakehouse), no qual o controle de versões, o isolamento transacional e a integridade de esquema tornam-se requisitos fundamentais — cuja primeira implementação efetiva é o Delta Lake. 
+
+## 1. Visão Geral
 
 A popularização dos Data Lakes e o amadurecimento das implementações em larga escala evidenciaram uma nova necessidade: oferecer sobre os object stores as mesmas garantias de consistência, integridade e controle de esquema antes restritas aos Data Warehouses. Embora eficientes para ingestão e armazenamento de dados brutos — estruturados, semiestruturados ou não estruturados —, os data lakes careciam de mecanismos nativos de controle transacional, validação de esquema e versionamento temporal. Essa ausência comprometia a confiabilidade e a reprodutibilidade das análises, expondo o ambiente a riscos como corrupção de dados em operações concorrentes, impossibilidade de rollback, falta de time travel e propagação de anomalias estruturais.
 
