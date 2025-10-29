@@ -1,6 +1,6 @@
 # Data Lakehouse: Transações ACID sobre Object Stores
 
->Após compreender o papel dos object stores como MinIO/S3, que fornecem a base de armazenamento distribuído, e a função do Spark como motor de computação distribuída e processamento em larga escala, avança-se agora para a camada transacional que conecta ambos. Essa evolução representa a transição natural do simples armazenamento de dados (Data Lake) para um ambiente governado e consistente (Data Lakehouse), no qual o controle de versões, o isolamento transacional e a integridade de esquema tornam-se requisitos fundamentais — cuja primeira implementação efetiva é o Delta Lake. 
+>Após compreender o papel dos object stores como MinIO/S3, que fornecem a base de armazenamento distribuído, e a função do Spark como motor de computação distribuída e processamento em larga escala, avançaremos para a camada transacional, que representa uma evolução natural do cenário de armazenamento de dados não estruturados e semi-estruturados em um Data Lake para um ambiente governado e consistente, por meio de um Data Lakehouse, no qual o controle de versões, o isolamento transacional e a integridade de esquema tornam-se requisitos fundamentais e cuja primeira implementação efetiva é o Delta Lake.
 
 ## 1. Visão Geral
 
@@ -94,7 +94,15 @@ Compreendidos os diferentes contextos e soluções, passamos agora ao aprofundam
 
 ## 3. Entendendo o Delta Lake
 
-Mantido pela Linux Foundation e fortemente associado à Databricks, o Delta Lake foi o primeiro framework amplamente adotado a implementar transações ACID sobre object stores. Seu núcleo baseia-se em um log transacional, denominado `_delta_log`, que registra de forma incremental todas as operações executadas em uma tabela. Esse log, composto por arquivos JSON (metadados de commits) e Parquet (snapshots otimizados), permite isolamento total entre sessões Spark, assegurando consistência e reprodutibilidade mesmo em ambientes distribuídos.
+Imagine um cenário comum no Data Lake tradicional (com armazenamento S3/MinIO e processamento Spark):
+
+- Falhas de Escrita: Um job do Spark falha no meio da execução, deixando o diretório de destino com arquivos parcialmente escritos e corruptos.
+- Leituras Inconsistentes: Um usuário lê os dados enquanto um job está escrevendo novos arquivos, resultando em uma visão inconsistente e potencialmente incorreta dos dados.
+- Atualizações e Deletes Ineficientes: Para fazer um UPDATE ou DELETE, você precisa reescrever toda a tabela (um diretório de arquivos Parquet/ORC), o que é custoso e propenso a erros.
+- Evolução de Esquema Complexa: Alterar o esquema de uma tabela requer coordenação manual e cuidado extremo para não quebrar jobs de downstream.
+- Qualidade de Dados: É difícil imponer qualidade de dados (e.g., colunas obrigatórias, valores únicos) na camada de armazenamento.
+
+O Delta Lake resolve esses problemas ao trazer confiabilidade e desempenho de um data warehouse para a flexibilidade e economia de um data lake. Mantido pela Linux Foundation e fortemente associado à Databricks, o Delta Lake foi o primeiro framework amplamente adotado a implementar transações ACID sobre object stores. Seu núcleo baseia-se em um log transacional, denominado `_delta_log`, que registra de forma incremental todas as operações executadas em uma tabela. Esse log, composto por arquivos JSON (metadados de commits) e Parquet (snapshots otimizados), permite isolamento total entre sessões Spark, assegurando consistência e reprodutibilidade mesmo em ambientes distribuídos.
 
 Em ambientes de dados dinâmicos, especialmente aqueles que recebem atualizações frequentes de diversas fontes, é comum a necessidade de combinar informações novas com registros já existentes. Tradicionalmente, isso exigiria duas operações distintas: INSERT, para adicionar novos dados, e UPDATE, para modificar os existentes. Para simplificar esse processo, surgiu o termo UPSERT — uma junção de UPDATE e INSERT — que designa uma operação capaz de atualizar o que já existe e inserir o que ainda não existe, de forma automatizada e atômica.
 
