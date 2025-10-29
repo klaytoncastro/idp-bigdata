@@ -355,6 +355,52 @@ tabela_delta.history().select("version", "timestamp", "operation", "operationMet
 
 Esse histórico mostra as operações realizadas — por exemplo, a escrita inicial da tabela (WRITE) e versões subsequentes (UPDATE, MERGE etc.).
 
+```python
+# Exemplo de UPDATE: corrigir pontos de um piloto específico
+spark.sql("""
+UPDATE delta.`s3a://datalake/f1_2022_delta`
+SET points = points + 1
+WHERE driver = 'Lewis Hamilton'
+""")
+
+# Exemplo de DELETE: remover registros inválidos (posição nula)
+spark.sql("""
+DELETE FROM delta.`s3a://datalake/f1_2022_delta`
+WHERE position IS NULL
+""")
+
+# Exemplo de UPSERT (MERGE): atualizar ou inserir novos resultados
+from pyspark.sql import Row
+
+# Dados simulando novas corridas
+updates = spark.createDataFrame([
+    Row(year=2022, race_name="Brazil GP", driver="Lewis Hamilton", points=25),
+    Row(year=2022, race_name="New Race", driver="New Driver", points=10)
+])
+
+updates.createOrReplaceTempView("updates")
+
+spark.sql("""
+MERGE INTO delta.`s3a://datalake/f1_2022_delta` AS target
+USING updates AS source
+ON target.driver = source.driver AND target.race_name = source.race_name
+WHEN MATCHED THEN UPDATE SET target.points = source.points
+WHEN NOT MATCHED THEN INSERT *
+""")
+
+# Consultar novamente o histórico de commits
+tabela_delta.history().select("version", "timestamp", "operation").show(truncate=False)
+
+# Ler versão anterior e comparar
+old_df = spark.read.format("delta").option("versionAsOf", 0).load("s3a://datalake/f1_2022_delta")
+print("Versão inicial:")
+old_df.show(5)
+
+new_df = spark.read.format("delta").load("s3a://datalake/f1_2022_delta")
+print("Versão atual:")
+new_df.show(5)
+```
+
 ### 4.3. Consultas Analíticas (Gold)
 
 Mesmo antes de introduzir ferramentas como o Dremio, que atuam na camada conceitual Gold, é possível realizar consultas SQL diretas no Spark, simulando-a.
@@ -406,7 +452,7 @@ graph LR
     style Consumo fill:#fff7d6,stroke:#b29700,stroke-width:1px
 ```
 
-Embora o Delta Lake seja uma das soluções mais maduras para Data Lakehouse, cumpre destacar que isso nem sempre significa que ele representa a abordagem ideal para todos os cenários. Por exemplo, se o pipeline depende de Flink, Trino ou Presto, o Iceberg oferece melhor interoperabilidade. Nos projetos com orçamento restrito, a manutenção de logs, checkpoints e catálogos adiciona complexidade e custo operacional. Em contextos de baixa latência em streaming, quando há necessidade de atualizações contínuas em segundos, o Hudi tende a ser mais eficiente. Já em ambientes reduzidos ou com recursos limitados, o overhead do Spark pode ser desnecessário e, nesses casos, utilizar DuckDB ou Dremio diretamente sobre arquivos Parquet representa uma alternativa prática e econômica. Com o pipeline completo implementado e validado, torna-se possível refletir sobre o impacto estratégico dessa arquitetura e sobre como o modelo Lakehouse redefine as fronteiras entre armazenamento, governança e análise de dados em escala.
+Embora o Delta Lake seja uma das soluções mais maduras para Data Lakehouse, importante destacar que isso nem sempre significa que ele representa a abordagem ideal para todos os cenários. Por exemplo, se o pipeline depende de Flink, Trino ou Presto, o Iceberg oferece melhor interoperabilidade. Nos projetos com orçamento restrito, a manutenção de logs, checkpoints e catálogos adiciona complexidade e custo operacional. Em contextos de baixa latência em streaming, quando há necessidade de atualizações contínuas em segundos, o Hudi tende a ser mais eficiente. Já em ambientes reduzidos ou com recursos limitados, o overhead do Spark pode ser desnecessário e, nesses casos, utilizar DuckDB ou Dremio diretamente sobre arquivos Parquet representa uma alternativa prática e econômica. Com o pipeline completo implementado e validado, torna-se possível refletir sobre o impacto estratégico dessa arquitetura e sobre como o modelo Lakehouse redefine as fronteiras entre armazenamento, governança e análise de dados em escala.
 
 # 5. Conclusão
 
