@@ -519,5 +519,4 @@ Nas VMs (configuração alternativa), precisamos evitar desligamentos abruptos, 
 
 ### Conclusão
 
-
 Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br).
