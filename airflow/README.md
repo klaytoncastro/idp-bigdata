@@ -2,11 +2,9 @@
 
 ## Visão Geral
 
-Orquestração refere-se ao processo de gerenciar e coordenar a execução de tarefas interdependentes em um fluxo de trabalho, garantindo que elas sejam executadas corretamente. Nesse cenário, um pipeline consiste numa série de etapas consecutivas que processam os dados de forma estruturada, garantindo que os dados sejam transformados e movidos de um sistema para outro de forma eficiente e ordenada. 
+Orquestração refere-se ao processo de gerenciar e coordenar a execução de tarefas interdependentes em um fluxo de trabalho, garantindo que elas sejam executadas corretamente. Nesse cenário, um pipeline consiste numa série de etapas consecutivas que processam os dados de forma estruturada, garantindo que os dados sejam transformados e movidos de um sistema para outro de forma eficiente e ordenada. Após construirmos um ambiente de processamento e governança de dados com Spark e Delta Lake, o próximo passo natural é automatizar e coordenar esses processos. Em um pipeline moderno, a confiabilidade não depende apenas do código, mas da execução ordenada e monitorável das etapas — e é aqui que entra o Apache Airflow como orquestrador central. Em ambientes onde grandes volumes de dados são processados continuamente, ferramentas como o Airflow são fundamentais para implementar e automatizar tarefas complexas de ETL (Extract, Transform, Load), integração entre diferentes sistemas de armazenamento, ingestão e análise de dados, onde cada etapa do fluxo — desde a ingestão até a transformação e armazenamento deve ser organizada de maneira programática, com intuito de gerenciar, monitorar e escalonar essas operações.
 
-Em ambientes onde grandes volumes de dados são processados continuamente, ferramentas como o Airflow são fundamentais para implementar e automatizar tarefas complexas de ETL (Extract, Transform, Load), integração entre diferentes sistemas de armazenamento, ingestão e análise de dados, onde cada etapa do fluxo — desde a ingestão até a transformação e armazenamento deve ser organizada de maneira programática, com intuito de gerenciar, monitorar e escalonar essas operações. 
-
-## Apache Airflow 
+## Apache Airflow
 
 Apache Airflow é uma plataforma de orquestração de fluxos de trabalho que permite o desenvolvimento, agendamento e monitoramento de pipelines de dados programaticamente. Esses pipelines são construídos como grafos acíclicos dirigidos (DAGs - Directed Acyclic Graphs), onde cada nó representa uma tarefa (task) e as arestas entre os nós indicam a sequência de execução.
 
@@ -22,7 +20,25 @@ O Airflow foi criado para resolver a necessidade de orquestração de fluxos de 
 
 ## Arquitetura e Componentes do Airflow
 
-A arquitetura do Airflow é baseada em uma abordagem distribuída, permitindo a orquestração eficiente de fluxos de trabalho de dados em ambientes com diversas necessidades de escalabilidade. Os principais componentes incluem:
+A arquitetura do Airflow é baseada em uma abordagem distribuída, permitindo a orquestração eficiente de fluxos de trabalho de dados em ambientes com diversas necessidades de escalabilidade. 
+
+```mermaid
+flowchart LR
+    A["DAG (Pipeline de Dados)"] --> B["Scheduler"]
+    B --> C["Executor"]
+    C --> D["Workers"]
+    B --> E["Metadata DB (PostgreSQL/MySQL)"]
+    B --> F["Web UI (Monitoramento)"]
+
+    style A fill:#f2f8ff,stroke:#467fcf,stroke-width:1px
+    style B fill:#e7f0ff,stroke:#467fcf,stroke-width:1px
+    style C fill:#fff7cc,stroke:#b29700,stroke-width:1px
+    style D fill:#fff3b0,stroke:#a18700,stroke-width:1px
+    style E fill:#fef9e7,stroke:#a18700,stroke-width:1px
+    style F fill:#f4f4f4,stroke:#999,stroke-width:1px
+```
+
+Os principais componentes incluem:
 
 - **DAGs**: Grafos que representam o fluxo de tarefas no pipeline. Um DAG define a ordem de execução e as dependências entre tarefas.
 
@@ -60,12 +76,19 @@ Portanto, para ambientes de produção, **PostgreSQL** e **MySQL** são os banco
 
 - Integração de Dados entre Sistemas Heterogêneos: Orquestrar a movimentação de dados entre bancos de dados relacionais (SQL) e NoSQL, ou entre sistemas de arquivos locais e distribuídos.
 
+### Boas Práticas na Construção de DAGs
+
+- Atomicidade: cada task deve executar uma função específica e isolada.
+- Idempotência: rodar a mesma task duas vezes não deve gerar resultados duplicados.
+- Dependências explícitas: use >> e << para controlar a ordem de execução.
+- Retry e alerta: configure reexecuções automáticas e alertas para falhas.
+- XComs: use para compartilhar informações entre tarefas sem acoplamento de código.
+
 ### Exemplo de Pipeline
 
 O Airflow é amplamente utilizado para automatizar pipelines de ETL. Ele pode, por exemplo, extrair dados de APIs, transformar os dados em formatos adequados e carregá-los em um data warehouse ou banco NoSQL.
 
 Também é capaz de orquestrar o processo de ingestão de dados em tempo real ou em batch de múltiplas fontes, como redes sociais, serviços de IoT e logs de aplicativos, movendo esses dados para plataformas de armazenamento na nuvem, como AWS S3, Google Cloud Storage, ou Azure Blob Storage.
-
 
 Atualmente, a solução é uma escolha popular para gerenciar workflows de treinamento de modelos de Machine Learning. Ele coordena tarefas de coleta de dados, pré-processamento, treinamento e validação de modelos, além de possibilitar o deploy automatizado desses modelos.
 
@@ -176,7 +199,6 @@ docker compose restart airflow-scheduler
 
 Isso irá forçar que o Airflow recarregue as novas configurações e identifique as DAGs corretamente. Após o procedimento, veja na interface gráfica a sua nova DAG, teste sua inicialização e verifique os logs de execução. 
 
-
 ### Prática: Ingestão Automatizada com Airflow + Spark + Delta Lake
 
 Após compreender os fundamentos do Apache Airflow e seu papel na orquestração de pipelines de dados, aplicaremos agora um exemplo prático de ingestão automatizada, integrando o Airflow ao Spark e ao Delta Lake. Em ambientes reais, tarefas de ingestão e transformação de dados precisam ser executadas periodicamente — muitas vezes diariamente, horariamente ou sob demanda — para garantir que os dados brutos coletados de diversas fontes sejam convertidos para formatos otimizados e governáveis.
@@ -184,10 +206,7 @@ Após compreender os fundamentos do Apache Airflow e seu papel na orquestração
 Nesta prática, simularemos esse tipo de rotina, utilizando o dataset público **NYC Taxi** como exemplo clássico de dados de alta volumetria e atualização contínua.  
 Nosso objetivo será converter dados brutos em **CSV** para o formato **Delta Lake**, armazenando-os diretamente em um bucket **MinIO**, com orquestração automatizada pelo **Apache Airflow** e processamento distribuído via **Apache Spark**.
 
-> O formato **Delta Lake** utiliza arquivos **Parquet** como base, mas adiciona **controle de versão e transações ACID**, permitindo rollback, time travel e governança total.  
-> Em outras palavras, ele herda todas as vantagens do Parquet e adiciona confiabilidade transacional e rastreabilidade.
-
----
+> Lembre-se: o formato **Delta Lake** utiliza arquivos **Parquet** como base, mas adiciona **controle de versão e transações ACID**, permitindo rollback, time travel e governança total. Ele herda todas as vantagens do Parquet e adiciona confiabilidade transacional e rastreabilidade.
 
 ### Dataset de Exemplo: NYC Taxi
 
@@ -195,15 +214,13 @@ Fonte oficial: [https://www.nyc.gov/site/tlc/about/tlc-trip-record-data.page](ht
 
 Cada arquivo CSV mensal contém milhões de corridas registradas por táxis de Nova York, incluindo datas, distâncias, valores e coordenadas de embarque e desembarque.
 
-| Dataset (mês único) | Tamanho bruto | Tamanho após conversão | Redução aproximada |
-|----------------------|---------------|------------------------|--------------------|
-| CSV (`yellow_tripdata_2023-01.csv`) | ~10 GB | — | — |
-| Parquet (compressão + colunar) | ~1,6 GB | ~84% menor | Alta eficiência de leitura |
-| Delta Lake (Parquet + `_delta_log/`) | ~1,7 GB | ~83% menor | Mesma compactação + controle ACID |
+| Dataset                              | Tamanho bruto | Tamanho após conversão | Redução aproximada                |
+|--------------------------------------|---------------|------------------------|-----------------------------------|
+| CSV (`yellow_tripdata_2023-01.csv`)  | ~10 GB        | —                      | —                                 |
+| Parquet (compressão + colunar)       | ~1,6 GB       | ~84% menor             | Alta eficiência de leitura        |
+| Delta Lake (Parquet + `_delta_log/`) | ~1,7 GB       | ~83% menor             | Mesma compactação + controle ACID |
 
 Mesmo com metadados adicionais, o Delta Lake mantém compressão semelhante ao Parquet, mas oferece integridade transacional e versionamento — recursos inexistentes no CSV.
-
----
 
 ### Arquitetura da Solução
 
@@ -219,7 +236,7 @@ flowchart LR
     style D fill:#e2fbe2,stroke:#22c55e
 ```
 
-A automação desse tipo de fluxo é comum em pipelines que precisam atualizar dados periodicamente. Com isso, é possível aplicar o ciclo do ELT moderno:
+Nesta etapa, aplicaremos a orquestração sobre o pipeline que já viabilizamos com Spark/Delta Lake. O Airflow coordenará as etapas de extração, transformação e carga de dados no MinIO, transformando o processo de laboratório anterior em um pipeline reexecutável e automatizado. Essa integração é o coração da engenharia de dados moderna: transformar scripts isolados em fluxos de dados controlados e versionáveis. A automação desse tipo de fluxo é comum em pipelines que precisam atualizar dados periodicamente. Com isso, é possível aplicar o ciclo do ELT moderno:
 Extração (Raw Data: Parquet/CSV) → Carga (Delta Lake) → Governança e Consistência (ACID sobre MinIO/S3).
 
 ```python
@@ -262,4 +279,4 @@ with DAG(
 
 ## Conclusão
 
-As tarefas de orquestração de fluxos de trabalho e automatização de pipelines em um ambientes de Big Data são práticas fundamentais na engenharia de dados. Nesse cenário, o Apache Airflow destaca-se por integrar diversas fontes, sistemas de armazenamento distribuído e ferramentas analíticas, garantindo escalabilidade e confiabilidade operacional. Seu uso é amplamente difundido para otimizar ETL, integração de dados, análises em tempo real e machine learning, consolidando-se como um componente essencial nas arquiteturas modernas de dados.
+As tarefas de orquestração de fluxos de trabalho e automatização de pipelines de dados são práticas fundamentais na engenharia de dados moderna. Nesse contexto, o Apache Airflow destaca-se por integrar múltiplas fontes, sistemas de armazenamento distribuído e ferramentas analíticas, garantindo escalabilidade, previsibilidade e confiabilidade operacional. Seu uso é amplamente difundido em processos de ETL/ELT, integração entre sistemas, análises em tempo real e treinamento automatizado de modelos de machine learning, consolidando-se como um componente essencial nas arquiteturas contemporâneas de dados. A orquestração com o Airflow completa o ciclo da engenharia de dados: Spark e Delta Lake asseguram a qualidade, consistência e governança dos dados, enquanto o Airflow garante rastreabilidade, automação e reexecução controlada dos pipelines. Com essa camada, o ecossistema torna-se auditável, escalável e resiliente, atendendo plenamente aos requisitos de ambientes de produção corporativos.

@@ -16,6 +16,7 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 06 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                             | 03/10/2025 |
 | 07 | [Spark](./spark/)                                                                    | Framework Spark e Prática com PySpark                            | 10/10/2025 |
 | 08 | [Delta Lake](./delta/)                                                               | Prática com Delta Lake                                           | 17/10/2025 |
+| 09 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines               | 31/10/2025 |
 
 <!--
 | 06 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 02/04/2025 |
@@ -24,7 +25,7 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 09 | [Kafka](./kafka/)                                                                    | Prática com Event Broker                                   | 30/04/2025 |
 | 10 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                       | 07/05/2025 |
 | 11 | [Streamlit](./streamlit/)                                                            | Dashboards Interativos e Visualização de Dados             | 14/05/2025 |
-| 12 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines         | 21/05/2025 |
+
 | 13 | [Pipeline](./pipeline/)                                                              | Desenvolvimento de Pipeline com Múltiplas Ferramentas      | 28/05/2025 |
 | 14 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                        | 04/06/2025 |
 | 15 | [Spark](./spark/)                                                                    | Processamento Paralelo e Análise de Dados                  | 18/06/2025 |
