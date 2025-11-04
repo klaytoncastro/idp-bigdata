@@ -22,10 +22,10 @@ RUN apt-get update && \
 
 # Instala as bibliotecas Python necessárias
 RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
-    pyspark==${SPARK_VERSION} pandas seaborn matplotlib scikit-learn scikit-optimize xgboost lightgbm joblib \
-    pycaret pymongo cassandra-driver boto3
+    pyspark==${SPARK_VERSION} pandas seaborn matplotlib pymongo cassandra-driver boto3
+#   scikit-learn scikit-optimize xgboost lightgbm joblib pycaret
 
-# Baixa os JARs do S3 (Hadoop AWS, AWS SDK), Spark-Cassandra Connector e MongoDB Connector
+# Baixa os JARs do S3 (Hadoop AWS, AWS SDK), Spark-Cassandra Connector e MongoDB Connector (Versão 3.4.3)
 #RUN wget -q https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/hadoop-aws-3.2.0.jar -P /usr/local/spark/jars/ && \
 #    wget -q https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.828/aws-java-sdk-bundle-1.11.828.jar -P /usr/local/spark/jars/ && \
 #    wget -q https://repo1.maven.org/maven2/com/datastax/spark/spark-cassandra-connector_2.12/3.0.0/spark-cassandra-connector_2.12-3.0.0.jar -P /usr/local/spark/jars/ && \

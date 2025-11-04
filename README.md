@@ -13,14 +13,15 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 03 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                           | 29/08/2025 |
 | 04 | [Censo IES](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais)             | Ingestão e Análise de Dados do Censo IES                         | 12/09/2025 |
 | 05 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar Cassandra                     | 26/09/2025 |
-| 06 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                             | 03/10/2025 |
+| 06 | [MinIO](./minio/)                                                                    | Prática com Armazenamento de Objetos                             | 03/10/2025 |
 | 07 | [Spark](./spark/)                                                                    | Framework Spark e Prática com PySpark                            | 10/10/2025 |
 | 08 | [Delta Lake](./delta/)                                                               | Prática com Delta Lake                                           | 17/10/2025 |
 | 09 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines               | 31/10/2025 |
+| 10 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                           | 02/11/2025 |
 
 <!--
-| 06 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor                     | 02/04/2025 |
-| 07 | [RabbitMQ](./rabbitmq/)                                                              | Prática com Message Broker                                 | 09/04/2025 |
+
+
 | 08 | [Celery](./celery/)                                                                  | Prática com Serviços de Mensageria                         | 23/04/2025 |
 | 09 | [Kafka](./kafka/)                                                                    | Prática com Event Broker                                   | 30/04/2025 |
 | 10 | [Minio](./minio/)                                                                    | Prática com Armazenamento de Objetos                       | 07/05/2025 |

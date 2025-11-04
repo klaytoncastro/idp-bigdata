@@ -187,7 +187,7 @@ Essas integrações ampliam o alcance do Spark para além do contexto de process
 
 ## 3. Atividade Prática
 
-A seguir, iniciaremos a configuração prática do ambiente, utilizando contêineres Docker para simular um cluster local de Spark integrado à IDE Jupyter. O objetivo é validar o funcionamento do motor de computação distribuída, que possibilitará evoluirmos para exercícios com Data Lakes e formatos de armazenamento otimizados. Para começar, construa o contêiner do Spark e posteriormente acesse a IDE Jupyter (`http://localhost:8889`). Aqui, alteramos a porta para `8889` para evitar conflitos com a instância do Jupyter que estávamos utilizando anteriomente, onde o Spark não estava habitado. Lembre-se de fazer `git pull` ou, se já tiver alterado o conteúdo do repositório, execute o bloco abaixo antes de começar: 
+A seguir, iniciaremos a configuração prática do ambiente, utilizando contêineres Docker para simular um cluster local de Spark integrado à IDE Jupyter. O objetivo é validar o funcionamento do motor de computação distribuída, que possibilitará evoluirmos para exercícios com Data Lakes e formatos de armazenamento otimizados. Para começar, construa o contêiner do Spark e posteriormente acesse a IDE Jupyter (`http://localhost:8889`). Aqui, alteramos a porta para `8889` para evitar conflitos com a instância do Jupyter que estávamos utilizando anteriomente, onde o Spark não estava habitado. Lembre-se de fazer `git pull` ou, *se já tiver alterado o conteúdo do repositório*, **execute o bloco abaixo antes de começar**, assim você garante que irá obter a última versão: 
 
 ```bash
 cd /opt/idp-bigdata/spark
@@ -196,7 +196,7 @@ wget https://raw.githubusercontent.com/klaytoncastro/idp-bigdata/refs/heads/main
 wget https://raw.githubusercontent.com/klaytoncastro/idp-bigdata/refs/heads/main/spark/Dockerfile
 ```
 
-Com a certeza dos arquivos atualizados, levante o ambiente:
+Com a certeza dos arquivos atualizados, levante o ambiente, da mesma forma que fez anteriormente com o Jupyter isolado:
 
 ```bash
 cd /opt/idp-bigdata/spark
@@ -205,11 +205,13 @@ docker-compose build
 docker-compose up -d
 ```
 
-Caso seja o seu primeiro acesso a esta instância do Jupyter, lembre-se de executar o comando a seguir para visualizar os logs e identificar o token para obter acesso à IDE. Utilize o comando abaixo para recuperar o token e definir sua própria senha da GUI. 
+Caso seja o seu primeiro acesso a esta instância do Jupyter que já contempla o Spark, lembre-se de executar o comando a seguir para visualizar os logs e identificar o token para obter acesso à IDE. Utilize o comando abaixo para recuperar o token e definir sua própria senha da GUI. 
 
 ```bash
 docker-compose logs | grep 'token='
 ```
+
+- **Lembre-se**: Não confunda as coisas, o contêiner Spark já possui uma instância Jupyter, é ela que você deve utilizar a partir daqui! 
 
 ### 3.1. Configuração da rede para comunicação com outros contêineres
 
@@ -279,8 +281,7 @@ e) Atualize o navegador e observe que a interface `http://localhost:4040` não e
 
 ### 3.3. Benchmark de Formatos de Arquivos em Processamento de Dados
 
-Nesta prática, será realizada a comparação entre diferentes formatos de armazenamento de dados compatíveis com o Apache Spark — CSV, JSON, Parquet, Avro e ORC — gravando e lendo arquivos a partir de um bucket do MinIO configurado como Object Storage compatível com S3.
-O objetivo é avaliar empiricamente o desempenho de gravação, leitura e tamanho final de cada formato, demonstrando como a escolha do formato afeta diretamente o custo de armazenamento e o tempo de processamento.
+Nesta prática, será realizada a comparação entre diferentes formatos de armazenamento de dados compatíveis com o Apache Spark — CSV, JSON, Parquet, Avro e ORC — gravando e lendo arquivos a partir de um bucket do MinIO configurado como Object Storage compatível com S3. O objetivo é avaliar empiricamente o desempenho de gravação, leitura e tamanho final de cada formato, demonstrando como a escolha do formato afeta diretamente o custo de armazenamento e o tempo de processamento. Antes disso, vamos entender cada formato padrão em ambientes típicos de Big Data:
 
 ### 3.3.1. CSV (Comma-Separated Values)
 
@@ -361,7 +362,7 @@ Em suma:
 | **ORC**     | Binário (colunar)  | ZLIB        | Sim                           | OLAP pesado, Hive, Big Data batch |
 
 
-**Agora, depois de subir os ambientes Spark e Jupyter, execute o código abaixo no seu Jupyter:**  
+**Agora que entendemos os tipos, vantagens, desvantagens e usos de cada formato, execute o código abaixo no seu contêiner Spark, a partir da interface Jupyter dele:**  
 
 ```python
 import time, os, json
