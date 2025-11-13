@@ -235,22 +235,69 @@ Esses catálogos não apenas descrevem a estrutura das tabelas, mas também gara
 
 ## 4. Prática com Delta Lake
 
-Com os fundamentos teóricos consolidados, esta seção aplica os conceitos estudados em ambiente laboratorial, demonstrando a criação e manipulação de tabelas Delta sobre um object store compatível. Antes de criar a primeira tabela Delta, é necessário garantir que o Spark conheça o Delta Lake package compatível com a versão instalada. No Jupyter hospedado no contêiner Spark, basta iniciar a sessão com PySpark já carregando o pacote `delta-spark` via parâmetro `.config("spark.jars.packages", ...)` Ao executar essa célula, o PySpark baixa automaticamente o pacote `delta-spark_2.12-3.2.0.jar` e suas dependências. No entanto, em ambientes modernos conteinerizados, o ideal é fazer o build novamente incluindo esse .jar já na montagem do Dockerfile, que podemos fazer posteriormente dessa forma: 
+Com os fundamentos teóricos consolidados, esta seção aplica os conceitos estudados em ambiente laboratorial, demonstrando a criação e manipulação de tabelas Delta sobre um object store compatível. Antes de criar a primeira tabela Delta, é necessário garantir que o Spark conheça o Delta Lake package compatível com a versão instalada. No Jupyter hospedado no contêiner Spark, basta iniciar a sessão com PySpark já carregando o pacote `delta-spark` via parâmetro `.config("spark.jars.packages", ...)` Ao executar a célula (`pip install delta-spark==3.2.1`), o PySpark baixa automaticamente o pacote `delta-spark` e suas dependências. No entanto, em ambientes modernos conteinerizados, o ideal é fazer o build novamente incluindo esse .jar já na montagem do Dockerfile, que podemos fazer posteriormente dessa forma: 
 
 ```bash
 # Baixa o Delta Lake compatível com Spark 3.5.x
-RUN wget -q --no-check-certificate \
-    https://repo1.maven.org/maven2/io/delta/delta-spark_2.12/3.2.0/delta-spark_2.12-3.2.0.jar \
-    -P /usr/local/spark/jars/
+RUN wget --no-check-certificate -q https://repo1.maven.org/maven2/io/delta/delta-spark_2.12/3.2.1/delta-spark_2.12-3.2.1.jar -P /usr/local/spark/jars/ && \
+    wget --no-check-certificate -q https://repo1.maven.org/maven2/io/delta/delta-storage/3.2.1/delta-storage-3.2.1.jar -P /usr/local/spark/jars/
 ```
 
 Dessa forma, o pacote já estará disponível no classpath padrão do Spark. Em seguida, no notebook, a sessão Spark pode ser iniciada sem a linha `.config("spark.jars.packages", ...)`. Para validar a instalação, execute: 
 
-```python
-from delta import configure_spark_with_delta_pip
 
-print("Versão do Delta Lake:")
+```python
+import os
+from pyspark.sql import SparkSession
+from delta.tables import DeltaTable
+import importlib.metadata
+
+# =====================================================
+# Versões Delta Lake
+# =====================================================
+print("Versão delta-spark (Python):", importlib.metadata.version("delta-spark"))
+
+# =====================================================
+# Configuração de ambiente para Spark + Delta 3.2.1
+# =====================================================
+os.environ["SPARK_HOME"] = "/usr/local/spark"
+os.environ["PYSPARK_SUBMIT_ARGS"] = (
+    "--jars /usr/local/spark/jars/delta-spark_2.12-3.2.1.jar,"
+    "/usr/local/spark/jars/delta-storage-3.2.1.jar pyspark-shell"
+)
+
+# =====================================================
+# Sessão Spark configurada para MinIO + Delta
+# =====================================================
+spark = (
+    SparkSession.builder
+    .appName("Delta-Bronze")
+    .master("local[*]")
+    .config("spark.executor.memory", "1g")
+    # Configuração S3A (MinIO)
+    .config("spark.hadoop.fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+    .config("spark.hadoop.fs.s3a.path.style.access", "true")
+    .config("spark.hadoop.fs.s3a.connection.ssl.enabled", "true")
+    .config("spark.hadoop.fs.s3a.endpoint", "http://minio:9000")
+    .config("spark.hadoop.fs.s3a.access.key", "minioadmin")
+    .config("spark.hadoop.fs.s3a.secret.key", "minioadmin")
+    # Integração Delta Lake
+    .config("spark.sql.extensions", "io.delta.sql.DeltaSparkSessionExtension")
+    .config("spark.sql.catalog.spark_catalog", "org.apache.spark.sql.delta.catalog.DeltaCatalog")
+    .getOrCreate()
+)
+
+spark.sparkContext.setLogLevel("ERROR")
+
+# =====================================================
+# Teste da integração e S3A Handler
+# =====================================================
+spark._jsc.hadoopConfiguration().set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+fs = spark._jvm.org.apache.hadoop.fs.FileSystem.get(spark._jsc.hadoopConfiguration())
+print("Handler S3A inicializado com sucesso:", fs)
+
 spark.sql("SELECT version()").show()
+#spark.stop()
 ```
 
 ### 4.1. Leitura dos arquivos CSV (Bronze)
@@ -284,15 +331,17 @@ A partir desse ponto, os dados brutos estão carregados e prontos para integraç
 Nesta etapa, criaremos uma visão integrada dos resultados da temporada 2022, unindo informações de pilotos, equipes e circuitos. Essa operação representa o refinamento dos dados — característica essencial da camada Silver.
 
 ```python
+# Cria as views temporárias
 drivers.createOrReplaceTempView("drivers")
 constructors.createOrReplaceTempView("constructors")
 races.createOrReplaceTempView("races")
 circuits.createOrReplaceTempView("circuits")
 results.createOrReplaceTempView("results")
 
+# Query SparkSQL
 query = """
 SELECT 
-    r.year,
+    ra.year,
     ra.name AS race_name,
     c.name AS circuit,
     d.forename || ' ' || d.surname AS driver,
@@ -309,20 +358,20 @@ JOIN circuits c ON c.circuitId = ra.circuitId
 WHERE ra.year = 2022
 """
 
-f1_2022 = spark.sql(query)
-f1_2022.show(5, truncate=False)
-print(f"Total de registros: {f1_2022.count()}")
+# Executa e mostra resultado
+df = spark.sql(query)
+df.show(20, truncate=False)
 ```
 
 ### 4.2.1. Escrita no Delta Lake
 Com o dataset consolidado, salvamos o resultado no formato Delta Lake, armazenando os arquivos tratados dentro do bucket datalake do MinIO.
 
 ```python
-delta_path = "s3a://datalake/f1_2022_delta"
+delta_path = "s3a://datalake-bronze/f1_2022_results_delta"
 
 f1_2022.write.format("delta").mode("overwrite").save(delta_path)
 
-print("Tabela Delta gravada com sucesso em s3a://datalake/f1_2022_delta")
+print("Tabela Delta gravada com sucesso em s3a://datalake-bronze/f1_2022_results_delta")
 ```
 
 Após a execução, verifique no MinIO (`http://localhost:9001`) o novo diretório criado, contendo:
@@ -356,49 +405,64 @@ tabela_delta.history().select("version", "timestamp", "operation", "operationMet
 Esse histórico mostra as operações realizadas — por exemplo, a escrita inicial da tabela (WRITE) e versões subsequentes (UPDATE, MERGE etc.).
 
 ```python
+from pyspark.sql import Row
+from delta.tables import DeltaTable
+
+# Caminho camada Bronze
+delta_path = "s3a://datalake-bronze/f1_2022_results_delta"
+
+# =====================================================
 # Exemplo de UPDATE: corrigir pontos de um piloto específico
-spark.sql("""
-UPDATE delta.`s3a://datalake/f1_2022_delta`
+# =====================================================
+spark.sql(f"""
+UPDATE delta.`{delta_path}`
 SET points = points + 1
 WHERE driver = 'Lewis Hamilton'
 """)
 
+# =====================================================
 # Exemplo de DELETE: remover registros inválidos (posição nula)
-spark.sql("""
-DELETE FROM delta.`s3a://datalake/f1_2022_delta`
+# =====================================================
+spark.sql(f"""
+DELETE FROM delta.`{delta_path}`
 WHERE position IS NULL
 """)
 
+# =====================================================
 # Exemplo de UPSERT (MERGE): atualizar ou inserir novos resultados
-from pyspark.sql import Row
-
-# Dados simulando novas corridas
+# =====================================================
 updates = spark.createDataFrame([
-    Row(year=2022, race_name="Brazil GP", driver="Lewis Hamilton", points=25),
+    Row(year=2022, race_name="Brazil Grand Prix", driver="Lewis Hamilton", points=25),
     Row(year=2022, race_name="New Race", driver="New Driver", points=10)
 ])
 
 updates.createOrReplaceTempView("updates")
 
-spark.sql("""
-MERGE INTO delta.`s3a://datalake/f1_2022_delta` AS target
+spark.sql(f"""
+MERGE INTO delta.`{delta_path}` AS target
 USING updates AS source
 ON target.driver = source.driver AND target.race_name = source.race_name
 WHEN MATCHED THEN UPDATE SET target.points = source.points
-WHEN NOT MATCHED THEN INSERT *
+WHEN NOT MATCHED THEN INSERT (year, race_name, driver, points)
+VALUES (source.year, source.race_name, source.driver, source.points)
 """)
 
-# Consultar novamente o histórico de commits
+# =====================================================
+# Histórico de commits Delta
+# =====================================================
+tabela_delta = DeltaTable.forPath(spark, delta_path)
 tabela_delta.history().select("version", "timestamp", "operation").show(truncate=False)
 
-# Ler versão anterior e comparar
-old_df = spark.read.format("delta").option("versionAsOf", 0).load("s3a://datalake/f1_2022_delta")
+# =====================================================
+# Comparação de versões
+# =====================================================
+old_df = spark.read.format("delta").option("versionAsOf", 0).load(delta_path)
 print("Versão inicial:")
-old_df.show(5)
+old_df.show(5, truncate=False)
 
-new_df = spark.read.format("delta").load("s3a://datalake/f1_2022_delta")
+new_df = spark.read.format("delta").load(delta_path)
 print("Versão atual:")
-new_df.show(5)
+new_df.show(5, truncate=False)
 ```
 
 ### 4.3. Consultas Analíticas (Gold)

@@ -22,21 +22,33 @@ RUN apt-get update && \
 
 # Instala as bibliotecas Python necessárias
 RUN pip install --trusted-host pypi.org --trusted-host pypi.python.org --trusted-host files.pythonhosted.org \
-    pyspark==${SPARK_VERSION} pandas seaborn matplotlib pymongo cassandra-driver boto3
-#   scikit-learn scikit-optimize xgboost lightgbm joblib pycaret
+    pyspark==${SPARK_VERSION} pandas seaborn matplotlib pymongo cassandra-driver boto3 delta-spark==3.2.1
+# scikit-learn scikit-optimize xgboost lightgbm joblib pycaret
 
-# Baixa os JARs do S3 (Hadoop AWS, AWS SDK), Spark-Cassandra Connector e MongoDB Connector (Versão 3.4.3)
+# Baixa os JARs do S3 (Hadoop AWS, AWS SDK), Spark-Cassandra Connector, MongoDB Connector, Delta Lake
 #RUN wget -q https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/hadoop-aws-3.2.0.jar -P /usr/local/spark/jars/ && \
 #    wget -q https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.828/aws-java-sdk-bundle-1.11.828.jar -P /usr/local/spark/jars/ && \
 #    wget -q https://repo1.maven.org/maven2/com/datastax/spark/spark-cassandra-connector_2.12/3.0.0/spark-cassandra-connector_2.12-3.0.0.jar -P /usr/local/spark/jars/ && \
 #    wget -q https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.12/3.0.0/mongo-spark-connector_2.12-3.0.0.jar -P /usr/local/spark/jars/
 
 # Baixa os JARs compatíveis com Spark 3.5.x / Hadoop 3.3.x
+#RUN wget --no-check-certificate -q https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.2/hadoop-aws-3.3.2.jar -P /usr/local/spark/jars/ && \
+#    wget --no-check-certificate -q https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.1026/aws-java-sdk-bundle-1.11.1026.jar -P /usr/local/spark/jars/ && \
+#    wget --no-check-certificate -q https://repo1.maven.org/maven2/com/datastax/spark/spark-cassandra-connector_2.12/3.5.1/spark-cassandra-connector_2.12-3.5.1.jar -P /usr/local/spark/jars/ && \
+#    wget --no-check-certificate -q https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.12/3.0.2/mongo-spark-connector_2.12-3.0.2.jar -P /usr/local/spark/jars/ && \
+#    wget --no-check-certificate -q https://repo1.maven.org/maven2/org/apache/spark/spark-avro_2.12/3.5.7/spark-avro_2.12-3.5.7.jar -P /usr/local/spark/jars/ && \
+#    wget --no-check-certificate -q https://repo1.maven.org/maven2/io/delta/delta-spark_2.12/3.2.0/delta-spark_2.12-3.2.0.jar -P /usr/local/spark/jars/
+
+# ------------------------------------------------------------
+# JARs Hadoop, AWS, Cassandra, Mongo e Delta 3.2.1
+# ------------------------------------------------------------
 RUN wget --no-check-certificate -q https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.3.2/hadoop-aws-3.3.2.jar -P /usr/local/spark/jars/ && \
     wget --no-check-certificate -q https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.1026/aws-java-sdk-bundle-1.11.1026.jar -P /usr/local/spark/jars/ && \
     wget --no-check-certificate -q https://repo1.maven.org/maven2/com/datastax/spark/spark-cassandra-connector_2.12/3.5.1/spark-cassandra-connector_2.12-3.5.1.jar -P /usr/local/spark/jars/ && \
     wget --no-check-certificate -q https://repo1.maven.org/maven2/org/mongodb/spark/mongo-spark-connector_2.12/3.0.2/mongo-spark-connector_2.12-3.0.2.jar -P /usr/local/spark/jars/ && \
-    wget --no-check-certificate -q https://repo1.maven.org/maven2/org/apache/spark/spark-avro_2.12/3.5.7/spark-avro_2.12-3.5.7.jar -P /usr/local/spark/jars/
+    wget --no-check-certificate -q https://repo1.maven.org/maven2/org/apache/spark/spark-avro_2.12/${SPARK_VERSION}/spark-avro_2.12-${SPARK_VERSION}.jar -P /usr/local/spark/jars/ && \
+    wget --no-check-certificate -q https://repo1.maven.org/maven2/io/delta/delta-spark_2.12/3.2.1/delta-spark_2.12-3.2.1.jar -P /usr/local/spark/jars/ && \
+    wget --no-check-certificate -q https://repo1.maven.org/maven2/io/delta/delta-storage/3.2.1/delta-storage-3.2.1.jar -P /usr/local/spark/jars/
 
 # Instala o MinIO Client (mc) ignorando verificação de certificado
 #RUN wget --no-check-certificate -q https://github.com/minio/mc/releases/download/RELEASE.2024-09-20T01-15-33Z/mc -O /usr/local/bin/mc && \
