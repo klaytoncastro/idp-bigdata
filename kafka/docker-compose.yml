@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:latest
+    image: confluentinc/cp-zookeeper:7.4.1
     hostname: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -12,7 +12,7 @@ services:
       - mybridge
 
   kafka1:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.4.1
     hostname: kafka1
     depends_on:
       - zookeeper
@@ -31,7 +31,7 @@ services:
       - mybridge
 
   kafka2:
-    image: confluentinc/cp-kafka:latest
+    image: confluentinc/cp-kafka:7.4.1
     hostname: kafka2
     depends_on:
       - zookeeper
@@ -52,19 +52,16 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     hostname: kafka-ui
-    ports:
-      - "8083:8080"
     depends_on:
       - kafka1
       - kafka2
       - zookeeper
+    ports:
+      - "8083:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: "Meu Cluster Kafka"
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka1:9092,kafka2:9093"
       KAFKA_CLUSTERS_0_ZOOKEEPER: "zookeeper:2181"
-      # AUTH_TYPE: "LOGIN_FORM"
-      # SPRING_SECURITY_USER_NAME: admin
-      # SPRING_SECURITY_USER_PASSWORD: admin
     networks:
       - mybridge
 
