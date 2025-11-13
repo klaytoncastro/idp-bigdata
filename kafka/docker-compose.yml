@@ -1,7 +1,7 @@
 version: '3.3'
 services:
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.4.1
+    image: confluentinc/cp-zookeeper:7.2.2
     hostname: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
@@ -12,7 +12,7 @@ services:
       - mybridge
 
   kafka1:
-    image: confluentinc/cp-kafka:7.4.1
+    image: confluentinc/cp-kafka:7.2.2
     hostname: kafka1
     depends_on:
       - zookeeper
@@ -31,7 +31,7 @@ services:
       - mybridge
 
   kafka2:
-    image: confluentinc/cp-kafka:7.4.1
+    image: confluentinc/cp-kafka:7.2.2
     hostname: kafka2
     depends_on:
       - zookeeper
@@ -67,6 +67,4 @@ services:
 
 networks:
   mybridge:
-    name: mybridge
     external: true
-    driver: bridge
