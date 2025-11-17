@@ -52,12 +52,12 @@ services:
   kafka-ui:
     image: provectuslabs/kafka-ui:latest
     hostname: kafka-ui
+    ports:
+      - "8083:8080"
     depends_on:
       - kafka1
       - kafka2
       - zookeeper
-    ports:
-      - "8083:8080"
     environment:
       KAFKA_CLUSTERS_0_NAME: "Meu Cluster Kafka"
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: "kafka1:9092,kafka2:9093"
@@ -67,4 +67,5 @@ services:
 
 networks:
   mybridge:
+    name: mybridge
     external: true
