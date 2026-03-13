@@ -175,7 +175,7 @@ Acesse o [Google Colab](https://colab.research.google.com), crie um novo noteboo
 # Instalação da biblioteca PyMongo
 # ----------------------------------------------------------
 # Execute no Google Colab:
-pip install pymongo[srv]
+!pip install pymongo[srv]
 ```
 
 ```python
@@ -425,16 +425,16 @@ plt.show()
 - Caso pretenda utilizar outras ferramentas, como o Jupyter em conjunto com o MongoDB, é recomendável alocar no mínimo 3072MB de RAM. 
 - Se você planeja executar o Jupyter em conjunto com o MongoDB e Spark, é aconselhável alocar pelo menos 4096MB de RAM. Avalie também a possibilidade de acréscimo de processadores virtuais, de acordo com a capacidade de seu hardware Se você possui à disposição um sistema quad-core, configure a VM para utilizar 2 processadores. 
 
-2. Após os promover os ajustes, inicie a VM. Lembre-se que você deve trabalhar sempre com a versão mais recente do repositório [idp-nosql](https://github.com/klaytoncastro/idp-nosql). Navegue até o diretório onde você clonou o repositório (`cd /opt/idp-nosql`) e obtenha as respectivas atualizações com o comando abaixo: 
+2. Após os promover os ajustes, inicie a VM. Lembre-se que você deve trabalhar sempre com a versão mais recente do repositório [idp-bigdata](https://github.com/klaytoncastro/idp-bigdata). Navegue até o diretório onde você clonou o repositório (`cd /opt/idp-bigdata`). Caso ainda não tenha clonado o repositório, execute:
 
 ```bash
-git pull origin main
+git clone https://github.com/klaytoncastro/idp-bigdata
 ```
 
-3. Se este for seu primeiro acesso, vá até o diretório `/opt/idp-nosql/mongodb` e certifique-se que o script `wait-for-it.sh` tenha permissão de execução: 
+3. Se este for seu primeiro acesso, vá até o diretório. Ex: `cd /opt/idp-bigdata/mongodb` e certifique-se que o script `wait-for-it.sh` tenha permissão de execução: 
 
 ```bash
-cd /opt/idp-nosql/mongodb
+cd /opt/idp-bigdata/mongodb
 chmod +x wait-for-it.sh
 ```
 
@@ -967,6 +967,7 @@ O [Robo3T](https://robomongo.org/), anteriormente conhecido como Robomongo, é o
 ## Conclusão
 
 Esta documentação fornece uma visão geral acerca dos aspectos essenciais do MongoDB, uma das soluções mais populares e poderosas para gerenciamento e análise de dados no contexto de Big Data e NoSQL. Exploramos a flexibilidade de esquema do MongoDB, sua linguagem e recursos avançados de consulta (MQL) e agregação (MAF). Vimos que o MongoDB Express proporciona uma interface gráfica (GUI) amigável para gerenciamento de bases de dados MongoDB, tornando mais acessível o trabalho com documentos. Para aprofundar seu conhecimento, consulte a documentação oficial do [MongoDB](https://docs.mongodb.com/). 
+
 
 
 
