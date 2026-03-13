@@ -6,6 +6,8 @@ Olá, estudante! Seja bem-vindo aos laboratórios da disciplina de **Big Data e 
 
 Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big Data e NoSQL por meio de desafios práticos. Cada desafio proporcionará uma experiência aplicada, permitindo que você consolide os conhecimentos adquiridos e aprofunde seu aprendizado de maneira progressiva. Durante essa jornada, você terá contato com ferramentas amplamente utilizadas no mercado e empregará técnicas para resolver problemas reais.
 
+<!--
+
 | #  | Atividade                                                                            | Desafio                                                          | Prazo      |
 |----|--------------------------------------------------------------------------------------|------------------------------------------------------------------|------------|
 | 01 | [MongoDB](./mongodb/)                                                                | Prática com Banco de Dados de Documentos                         | 15/08/2025 |
@@ -23,7 +25,6 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 13 | [Celery](./celery/)                                                                  | Orquestração, workers, filas e serviços de Mensageria            | 13/11/2025 |
 | 14 | [Pipeline](./pipeline/)                                                              | Desenvolvimento de Pipeline com Múltiplas Ferramentas            | 27/11/2025 |
 
-<!--
 | 15 | [Streamlit](./streamlit/)                                                            | Dashboards Interativos e Visualização de Dados             | 14/05/2025 |
 | 16 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                        | 04/06/2025 |
 | 17 | [Projeto Final]                                                                      | Projeto Capstone da Disciplina                             | 25/06/2025 |
@@ -488,3 +489,4 @@ Nas VMs (configuração alternativa), precisamos evitar desligamentos abruptos, 
 ### Conclusão
 
 Agora você está com o ambiente preparado e pronto para começar os laboratórios. Em caso de dúvidas, não hesite em me contactar: [klayton.castro@idp.edu.br](klayton.castro@idp.edu.br).
+
