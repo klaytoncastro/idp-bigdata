@@ -168,6 +168,8 @@ Essa **URI será usada no PyMongo** para conectar o Google Colab ao MongoDB Atla
 
 ### Implementação no Colab, usando PyMongo
 
+Acesse o [Google Colab](https://colab.research.google.com), crie um novo notebook e execute os comandos a seguir. Observe a sintaxe e objetivo de cada comando. 
+
 ```python
 # ----------------------------------------------------------
 # Instalação da biblioteca PyMongo
@@ -965,6 +967,7 @@ O [Robo3T](https://robomongo.org/), anteriormente conhecido como Robomongo, é o
 ## Conclusão
 
 Esta documentação fornece uma visão geral acerca dos aspectos essenciais do MongoDB, uma das soluções mais populares e poderosas para gerenciamento e análise de dados no contexto de Big Data e NoSQL. Exploramos a flexibilidade de esquema do MongoDB, sua linguagem e recursos avançados de consulta (MQL) e agregação (MAF). Vimos que o MongoDB Express proporciona uma interface gráfica (GUI) amigável para gerenciamento de bases de dados MongoDB, tornando mais acessível o trabalho com documentos. Para aprofundar seu conhecimento, consulte a documentação oficial do [MongoDB](https://docs.mongodb.com/). 
+
 
 
 
