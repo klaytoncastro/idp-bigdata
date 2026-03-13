@@ -73,9 +73,349 @@ O **MongoDB Express** é uma interface gráfica que facilita a administração, 
 
 - **Visualização de Índices**: os índices existentes podem ser visualizados e gerenciados por meio da interface.
 
-Dessa forma, MongoDB e MongoDB Express são ferramentas complementares que simplificam a gestão do ambiente, permitindo que os desenvolvedores e administradores trabalhem de forma eficiente com dados dinâmicos em uma abordagem robusta e, ao mesmo tempo, flexível. 
+Dessa forma, MongoDB e MongoDB Express são ferramentas complementares que simplificam a gestão do ambiente, permitindo que os desenvolvedores e administradores trabalhem de forma eficiente com dados dinâmicos em uma abordagem robusta e, ao mesmo tempo, flexível. Mais à frente, veremos também a ferramenta oficial para GUI, que precisa ser instalada, o MongoDB Compass. 
 
-## Configurando o Ambiente
+## Lab 1: Configurando uma Aplicação com MongoDB Atlas e Google Colab
+
+Em aplicações modernas baseadas em dados, normalmente temos pelo menos as três seguintes camadas principais:
+
+1. **Camada de armazenamento** — onde os dados são persistidos (banco de dados)  
+2. **Camada de aplicação ou processamento** — onde scripts, APIs ou notebooks manipulam os dados  
+3. **Camada de acesso do usuário** — dashboards, aplicações web ou interfaces
+
+Neste laboratório vamos trabalhar com uma arquitetura simples:
+
+- **Banco de dados:** MongoDB hospedado na nuvem usando **MongoDB Atlas**
+- **Aplicação:** um **notebook Python executado no Google Colab**
+
+A ideia é que o banco esteja disponível na internet e que qualquer aplicação autorizada possa se conectar a ele — seja um notebook no Colab, um script Python local, uma API Flask ou uma aplicação hospedada em outra nuvem. Essa é exatamente a lógica de **DBaaS (Database as a Service)**.
+
+### O que é MongoDB Atlas
+
+O [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) é a plataforma oficial de banco de dados em nuvem da MongoDB Inc. Ele oferece um ambiente totalmente gerenciado para executar bancos MongoDB sem que o usuário precise instalar, configurar ou administrar servidores manualmente. Entre os principais recursos estão:
+
+- criação rápida de **clusters MongoDB na nuvem**
+- **backup automático**
+- **replicação e alta disponibilidade**
+- **monitoramento de desempenho**
+- **escalabilidade automática**
+- **controle de acesso por usuário e IP**
+
+Na prática, isso significa que o desenvolvedor ou cientista de dados pode focar na aplicação e na análise de dados, enquanto a infraestrutura do banco é administrada pela própria plataforma.
+
+### Criação da Conta e do Cluster
+
+1. Acesse `https://www.mongodb.com/atlas` 
+2. Crie uma conta (é possível usar login com Google).  
+3. Após entrar no painel, crie um **cluster**.
+
+### Configurações recomendadas para laboratório:
+
+- **Cluster Tier:** `M0 (Free)`
+- **Cloud Provider:** AWS, GCP ou Azure
+- **Region:** escolha uma próxima (ex.: `us-east-1`)
+- Clique em **Create Cluster**
+
+O cluster gratuito é suficiente para aulas, testes e protótipos.
+
+###  Criação do Usuário do Banco (Database User)
+
+Após criar o cluster, é necessário definir **quem pode acessar o banco**.
+
+1. No menu lateral, acesse **Database Access**.
+2. Clique em **Add New Database User**.
+3. Defina:
+   - **Username**
+   - **Password**
+4. Em **Built-in Role**, selecione:
+`Read and write to any database`
+
+Esse usuário será utilizado na **string de conexão**.
+
+### Liberação de IP (Network Access)
+
+O **Google Colab executa em servidores dinâmicos do Google**, portanto não sabemos previamente qual IP será utilizado.
+
+Por isso é necessário liberar acesso global temporariamente.
+
+1. No menu lateral, clique em **Network Access**.
+2. Clique em **Add IP Address**.
+3. Clique em **Allow Access From Anywhere**.
+
+Ou ainda, preencha com: `0.0.0.0/0` e clique em **Confirm**.
+
+>Nota de Segurança: o endereço 0.0.0.0/0 significa qualquer IP da Internet. Para laboratórios educacionais, isso é aceitável. Contudo, em ambientes de produção, o correto é liberar apenas os IPs dos servidores de aplicação efetivamente autorizados.
+
+### Obtendo a String de Conexão (URI)
+
+Agora precisamos da **URI de conexão** usada pelo PyMongo.
+
+1. No menu lateral, acesse **Database / Clusters**.
+2. Clique em **Connect**.
+3. Escolha **Drivers** ou **Connect your application**.
+4. Selecione:
+Driver: Python
+Version: 3.6+
+
+O Atlas mostrará uma string semelhante a:
+`mongodb+srv://<db_username>:<db_password>@cluster0.xxxx.mongodb.net/?retryWrites=true&w=majority`
+
+Substitua `<db_username>`, `<db_password>`e a identificação do cluster `xxxx`pelas credenciais criadas.  
+
+Exemplo: `mongodb+srv://<db_username>:<db_password>@cluster0.<xxxx>.mongodb.net/?retryWrites=true&w=majority`
+
+Essa **URI será usada no PyMongo** para conectar o Google Colab ao MongoDB Atlas.
+
+### Implementação no Colab, usando PyMongo
+
+```python
+# ----------------------------------------------------------
+# Instalação da biblioteca PyMongo
+# ----------------------------------------------------------
+# Execute no Google Colab:
+pip install pymongo[srv]
+```
+
+```python
+# ----------------------------------------------------------
+# Importação das bibliotecas necessárias
+# ----------------------------------------------------------
+from pymongo import MongoClient
+import pandas as pd
+import matplotlib.pyplot as plt
+```
+
+```python
+# ----------------------------------------------------------
+# Conexão com MongoDB Atlas
+# ----------------------------------------------------------
+# Substitua pelas credenciais e informações do seu cluster Atlas
+uri = "mongodb+srv://<SEU_USUARIO_ATLAS>:<SUA_SENHA_ATLAS>@<SEU_CLUSTER_ATLAS>.mongodb.net/?retryWrites=true&w=majority"
+
+client = MongoClient(uri)
+
+# Teste de conectividade
+try:
+    client.admin.command("ping")
+    print("Conectado ao MongoDB com sucesso.")
+except Exception as e:
+    print("Erro na conexão:", e)
+```
+
+```python
+# ----------------------------------------------------------
+# Seleção ou criação do banco de dados
+# ----------------------------------------------------------
+db = client["AulaDemo"]
+```
+
+```python
+# ==========================================================
+# COLEÇÃO: ESTUDANTES
+# ==========================================================
+
+# Criação da coleção
+try:
+    db.create_collection("Estudantes")
+except:
+    pass  # Ignora erro caso já exista
+
+colecao = db["Estudantes"]
+```
+
+```python
+# ----------------------------------------------------------
+# Inserção de um documento
+# ----------------------------------------------------------
+colecao.insert_one({
+    "nome": "Fernando Campos",
+    "idade": 22,
+    "curso": "Engenharia da Computação",
+    "email": "fernando.campos@email.com"
+})
+```
+
+```python
+# ----------------------------------------------------------
+# Inserção de múltiplos documentos
+# ----------------------------------------------------------
+colecao.insert_many([
+    {
+        "nome": "Mariano Rodrigues",
+        "idade": 20,
+        "curso": "Design Gráfico"
+    },
+    {
+        "nome": "Roberta Lara",
+        "idade": 23,
+        "curso": "Ciência da Computação"
+    }
+])
+```
+
+```python
+# ----------------------------------------------------------
+# Consulta de todos os documentos
+# ----------------------------------------------------------
+print("\n--- Todos os estudantes ---")
+for doc in colecao.find():
+    print(doc)
+```
+
+```python
+# ----------------------------------------------------------
+# Consulta com filtro
+# ----------------------------------------------------------
+print("\n--- Estudantes de Engenharia da Computação ---")
+for doc in colecao.find({"curso": "Engenharia da Computação"}):
+    print(doc)
+```
+
+```python
+# ----------------------------------------------------------
+# Ordenação de resultados
+# ----------------------------------------------------------
+print("\n--- Estudantes ordenados por nome ---")
+for doc in colecao.find().sort("nome", 1):
+    print(doc)
+```
+
+```python
+# ----------------------------------------------------------
+# Limitação de resultados
+# ----------------------------------------------------------
+print("\n--- Limite de documentos ---")
+for doc in colecao.find().limit(4):
+    print(doc)
+```
+
+```python
+# ----------------------------------------------------------
+# Atualização de documento
+# ----------------------------------------------------------
+colecao.update_one(
+    {"nome": "Fernando Campos"},
+    {"$set": {"status": "Ativo"}}
+)
+```
+
+```python
+# ----------------------------------------------------------
+# Remoção de documento
+# ----------------------------------------------------------
+colecao.delete_one({"nome": "Roberta Lara"})
+```
+
+```python
+# ----------------------------------------------------------
+# Criação de índice
+# ----------------------------------------------------------
+colecao.create_index("nome")
+```
+
+```python
+# ----------------------------------------------------------
+# Aggregation Pipeline
+# Agrupa estudantes por curso
+# ----------------------------------------------------------
+pipeline = [
+    {"$group": {"_id": "$curso", "total": {"$sum": 1}}},
+    {"$sort": {"total": -1}}
+]
+
+print("\n--- Total de estudantes por curso ---")
+for doc in colecao.aggregate(pipeline):
+    print(doc)
+```
+
+```python
+# ----------------------------------------------------------
+# Conversão da coleção para DataFrame (análise)
+# ----------------------------------------------------------
+df_estudantes = pd.DataFrame(list(colecao.find()))
+print("\nDataFrame de estudantes:")
+print(df_estudantes)
+```
+
+```python
+# ==========================================================
+# COLEÇÃO: VENDAS
+# ==========================================================
+
+vendas = db["Vendas"]
+
+# ----------------------------------------------------------
+# Inserção de dados de exemplo
+# ----------------------------------------------------------
+vendas.insert_many([
+    {"produto": "Laptop", "categoria": "Eletrônicos", "valor": 1500},
+    {"produto": "Smartphone", "categoria": "Eletrônicos", "valor": 1800},
+    {"produto": "Televisor", "categoria": "Eletrônicos", "valor": 1700},
+    {"produto": "Tablet", "categoria": "Eletrônicos", "valor": 700},
+    {"produto": "Livros", "categoria": "Livraria", "valor": 400},
+    {"produto": "Cadeira", "categoria": "Móveis", "valor": 850},
+    {"produto": "Mesa", "categoria": "Móveis", "valor": 800},
+    {"produto": "Tênis", "categoria": "Esportes", "valor": 450},
+    {"produto": "Bicicleta", "categoria": "Esportes", "valor": 2200}
+])
+```
+
+```python
+# ----------------------------------------------------------
+# Pipeline de agregação
+# Receita total por categoria
+# ----------------------------------------------------------
+pipeline = [
+    {
+        "$group": {
+            "_id": "$categoria",
+            "receitaTotal": {"$sum": "$valor"}
+        }
+    },
+    {
+        "$sort": {"receitaTotal": -1}
+    }
+]
+
+resultado = list(vendas.aggregate(pipeline))
+
+print("\n--- Receita total por categoria ---")
+print(resultado)
+```
+
+```python
+# ----------------------------------------------------------
+# Conversão para DataFrame
+# ----------------------------------------------------------
+df = pd.DataFrame(resultado)
+df.columns = ["Categoria", "Receita Total"]
+
+print("\nDataFrame agregado:")
+print(df)
+```
+
+```python
+# ----------------------------------------------------------
+# Visualização gráfica
+# ----------------------------------------------------------
+plt.figure()
+
+df.plot(
+    x="Categoria",
+    y="Receita Total",
+    kind="bar"
+)
+
+plt.title("Receita Total por Categoria")
+plt.xlabel("Categoria")
+plt.ylabel("Receita Total")
+plt.xticks(rotation=45)
+
+plt.tight_layout()
+plt.show()
+```
+
+## Lab 2: Configurando o Ambiente (On-Premises)
 
 1. O dimensionamento apropriado de recursos depende das necessidades específicas do seu projeto. De modo a garantir um desempenho adequado e evitar problemas com os contêineres, ajuste a quantidade de memória nas configurações de Sistema na VM VirtualBox conforme orientações abaixo: 
 
@@ -83,16 +423,16 @@ Dessa forma, MongoDB e MongoDB Express são ferramentas complementares que simpl
 - Caso pretenda utilizar outras ferramentas, como o Jupyter em conjunto com o MongoDB, é recomendável alocar no mínimo 3072MB de RAM. 
 - Se você planeja executar o Jupyter em conjunto com o MongoDB e Spark, é aconselhável alocar pelo menos 4096MB de RAM. Avalie também a possibilidade de acréscimo de processadores virtuais, de acordo com a capacidade de seu hardware Se você possui à disposição um sistema quad-core, configure a VM para utilizar 2 processadores. 
 
-2. Após os promover os ajustes, inicie a VM. Lembre-se que você deve trabalhar sempre com a versão mais recente do repositório [IDP-BigData](https://github.com/klaytoncastro/idp-bigdata). Navegue até o diretório onde você clonou o repositório (`cd /opt/idp-bigdata`) e obtenha as respectivas atualizações com o comando abaixo: 
+2. Após os promover os ajustes, inicie a VM. Lembre-se que você deve trabalhar sempre com a versão mais recente do repositório [idp-nosql](https://github.com/klaytoncastro/idp-nosql). Navegue até o diretório onde você clonou o repositório (`cd /opt/idp-nosql`) e obtenha as respectivas atualizações com o comando abaixo: 
 
 ```bash
 git pull origin main
 ```
 
-3. Se este for seu primeiro acesso, vá até o diretório `/opt/idp-bigdata/mongodb` e certifique-se que o script `wait-for-it.sh` tenha permissão de execução: 
+3. Se este for seu primeiro acesso, vá até o diretório `/opt/idp-nosql/mongodb` e certifique-se que o script `wait-for-it.sh` tenha permissão de execução: 
 
 ```bash
-cd /opt/idp-bigdata/mongodb
+cd /opt/idp-nosql/mongodb
 chmod +x wait-for-it.sh
 ```
 
@@ -622,8 +962,11 @@ Além do MongoDB Express, você também pode experimentar a ferramenta [MongoDB 
 
 O [Robo3T](https://robomongo.org/), anteriormente conhecido como Robomongo, é outra GUI para gerenciamento de bancos de dados MongoDB. Ela fornece uma interface intuitiva que permite criar, editar e consultar seus bancos de dados e também oferece recursos como autocompletar, formatação de consulta, suporte a múltiplas conexões e visualização de documentos BSON. 
 
-O [MongoDB Atlas](https://www.mongodb.com/cloud/atlas) é a proposta de banco de dados como serviço (DBaaS - Database as a Service) fornecida pela MongoDB Inc. Oferece uma plataforma de nuvem para hospedar, gerenciar e dimensionar seus bancos de dados MongoDB. Ao implantar bancos de dados como serviço gerenciado, você facilita tarefas de administração, tais como backup e restauração de dados, configuração de alta disponibilidade, recursos de elasticidade (escalabilidade rápida e automática), monitoramento de desempenho e disponibilidade de seus clusters, e muito mais. 
-
 ## Conclusão
 
 Esta documentação fornece uma visão geral acerca dos aspectos essenciais do MongoDB, uma das soluções mais populares e poderosas para gerenciamento e análise de dados no contexto de Big Data e NoSQL. Exploramos a flexibilidade de esquema do MongoDB, sua linguagem e recursos avançados de consulta (MQL) e agregação (MAF). Vimos que o MongoDB Express proporciona uma interface gráfica (GUI) amigável para gerenciamento de bases de dados MongoDB, tornando mais acessível o trabalho com documentos. Para aprofundar seu conhecimento, consulte a documentação oficial do [MongoDB](https://docs.mongodb.com/). 
+
+
+
+
+
