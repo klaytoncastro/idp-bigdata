@@ -8,11 +8,13 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 
 | #  | Atividade                                                                            | Desafio                                                          | Prazo      |
 |----|--------------------------------------------------------------------------------------|------------------------------------------------------------------|------------|
-| 01 | [MongoDB Atlas](./mongodb/)                                                          | Prática com Banco de Dados de Documentos MongoDB em Cloud Pública| 03/04/2026 |
-| 02 | [MongoDB on-premises](./mongodb/)                                                    | Prática com Banco de Dados de Documentos MongoDB local           | 10/04/2026 |
-| 03 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB       | 17/04/2026 |
-| 04 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                           | 24/04/2026 |
-| 05 | [Censo IES](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais)             | Ingestão e Análise de Dados do Censo IES                         | 06/05/2026 |
+| 01 | [MongoDB Atlas](./mongodb/)                                                          | Prática com Banco de Dados de Documentos MongoDB em Cloud Pública| 21/08/2026 |
+| 02 | [MongoDB on-premises](./mongodb/)                                                    | Prática com Banco de Dados de Documentos MongoDB local           | 28/08/2026 |
+| 03 | [Jupyter & MongoDB](./jupyter/)                                                      | Integração de Ambientes e Manipulação de Dados com MongoDB       | 31/08/2026 |
+| 04 | [MongoDB & Python](https://www.kaggle.com/code/ganu1899/mongodb-with-python)         | Prática com MongoDB e Python no Kaggle                           | 31/08/2026 |
+| 05 | [Censo IES](./jupyter/#4-limpeza-preparação-e-importação-de-dados-reais)             | Ingestão e Análise de Dados do Censo IES                         | 31/08/2026 |
+
+<!--
 | 06 | [Neo4j](./neo4j/)                                                                    | Prática com Banco de Dados de Grafo                              | 08/05/2026 |
 | 07 | [Cassandra](./cassandra/)                                                            | Prática com Banco de Dados Colunar Cassandra                     | 15/05/2026 |
 | 08 | [Redis](./redis/)                                                                    | Prática com Banco de Dados Chave-Valor e Mensageria Leve         | 22/05/2026 |
@@ -22,8 +24,6 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 12 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines               | 19/06/2026 |
 | 13 | [Kafka](./kafka/)                                                                    | Prática com Event Broker Distribuído                             | 24/06/2026 |
 | 14 | [Pipeline](./pipeline/)                                                              | Desenvolvimento de Pipeline de Dados com Múltiplas Ferramentas   | 26/06/2026 |
-
-<!--
 | 12 | [RabbitMQ](./rabbitmq/)                                                              | Prática com Broker Pub/Sub                                       | 10/11/2025 |
 | 13 | [Celery](./celery/)                                                                  | Orquestração, workers, filas e serviços de Mensageria            | 13/11/2025 |
 | 15 | [Streamlit](./streamlit/)                                                            | Dashboards Interativos e Visualização de Dados             | 14/05/2025 |
