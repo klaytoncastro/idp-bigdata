@@ -329,7 +329,7 @@ Já no VirtualBox (ambiente servidor), é praticamente mandatório o uso de cone
 2. Cada ambiente deve ser montado conforme necessidade de uso e indicação do Professor. Ao entrar na subpasta correspondente a cada ambiente, basta construir e iniciar os serviços usando o Docker Compose. Por exemplo, para o Jupyter/Spark:
 
 ```bash
-   cd /opt/idp-bigdata/jupyter-spark
+   cd /opt/idp-bigdata/jupyter
    docker-compose build
    docker-compose up -d
 ```
