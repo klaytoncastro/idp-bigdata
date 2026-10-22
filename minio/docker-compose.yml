@@ -1,27 +1,22 @@
+version: '3.3'
 services:
   minio:
     image: ghcr.io/coollabsio/minio:RELEASE.2025-10-15T17-29-55Z
     container_name: minio
     restart: unless-stopped
-
     ports:
       - "9000:9000"
       - "9001:9001"
-
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
-
     volumes:
       - ./minio-data:/data
       - ./minio-backup:/backup
-
     command: server /data --console-address ":9001"
-
     networks:
       - mybridge
-
 networks:
-  mybridge:
-    name: mybridge
-    external: true
+  mybridge: 
+    external: 
+      name: mybridge 
