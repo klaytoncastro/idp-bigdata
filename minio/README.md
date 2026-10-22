@@ -243,6 +243,12 @@ O container executará o serviço principal do MinIO, expondo:
 Para iniciar o servidor MinIO no ambiente de prática, utilizaremos o Docker Compose, conforme o padrão estabelecido no projeto:
 
 <!--
+
+#https://dl.min.io/aistor/minio/release/linux-amd64/
+#wget https://dl.min.io/client/mc/release/linux-amd64/mc
+#chmod +x mc
+#sudo mv mc /usr/local/bin/
+
 cd /opt/idp-bigdata/minio/
 git clone https://github.com/minio/minio
 cd minio/
@@ -448,10 +454,7 @@ print("URL temporária:", url)
 O `mc` é o utilitário de linha de comando do MinIO. Ele é análogo ao AWS CLI, mas funciona com qualquer serviço compatível com a API S3, incluindo Azure BLOB Storage, Google Cloud Storage e o próprio MinIO. Na VM, você pode baixá-lo com o comando abaixo: 
 
 ```bash
-#https://dl.min.io/aistor/minio/release/linux-amd64/
-wget https://dl.min.io/client/mc/release/linux-amd64/mc
-chmod +x mc
-sudo mv mc /usr/local/bin/
+wget -q "https://github.com/minio/mc/releases/download/RELEASE.2025-08-13T08-35-41Z/mc.linux-${TARGETARCH}.RELEASE.2025-08-13T08-35-41Z" -O /usr/local/bin/mc && chmod +x /usr/local/bin/mc
 ```
 
 <!--# MacOS
