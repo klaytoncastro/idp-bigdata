@@ -46,19 +46,88 @@ Essas soluções abriram caminho para o armazenamento de objetos acessado via HT
 
 Como vimos na seção anterior, ao longo da evolução das arquiteturas de TI, consolidaram-se três modelos fundamentais de armazenamento, cada qual com características próprias de desempenho, escalabilidade e adequação às cargas de trabalho. 
 
-- **Armazenamento de Bloco**: Baseado em soluções locais ou em redes de armazenamento dedicadas (SAN, via protocolos como iSCSI ou Fibre Channel). Os dados são organizados em blocos de tamanho fixo, e cabe ao sistema operacional do servidor formatar o volume em sistemas de arquivos (ext4, NTFS etc.). É a base de bancos de dados transacionais e hipervisores, em que latência mínima e alto IOPS são cruciais. Um volume de bloco não possui noção de arquivos, apenas de endereços lógicos; portanto, não há arbitragem nativa de concorrência. Para evitar corrupção quando múltiplos hosts acessam o mesmo volume, recorre-se a mecanismos como LUNs dedicadas a um único servidor, sistemas de arquivos com suporte a múltiplos hosts e bloqueio distribuído (ex.: VMFS), ou ainda protocolos de coordenação de baixo nível (SCSI-3) e multipath (ALUA/MPIO) para redundância de acesso. A governança (retenção, versionamento) é externa ao dispositivo lógico. Embora eficiente para dados estruturados, é pouco adequado a volumes massivos de dados não estruturados.
+- **Block Storage:** 
+- **File Storage:** 
+- **Object Storage:** 
 
-- **Armazenamento de Arquivos**: Oferecido por servidores ou appliances especializados (NAS – Network Attached Storage), que expõem hierarquias de diretórios via rede utilizando protocolos como NFS (Unix/Linux) e SMB/CIFS (Windows). A coordenação do acesso concorrente é feita pelo próprio servidor, que enxerga seus volumes em nível de bloco e os disponibiliza em forma de arquivos. Essa abordagem favorece colaboração e compartilhamento, mas sofre limitações de desempenho quando o número de arquivos ou operações de metadados (criação, listagem, renomeação) cresce para milhões. Em cargas analíticas modernas, a estrutura hierárquica e a pressão em metadados reduzem a eficiência em comparação ao armazenamento de objetos. Por isso, em Big Data, prevalecem formatos colunares otimizados para leitura analítica massiva.
+- **Armazenamento de Bloco**: Entrega um dispositivo de armazenamento lógico. O sistema operacional ou a aplicação decide como organizar os dados. Baseado em soluções locais ou em redes de armazenamento dedicadas (SAN, via protocolos como iSCSI ou Fibre Channel). Os dados são organizados em blocos de tamanho fixo, e cabe ao sistema operacional do servidor formatar o volume em sistemas de arquivos (ext4, NTFS etc.). É a base de bancos de dados transacionais e hipervisores, em que latência mínima e alto IOPS são cruciais. Um volume de bloco não possui noção de arquivos, apenas de endereços lógicos; portanto, não há arbitragem nativa de concorrência. Para evitar corrupção quando múltiplos hosts acessam o mesmo volume, recorre-se a mecanismos como LUNs dedicadas a um único servidor, sistemas de arquivos com suporte a múltiplos hosts e bloqueio distribuído (ex.: VMFS), ou ainda protocolos de coordenação de baixo nível (SCSI-3) e multipath (ALUA/MPIO) para redundância de acesso. A governança (retenção, versionamento) é externa ao dispositivo lógico. Embora eficiente para dados estruturados, é pouco adequado a volumes massivos de dados não estruturados.
 
-- **Armazenamento de Objetos**: Evolução natural para lidar com a explosão de dados não estruturados. Cada item é tratado como objeto independente, composto por identificador único (ID), atributos e metadados enriquecíveis, além do conteúdo binário. Ao invés de expor sistemas de arquivos ou volumes, os objetos residem em repositórios acessíveis por APIs (ex.: REST, S3), eliminando a hierarquia tradicional de diretórios. Essa simplicidade de endereçamento (buckets com chave única) favorece escalabilidade horizontal massiva, interoperabilidade entre plataformas e governança granular (retenção, imutabilidade). Por isso, tornou-se a base tecnológica de Data Lakes e do ecossistema moderno de Big Data, AI/ML, Analytics e aplicações cloud-native.
-## Tabela — Block vs File vs Object
+- **Armazenamento de Arquivos**: Disponibiliza arquivos e diretórios por meio de um sistema de arquivos, frequentemente acessado pela rede. Oferecido por servidores ou appliances especializados (NAS – Network Attached Storage), que expõem hierarquias de diretórios via rede utilizando protocolos como NFS (Unix/Linux) e SMB/CIFS (Windows). A coordenação do acesso concorrente é feita pelo próprio servidor, que enxerga seus volumes em nível de bloco e os disponibiliza em forma de arquivos. Essa abordagem favorece colaboração e compartilhamento, mas sofre limitações de desempenho quando o número de arquivos ou operações de metadados (criação, listagem, renomeação) cresce para milhões. Em cargas analíticas modernas, a estrutura hierárquica e a pressão em metadados reduzem a eficiência em comparação ao armazenamento de objetos. Por isso, em Big Data, prevalecem formatos colunares otimizados para leitura analítica massiva.
 
-| Critério   | Bloco (DAS/SAN)         | Arquivo (NFS/SMB-CIFS)    | Objeto (S3/Swift)                     |
-|------------|-------------------------|---------------------------|---------------------------------------|
-| Estrutura  | Blocos fixos            | Hierarquia de pastas      | Objeto + metadados + ID               |
-| Acesso     | Driver/FS local         | FS de rede                | HTTP/REST (S3)                        |
-| Uso típico | DBMS/VM - IOPS elevados | Colaboração simples       | Data Lake / ML / Backup / Logs        |
-| Escala     | Limitada                | Limitada                  | Scale-out elástico                    |
+- **Armazenamento de Objetos**: Disponibiliza objetos identificados por chaves, acessados por APIs e associados a metadados. Evolução natural da arquitetura de nuvem para lidar com a explosão de dados não estruturados. Cada item é tratado como objeto independente, composto por identificador único (ID), atributos e metadados enriquecíveis, além do conteúdo binário. Ao invés de expor sistemas de arquivos ou volumes, os objetos residem em repositórios acessíveis por APIs (ex.: REST, S3), eliminando a hierarquia tradicional de diretórios. Essa simplicidade de endereçamento (buckets com chave única) favorece escalabilidade horizontal massiva, interoperabilidade entre plataformas e governança granular (retenção, imutabilidade). Por isso, tornou-se a base tecnológica de Data Lakes e do ecossistema moderno de Big Data, AI/ML, Analytics e aplicações cloud-native.
+
+
+## Comparação dos modelos de armazenamento (Block vs File vs Object) 
+
+
+
+| Critério | Block Storage (DAS/SAN) | File Storage (NFS/SMB) | Object Storage (S3/Swift) |
+|---|---|---|---|
+| Estrutura | Blocos de tamanho definido | Hierarquia de arquivos e diretórios | Objetos com dados, metadados e identificador |
+| Unidade de acesso | Bloco | Arquivo | Objeto |
+| Identificação | Endereço lógico (LBA) | Caminho do arquivo | Bucket + chave do objeto |
+| Interface de acesso | Dispositivo de bloco (SO/driver) | Sistema de arquivos (NFS/SMB) | API HTTP/REST (S3/Swift) |
+| Gerenciamento | SO, filesystem ou SGBD | Servidor de arquivos / NAS | Plataforma de Object Storage |
+| Compartilhamento | Requer coordenação para acesso simultâneo ao mesmo volume | Compartilhamento nativo entre clientes | Acesso por múltiplos clientes via API |
+| Desempenho | Adequado a IOPS elevadas e baixa latência | Adequado a operações com arquivos | Otimizado para acesso a objetos e transferência de dados |
+| Escalabilidade | Vertical ou horizontal, conforme arquitetura | Vertical ou horizontal, conforme arquitetura | Frequentemente distribuída, com scale-out |
+| Uso típico | Bancos de dados, VMs, sistemas transacionais | Arquivos corporativos, diretórios compartilhados, colaboração | Data Lake, Big Data, ML, backups, logs |
+| Exemplos | DAS, SAN, Amazon EBS | NFS, SMB/CIFS, Amazon EFS | MinIO, Amazon S3, OpenStack Swift |
+
+
+> **Importante:** os modelos não determinam, por si só, a quantidade de clientes, o desempenho ou a escalabilidade. Essas características dependem da arquitetura e da implementação. Os três modelos de armazenamento se diferenciam principalmente pela forma como os dados são organizados, endereçados e acessados pelas aplicações.
+
+```mermaid
+flowchart LR
+    subgraph BLOCK["① BLOCK STORAGE"]
+        direction TB
+        B1["Aplicação / SGBD / VM"]
+        B2["Sistema operacional<br/>Filesystem ou acesso bruto"]
+        B3["I/O de blocos<br/>Endereçamento LBA"]
+        B4[("Volume lógico<br/>Disco / LUN")]
+        B5["DAS / SAN"]
+
+        B1 --> B2 --> B3 --> B4 --> B5
+    end
+
+    subgraph FILE["② FILE STORAGE"]
+        direction TB
+        F1["Aplicações / Clientes"]
+        F2["Protocolo de rede<br/>NFS / SMB"]
+        F3["Sistema de arquivos remoto"]
+        F4["Diretórios e arquivos<br/>/projetos/dados.csv"]
+        F5[("Servidor de arquivos<br/>NAS")]
+
+        F1 --> F2 --> F3 --> F4
+        F5 --- F4
+    end
+
+    subgraph OBJECT["③ OBJECT STORAGE"]
+        direction TB
+        O1["Aplicações / ETL / ML"]
+        O2["API HTTP / REST<br/>S3 / Swift"]
+        O3["Bucket + chave do objeto"]
+        O4["Conteúdo + metadados<br/>ID / Key / Version"]
+        O5[("Object Storage<br/>MinIO / S3 / Swift")]
+
+        O1 --> O2 --> O3 --> O4 --> O5
+    end
+
+    B1 ~~~ F1
+    F1 ~~~ O1
+
+    classDef block fill:#dbeafe,stroke:#2563eb,color:#1e40af
+    classDef file fill:#dcfce7,stroke:#16a34a,color:#166534
+    classDef object fill:#f3e8ff,stroke:#9333ea,color:#6b21a8
+
+    class B1,B2,B3,B4,B5 block
+    class F1,F2,F3,F4,F5 file
+    class O1,O2,O3,O4,O5 object
+
+    style BLOCK fill:#eff6ff,stroke:#2563eb,stroke-width:2px
+    style FILE fill:#f0fdf4,stroke:#16a34a,stroke-width:2px
+    style OBJECT fill:#faf5ff,stroke:#9333ea,stroke-width:2px
+```
 
 ### Principais Vantagens e Características
 
@@ -75,6 +144,14 @@ Como vimos na seção anterior, ao longo da evolução das arquiteturas de TI, c
 ## 4. Como Funciona?
 
 O armazenamento de objetos elimina a complexidade da hierarquia de diretórios, usando um espaço de endereçamento simples (Single Namespace). Um objeto contém os dados do usuário, seus metadados (como tamanho, data e permissões), e um ID de objeto exclusivo, gerado por uma função de hash que garante sua unicidade. Isso permite que os dados sejam distribuídos de forma eficiente e recuperados de maneira rápida e segura dos OSDs, desde que você possua o ID em questão e as devidas permissões de acesso.
+
+No MinIO, podemos armazenar objetos como:
+
+- `datalake/bronze/clientes.json`
+- `datalake/silver/clientes.parquet`
+- `datalake/gold/indicadores.parquet`
+
+Nesse exemplo, `datalake` representa o **bucket** e os demais componentes formam a **chave do objeto**. Os prefixos `bronze/`, `silver/` e `gold/` simulam uma estrutura hierárquica, mas não são diretórios tradicionais de um sistema de arquivos.
 
 - **Upload**: Quando um aplicativo envia um arquivo para o sistema OSD, o arquivo é dividido em dados do usuário e metadados.
 - **Geração de ID**: O sistema OSD gera um ID de objeto exclusivo com base nos dados do arquivo.
