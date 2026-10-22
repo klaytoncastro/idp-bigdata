@@ -165,6 +165,84 @@ O container executará o serviço principal do MinIO, expondo:
 
 Para iniciar o servidor MinIO no ambiente de prática, utilizaremos o Docker Compose, conforme o padrão estabelecido no projeto:
 
+<!--
+cd /opt/idp-bigdata/minio/
+git clone https://github.com/minio/minio
+cd minio/
+git checkout RELEASE.2025-10-15T17-29-55Z
+docker build -t myminio/minio:RELEASE.2025-10-15T17-29-55Z .
+
+### 
+version: '3.7'
+
+services:
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    container_name: minio
+    restart: unless-stopped
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+
+    volumes:
+      - ./minio-data:/data
+      - ./minio-backup:/backup
+
+    command: server /data --console-address ":9001"
+
+    networks:
+      - mybridge
+
+networks:
+  mybridge:
+    external:
+      name: mybridge
+
+volumes:
+  minio-data:
+  minio-backup:
+
+
+---
+
+
+
+services:
+  minio:
+    image: myminio/minio:RELEASE.2025-10-15T17-29-55Z
+    container_name: minio
+    restart: unless-stopped
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+
+    volumes:
+      - ./minio-data:/data
+      - ./minio-backup:/backup
+
+    command: server /data --console-address ":9001"
+
+    networks:
+      - mybridge
+
+networks:
+  mybridge:
+    external: true
+    name: mybridge
+
+
+-->
+
 ```bash
 cd /opt/idp-bigdata/minio
 docker-compose up -d
@@ -290,9 +368,10 @@ print("URL temporária:", url)
 
 ### MinIO Client
 
-O `mc` é o utilitário de linha de comando do MinIO. Ele é análogo ao AWS CLI, mas funciona com qualquer serviço compatível com a API S3, incluindo Azure BLOB Storage, Google Cloud Storage e o próprio MinIO. Na VM, baixe com o comando abaixo: 
+O `mc` é o utilitário de linha de comando do MinIO. Ele é análogo ao AWS CLI, mas funciona com qualquer serviço compatível com a API S3, incluindo Azure BLOB Storage, Google Cloud Storage e o próprio MinIO. Na VM, você pode baixá-lo com o comando abaixo: 
 
 ```bash
+#https://dl.min.io/aistor/minio/release/linux-amd64/
 wget https://dl.min.io/client/mc/release/linux-amd64/mc
 chmod +x mc
 sudo mv mc /usr/local/bin/
@@ -305,6 +384,18 @@ O primeiro passo é configurar uma conexão para seu servidor MinIO local, por m
 
 ```bash
 mc alias set local http://localhost:9000 minioadmin minioadmin
+```
+
+Se estiver com o Docker Desktop rodando container diretamente em sua máquina, ou mesmo na VM, você também pode usar o container do Spark, que já possui o `mc` instalado. Para isso, entre no terminal do container do Spark: 
+
+```bash
+docker exec -it spark_spark_1 bash
+```
+
+Lembre-se de alterar a conexão para o container do MinIO nesse caso:
+
+```bash
+mc alias set local http://minio:9000 minioadmin minioadmin
 ```
 
 Depois você pode realizar as operações básicas: 
@@ -334,7 +425,228 @@ mc admin user add local aluno123 senha123
 mc admin policy attach local readwrite --user aluno123
 ```
 
-## 6. Conclusão
+## 6. Importando Datasets para o Data Lake no MinIO
+
+Na prática anterior, realizamos operações de `PUT`, `GET`, `LIST` e `DELETE` em buckets S3 compatíveis. Agora vamos obter os dados de uma fonte operacional, preservar sua estrutura original e torná-los acessíveis a outros sistemas de processamento.
+
+Neste laboratório, usaremos o MongoDB, banco de dados orientado a documentos, como fonte de dados para um Data Lake implementado sobre o MinIO, com protocolo S3 compatível. O MongoDB será responsável pela consulta e manutenção dos documentos operacionais; o MinIO receberá cópias extraídas dessas coleções como objetos, separando as responsabilidades de **armazenamento operacional** e **armazenamento analítico**. A integração reproduz, em escala didática, a etapa de ingestão frequentemente encontrada em arquiteturas modernas de dados.
+
+**Objetivo:** restaurar os datasets oficiais da MongoDB; selecionar coleções com dados semiestruturados; exportar seus documentos como JSON Lines; criar um bucket de entrada (Bronze); transferir arquivos usando o cliente `mc`; verificar sua integridade e discutir como o Spark poderá processá-los em uma próxima atividade.
+
+**Fluxo de dados:**
+
+```mermaid
+graph LR
+    A[MongoDB Sample Datasets] -->|curl| B[Arquivo BSON archive]
+    B -->|mongorestore| C[(MongoDB local)]
+    C -->|mongoexport| D[JSON Lines no host]
+    D -->|mc cp - API S3| E[(MinIO - Bronze)]
+    E -.->|Próxima prática| F[Spark - Silver/Parquet]
+    F -.-> G[Gold - Dados analíticos]
+```
+
+> Atenção: o `sampledata.archive` é um arquivo de backup no formato produzido pelas ferramentas do MongoDB, não um conjunto de arquivos CSV ou JSON. **`mongorestore` restaura o banco; `mongoexport` extrai os documentos para intercâmbio de dados.** 
+
+### Base de dados e ambiente de execução
+
+Execute os comandos a seguir no terminal do computador hospedeiro:
+
+```bash
+cd /opt/idp-bigdata/mongodb
+mkdir -p datasets
+
+curl -fL \
+  https://atlas-education.s3.amazonaws.com/sampledata.archive \
+  -o datasets/sampledata.archive
+
+ls -lh datasets/sampledata.archive
+
+# Os Compose do curso utilizam a rede Docker externa mybridge.
+docker network inspect mybridge >/dev/null 2>&1 || docker network create mybridge
+docker-compose up -d
+```
+
+O `curl` faz download do arquivo público; `-f` sinaliza respostas HTTP de erro, `-L` acompanha redirecionamentos e `-o` estabelece o nome e o destino. No Compose do curso, `datasets/` é montada dentro de `mongo_service` como `/datasets`: **não é necessário copiar o arquivo com `docker cp`**.
+
+Restaure o arquivo no MongoDB com a autenticação exigida pelo contêiner:
+
+```bash
+docker exec -it mongo_service mongorestore \
+  --archive=/datasets/sampledata.archive \
+  --port=27017 \
+  --username=root \
+  --password=mongo \
+  --authenticationDatabase=admin
+```
+
+Não empregamos `--drop`, pois seu uso excluiria coleções existentes antes de restaurá-las. O arquivo de amostras contém múltiplos bancos de dados; o processo de restauração não é restrito a uma única coleção.
+
+### Reconhecendo as coleções e seu potencial analítico
+
+Para a atividade, selecionamos três coleções com finalidades distintas:
+
+| Banco | Coleção | Dados e questões possíveis | Interesse didático |
+|---|---|---|---|
+| `sample_supplies` | `sales` | Vendas, itens, lojas e métodos de compra | Documentos com arrays de itens, úteis para posteriores transformações |
+| `sample_mflix` | `movies` | Filmes, gêneros e atributos associados | Dados semiestruturados e possibilidades de análises textuais |
+| `sample_training` | `grades` | Registros de avaliações | Maior volume e exemplo para processamento analítico |
+
+
+```bash
+docker exec mongo_service mongo \
+  --username root --password mongo \
+  --authenticationDatabase admin --quiet \
+  --eval 'print("Vendas:", db.getSiblingDB("sample_supplies").sales.countDocuments({})); print("Filmes:", db.getSiblingDB("sample_mflix").movies.countDocuments({})); print("Avaliações:", db.getSiblingDB("sample_training").grades.countDocuments({}));'
+```
+
+**Observe:** como uma venda representa múltiplos produtos em `items`, seu documento MongoDB é diferente de uma linha plana em uma tabela relacional. A ingestão Bronze preservará essa estrutura; o tratamento desses arrays será feito posteriormente.
+
+### Exportação dos dados brutos: preparando a camada Bronze do Datalake
+
+Prepare os diretórios de exportação. Os mesmos caminhos aparecem no contêiner sob `/datasets/`.
+
+```bash
+mkdir -p datasets/raw/sample_supplies \
+         datasets/raw/sample_mflix \
+         datasets/raw/sample_training
+```
+
+O utilitário `mongoexport`, executado no contêiner, extrai documentos como JSON. Por padrão, a saída JSON possui **um documento por linha**; por clareza, utilizaremos a extensão `.jsonl` (JSON Lines / NDJSON). Os tipos BSON especiais são representados por Extended JSON.
+
+```bash
+# Vendas — documentos contendo items, customer e saleDate.
+docker exec mongo_service mongoexport \
+  --db=sample_supplies --collection=sales \
+  --username=root --password=mongo \
+  --authenticationDatabase=admin \
+  --out=/datasets/raw/sample_supplies/sales.jsonl
+
+# Filmes — dados semiestruturados e metadados.
+docker exec mongo_service mongoexport \
+  --db=sample_mflix --collection=movies \
+  --username=root --password=mongo \
+  --authenticationDatabase=admin \
+  --out=/datasets/raw/sample_mflix/movies.jsonl
+
+# Avaliações — coleção para trabalhar com volume mais significativo.
+docker exec mongo_service mongoexport \
+  --db=sample_training --collection=grades \
+  --username=root --password=mongo \
+  --authenticationDatabase=admin \
+  --out=/datasets/raw/sample_training/grades.jsonl
+```
+
+Verifique se os arquivos foram efetivamente gerados e observe seus tamanhos e a estrutura dos documentos:
+
+```bash
+ls -lh datasets/raw/sample_supplies/sales.jsonl \
+       datasets/raw/sample_mflix/movies.jsonl \
+       datasets/raw/sample_training/grades.jsonl
+
+wc -l datasets/raw/sample_supplies/sales.jsonl \
+      datasets/raw/sample_mflix/movies.jsonl \
+      datasets/raw/sample_training/grades.jsonl
+
+head -n 1 datasets/raw/sample_supplies/sales.jsonl
+```
+
+**Questão:** por que preservar `items` e demais campos aninhados, em vez de converter imediatamente tudo para CSV? A camada Bronze retém a representação original extraída da fonte, possibilitando novas transformações, inspeções e reprocessamento sem repetir o acesso ao banco operacional.
+
+### Publicação no MinIO — Ingestão no Data Lake
+
+Verifique se o serviço MinIO está em execução. As VMs utilizam os caminhos API S3 em `http://localhost:9000` e o Console Web em `http://localhost:9001`. Você também pode usar o terminal do contêiner do Spark apontando para o contêiner do MinIO, como vimos na parte de CLI do MinIO. 
+
+```bash
+docker ps --filter name=minio
+```
+
+Use o cliente `mc` já apresentado nesta aula, configure a conexão e crie um bucket dedicado à ingestão:
+
+```bash
+mc alias set local http://localhost:9000 minioadmin minioadmin
+mc mb local/datalake-bronze
+```
+
+O comando `mc mb` deve ser executado apenas se o bucket ainda não existir. Ao contrário de `mkdir`, a estrutura após o bucket representa *prefixos nas chaves dos objetos*, não diretórios físicos no servidor.
+
+Transfira os três arquivos para o Data Lake, preservando a origem nos nomes dos objetos:
+
+```bash
+cd /opt/idp-bigdata/mongodb
+
+mc cp datasets/raw/sample_supplies/sales.jsonl \
+  local/datalake-bronze/mongodb/sample_supplies/sales.jsonl
+
+mc cp datasets/raw/sample_mflix/movies.jsonl \
+  local/datalake-bronze/mongodb/sample_mflix/movies.jsonl
+
+mc cp datasets/raw/sample_training/grades.jsonl \
+  local/datalake-bronze/mongodb/sample_training/grades.jsonl
+```
+
+Se for usar no contêiner Spark:
+
+```bash
+cd /opt/idp-bigdata/mongodb
+#mv datasets/raw /opt/idp-bigdata/spark/data/raw
+
+mc cp raw/sample_supplies/sales.jsonl \
+  local/datalake-bronze/mongodb/sample_supplies/sales.jsonl
+
+mc cp raw/sample_mflix/movies.jsonl \
+  local/datalake-bronze/mongodb/sample_mflix/movies.jsonl
+
+mc cp raw/sample_training/grades.jsonl \
+  local/datalake-bronze/mongodb/sample_training/grades.jsonl
+```
+
+A notação `local/datalake-bronze/mongodb/...` identifica, respectivamente, o alias do servidor, o bucket e a chave do objeto. Essa chave poderá ser usada por bibliotecas e frameworks compatíveis com S3.
+
+### Verificação da ingestão
+
+Confirme quais objetos estão presentes e seus tamanhos:
+
+```bash
+mc ls --recursive local/datalake-bronze/mongodb/
+mc stat local/datalake-bronze/mongodb/sample_supplies/sales.jsonl
+```
+
+Realize um download a partir do MinIO e compare os bytes com o arquivo exportado originalmente:
+
+```bash
+mc cp local/datalake-bronze/mongodb/sample_supplies/sales.jsonl \
+  /tmp/sales-minio.jsonl
+
+cmp datasets/raw/sample_supplies/sales.jsonl /tmp/sales-minio.jsonl
+```
+
+O comando `cmp` não imprime mensagens se os arquivos forem idênticos e termina com código zero. Esse é o critério de conclusão: **os documentos extraídos do MongoDB passaram a existir como objetos S3, sem alteração de conteúdo durante a transferência**. Também é possível inspecionar visualmente os dados no Console Web do MinIO.
+
+Para confrontar a quantidade de registros, utilize `wc -l` sobre o arquivo e compare com `countDocuments({})` da coleção de origem. Essa comparação supõe que a coleção não foi alterada entre a contagem e a exportação.
+
+### Interpretando a arquitetura: operacional x analítica
+
+| Etapa | Tecnologia | Responsabilidade | Formato / interface |
+|---|---|---|---|
+| Fonte | MongoDB | Armazenamento e consultas sobre documentos operacionais | BSON e consultas MongoDB |
+| Extração | `mongoexport` | Materialização dos documentos para intercâmbio | Extended JSON Lines |
+| Transporte | `mc` | Publicação na API S3 | PUT de objetos |
+| Bronze | MinIO | Preservação dos dados brutos extraídos | Objetos `.jsonl` |
+| Silver (próxima prática) | Spark | Limpeza, normalização de arrays, tipagem e conversão | Parquet |
+| Gold (evolução) | Spark / SQL | Agregações e conjuntos prontos para análise | Tabelas e objetos analíticos |
+
+Ao concluir a prática, **não houve uma migração do banco MongoDB para MinIO**: construímos uma cópia para processamento e análise. O MongoDB continua sendo a fonte operacional. Tampouco é correto chamar o arquivo gerado pelo `mongoexport` de backup integral, uma vez que essa ferramenta não preserva toda a informação necessária à recuperação do banco.
+
+A operação executada é uma **ingestão em lote (batch)**. Alterações futuras no MongoDB não aparecerão automaticamente no MinIO. Para pipelines incrementais e automatizados, conceitos como Change Streams/CDC, conectores de ingestão (por exemplo, Debezium e Airbyte) e orquestração (Airflow) poderão ser explorados em laboratórios posteriores.
+
+### Desafio
+
+(i) registrar a contagem de documentos das três coleções; (ii) comprovar a exportação em JSON Lines; (iii) verificar no Console Web a presença dos objetos no bucket `datalake-bronze`; (iv) inspecionar o objeto de vendas e identificar seus campos aninhados; e (v) explicar a diferença entre restaurar um banco, exportar documentos e armazenar objetos em um Data Lake. Propor quais campos de `sample_supplies.sales` devem ser normalizados para construir uma tabela analítica de itens vendidos. A implementação será retomada no Spark, quando os arquivos Bronze serão lidos e transformados para Parquet na camada Silver.
+
+**Referências:** [MongoDB — Carregar dados de amostra localmente](https://www.mongodb.com/pt-br/docs/manual/sample-data/load-sample-data-local/); [MongoDB — mongorestore](https://www.mongodb.com/docs/database-tools/mongorestore/); [MongoDB — mongoexport](https://www.mongodb.com/docs/database-tools/mongoexport/); [MinIO — mc cp](https://docs.min.io/aistor/reference/cli/mc-cp/).
+
+
+## 7. Conclusão
 
 Dominar object storage deixou de ser apenas um requisito técnico: é um diferencial competitivo, já que quase todo pipeline de dados moderno começa e termina em um bucket S3 ou compatível. Ignorar isso compromete a atuação de qualquer engenheiro ou cientista de dados. O armazenamento em objetos oferece segurança, escalabilidade e flexibilidade para lidar com o crescimento de dados não estruturados, sendo ideal para nuvem, arquivamento de longo prazo e dados críticos. Nesse cenário, o MinIO — compatível com a API S3 — destaca-se como solução eficiente e escalável em ambientes on-premises e híbridos, viabilizando datalakes integrados a ecossistemas de Big Data. Explorar o MinIO em laboratório antes de adotar serviços externos como o Amazon S3 permite validar fluxos de trabalho e garantir, desde o início, uma arquitetura cloud-native robusta e preparada para escala. Para aprofundamento e maiores informações, consulte: 
 
