@@ -46,15 +46,11 @@ Essas soluções abriram caminho para o armazenamento de objetos acessado via HT
 
 Como vimos na seção anterior, ao longo da evolução das arquiteturas de TI, consolidaram-se três modelos fundamentais de armazenamento, cada qual com características próprias de desempenho, escalabilidade e adequação às cargas de trabalho. 
 
-- **Block Storage:** 
-- **File Storage:** 
-- **Object Storage:** 
+- **Block Storage** (baseado em blocos): Entrega um dispositivo de armazenamento lógico. O sistema operacional ou a aplicação decide como organizar os dados. Baseado em soluções locais ou em redes de armazenamento dedicadas (SAN, via protocolos como iSCSI ou Fibre Channel). Os dados são organizados em blocos de tamanho fixo, e cabe ao sistema operacional do servidor formatar o volume em sistemas de arquivos (ext4, NTFS etc.). É a base de bancos de dados transacionais e hipervisores, em que latência mínima e alto IOPS são cruciais. Um volume de bloco não possui noção de arquivos, apenas de endereços lógicos; portanto, não há arbitragem nativa de concorrência. Para evitar corrupção quando múltiplos hosts acessam o mesmo volume, recorre-se a mecanismos como LUNs dedicadas a um único servidor, sistemas de arquivos com suporte a múltiplos hosts e bloqueio distribuído (ex.: VMFS), ou ainda protocolos de coordenação de baixo nível (SCSI-3) e multipath (ALUA/MPIO) para redundância de acesso. A governança (retenção, versionamento) é externa ao dispositivo lógico. Embora eficiente para dados estruturados, é pouco adequado a volumes massivos de dados não estruturados.
 
-- **Armazenamento de Bloco**: Entrega um dispositivo de armazenamento lógico. O sistema operacional ou a aplicação decide como organizar os dados. Baseado em soluções locais ou em redes de armazenamento dedicadas (SAN, via protocolos como iSCSI ou Fibre Channel). Os dados são organizados em blocos de tamanho fixo, e cabe ao sistema operacional do servidor formatar o volume em sistemas de arquivos (ext4, NTFS etc.). É a base de bancos de dados transacionais e hipervisores, em que latência mínima e alto IOPS são cruciais. Um volume de bloco não possui noção de arquivos, apenas de endereços lógicos; portanto, não há arbitragem nativa de concorrência. Para evitar corrupção quando múltiplos hosts acessam o mesmo volume, recorre-se a mecanismos como LUNs dedicadas a um único servidor, sistemas de arquivos com suporte a múltiplos hosts e bloqueio distribuído (ex.: VMFS), ou ainda protocolos de coordenação de baixo nível (SCSI-3) e multipath (ALUA/MPIO) para redundância de acesso. A governança (retenção, versionamento) é externa ao dispositivo lógico. Embora eficiente para dados estruturados, é pouco adequado a volumes massivos de dados não estruturados.
+- **File Storage** (baseado em arquivos): Disponibiliza arquivos e diretórios por meio de um sistema de arquivos, frequentemente acessado pela rede. Oferecido por servidores ou appliances especializados (NAS – Network Attached Storage), que expõem hierarquias de diretórios via rede utilizando protocolos como NFS (Unix/Linux) e SMB/CIFS (Windows). A coordenação do acesso concorrente é feita pelo próprio servidor, que enxerga seus volumes em nível de bloco e os disponibiliza em forma de arquivos. Essa abordagem favorece colaboração e compartilhamento, mas sofre limitações de desempenho quando o número de arquivos ou operações de metadados (criação, listagem, renomeação) cresce para milhões. Em cargas analíticas modernas, a estrutura hierárquica e a pressão em metadados reduzem a eficiência em comparação ao armazenamento de objetos. Por isso, em Big Data, prevalecem formatos colunares otimizados para leitura analítica massiva.
 
-- **Armazenamento de Arquivos**: Disponibiliza arquivos e diretórios por meio de um sistema de arquivos, frequentemente acessado pela rede. Oferecido por servidores ou appliances especializados (NAS – Network Attached Storage), que expõem hierarquias de diretórios via rede utilizando protocolos como NFS (Unix/Linux) e SMB/CIFS (Windows). A coordenação do acesso concorrente é feita pelo próprio servidor, que enxerga seus volumes em nível de bloco e os disponibiliza em forma de arquivos. Essa abordagem favorece colaboração e compartilhamento, mas sofre limitações de desempenho quando o número de arquivos ou operações de metadados (criação, listagem, renomeação) cresce para milhões. Em cargas analíticas modernas, a estrutura hierárquica e a pressão em metadados reduzem a eficiência em comparação ao armazenamento de objetos. Por isso, em Big Data, prevalecem formatos colunares otimizados para leitura analítica massiva.
-
-- **Armazenamento de Objetos**: Disponibiliza objetos identificados por chaves, acessados por APIs e associados a metadados. Evolução natural da arquitetura de nuvem para lidar com a explosão de dados não estruturados. Cada item é tratado como objeto independente, composto por identificador único (ID), atributos e metadados enriquecíveis, além do conteúdo binário. Ao invés de expor sistemas de arquivos ou volumes, os objetos residem em repositórios acessíveis por APIs (ex.: REST, S3), eliminando a hierarquia tradicional de diretórios. Essa simplicidade de endereçamento (buckets com chave única) favorece escalabilidade horizontal massiva, interoperabilidade entre plataformas e governança granular (retenção, imutabilidade). Por isso, tornou-se a base tecnológica de Data Lakes e do ecossistema moderno de Big Data, AI/ML, Analytics e aplicações cloud-native.
+- **Object Storage:** (armazenamento de objetos): Disponibiliza objetos identificados por chaves, acessados por APIs e associados a metadados. Evolução natural da arquitetura de nuvem para lidar com a explosão de dados não estruturados. Cada item é tratado como objeto independente, composto por identificador único (ID), atributos e metadados enriquecíveis, além do conteúdo binário. Ao invés de expor sistemas de arquivos ou volumes, os objetos residem em repositórios acessíveis por APIs (ex.: REST, S3), eliminando a hierarquia tradicional de diretórios. Essa simplicidade de endereçamento (buckets com chave única) favorece escalabilidade horizontal massiva, interoperabilidade entre plataformas e governança granular (retenção, imutabilidade). Por isso, tornou-se a base tecnológica de Data Lakes e do ecossistema moderno de Big Data, AI/ML, Analytics e aplicações cloud-native.
 
 
 ## Comparação dos modelos de armazenamento (Block vs File vs Object) 
@@ -212,7 +208,7 @@ No estágio mais avançado, Data Lakes modernos incorporam Delta Lake, Iceberg, 
 
 - Delta Lake / Apache Iceberg / Apache Hudi – camadas de gerenciamento sobre object storage, trazendo ACID, versionamento e esquema evolutivo (fundamentais para Data Lakes confiáveis).
 - Trino (antigo PrestoSQL) – query engine distribuído para consultar dados diretamente no object storage via SQL, sem mover dados.
-- Hive / Impala – no legado Hadoop, mas ainda úteis para mostrar a ponte entre HDFS e object storage.
+- Hive / Impala – no legado Hadoop, mas ainda úteis para a ponte entre HDFS e object storage.
 - Flink – alternativa ao Spark para processamento de streams com baixa latência.
 
 ## 5. Prática com MinIO
@@ -242,90 +238,6 @@ O container executará o serviço principal do MinIO, expondo:
 
 Para iniciar o servidor MinIO no ambiente de prática, utilizaremos o Docker Compose, conforme o padrão estabelecido no projeto:
 
-<!--
-
-#https://dl.min.io/aistor/minio/release/linux-amd64/
-#wget https://dl.min.io/client/mc/release/linux-amd64/mc
-#chmod +x mc
-#sudo mv mc /usr/local/bin/
-
-cd /opt/idp-bigdata/minio/
-git clone https://github.com/minio/minio
-cd minio/
-git checkout RELEASE.2025-10-15T17-29-55Z
-docker build -t myminio/minio:RELEASE.2025-10-15T17-29-55Z .
-
-### 
-version: '3.7'
-
-services:
-  minio:
-    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
-    container_name: minio
-    restart: unless-stopped
-
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-
-    volumes:
-      - ./minio-data:/data
-      - ./minio-backup:/backup
-
-    command: server /data --console-address ":9001"
-
-    networks:
-      - mybridge
-
-networks:
-  mybridge:
-    external:
-      name: mybridge
-
-volumes:
-  minio-data:
-  minio-backup:
-
-
----
-
-
-
-services:
-  minio:
-    image: myminio/minio:RELEASE.2025-10-15T17-29-55Z
-    container_name: minio
-    restart: unless-stopped
-
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-
-    environment:
-      MINIO_ROOT_USER: minioadmin
-      MINIO_ROOT_PASSWORD: minioadmin
-
-    volumes:
-      - ./minio-data:/data
-      - ./minio-backup:/backup
-
-    command: server /data --console-address ":9001"
-
-    networks:
-      - mybridge
-
-networks:
-  mybridge:
-    external: true
-    name: mybridge
-
-
--->
-
 ```bash
 cd /opt/idp-bigdata/minio
 docker-compose up -d
@@ -353,7 +265,9 @@ Conforme já explicado em sala de aula, um ponto essencial é a persistência do
 
 ### API Python: Boto3
 
-O MinIO utiliza uma API compatível com S3 para realizar operações via chamadas HTTP, como upload, download, criação de buckets e listagem de arquivos, de forma semelhante à AWS. Para usar o MinIO com Python, a biblioteca recomendada é o Boto3, que facilita a comunicação com o servidor MinIO. O nome "Boto" faz referência ao boto-cor-de-rosa, um golfinho da Amazônia, escolhido de forma divertida por Mitch Garnaat, criador da biblioteca, comparando-a ao boto navegando pelos serviços da nuvem. Você pode instalar a Boto3 usando o `pip` ou configurando o Dockerfile da IDE Jupyter, como vimos em sala de aula.   
+O MinIO utiliza uma API compatível com S3 para realizar operações via chamadas HTTP, como upload, download, criação de buckets e listagem de arquivos, de forma semelhante à AWS. Para usar o MinIO com Python, a biblioteca recomendada é o Boto3, que facilita a comunicação com o servidor MinIO. O nome "Boto", escolhido de forma divertida por Mitch Garnaat, criador da biblioteca, faz referência ao boto cor-de-rosa, uma espécie de golfinho da Amazônia, comparando-a ao boto navegando fluentemente pelos serviços da nuvem. Você pode instalar a biblioteca boto3 usando o `pip` ou configurando o Dockerfile do container Jupyter ou Spark, como vimos em sala de aula.   
+
+>Caso esteja executando o script localmente no host, utilize http://localhost:9000. Se o script rodar dentro de outro container na mesma rede bridge (como Spark ou Jupyter), utilize http://minio:9000.
 
 ```python
 pip install boto3
@@ -366,13 +280,14 @@ from botocore.client import Config
 
 s3 = boto3.client(
     's3',
-    endpoint_url='http://localhost:9000',
+    endpoint_url='http://minio:9000',
     aws_access_key_id='minioadmin',
     aws_secret_access_key='minioadmin',
     config=Config(signature_version='s3v4'),
     region_name='us-east-1'
 )
 ```
+
 
 ### Criando um Bucket
 
@@ -395,16 +310,6 @@ s3.upload_file('localfile.txt', 'meu-bucket', 'localfile.txt')
 ```python
 # Ler um arquivo (substitua pelo nome do seu bucket e objeto)
 s3.download_file('meu-bucket', 'localfile.txt', 'baixado_localfile.txt')
-```
-
-### Testando com curl
-
-Em sua máquina, faça uma requisição ao objeto via terminal: 
-
-```bash
-# Exemplo de download usando a API S3 (substitua pelo nome do seu bucket e objeto)
-curl -O http://localhost:9000/meuprimeirobucket/teste.txt \
-     -u minioadmin:minioadmin
 ```
 
 ### Listando Objetos em um Bucket
@@ -430,15 +335,6 @@ Uma Presigned URL é um link temporário e autenticado que dá acesso direto a u
 import boto3
 from botocore.client import Config
 
-s3 = boto3.client(
-    's3',
-    endpoint_url='http://localhost:9000',
-    aws_access_key_id='minioadmin',
-    aws_secret_access_key='minioadmin',
-    config=Config(signature_version='s3v4'),
-    region_name='us-east-1'
-)
-
 # Gerar URL temporária para download
 url = s3.generate_presigned_url(
     'get_object',
@@ -456,10 +352,6 @@ O `mc` é o utilitário de linha de comando do MinIO. Ele é análogo ao AWS CLI
 ```bash
 wget -q "https://github.com/minio/mc/releases/download/RELEASE.2025-08-13T08-35-41Z/mc.linux-${TARGETARCH}.RELEASE.2025-08-13T08-35-41Z" -O /usr/local/bin/mc && chmod +x /usr/local/bin/mc
 ```
-
-<!--# MacOS
-brew install minio/stable/mc--> 
-
 O primeiro passo é configurar uma conexão para seu servidor MinIO local, por meio de um alias: 
 
 ```bash
@@ -721,7 +613,12 @@ A operação executada é uma **ingestão em lote (batch)**. Alterações futura
 
 ### Desafio
 
-(i) registrar a contagem de documentos das três coleções; (ii) comprovar a exportação em JSON Lines; (iii) verificar no Console Web a presença dos objetos no bucket `datalake-bronze`; (iv) inspecionar o objeto de vendas e identificar seus campos aninhados; e (v) explicar a diferença entre restaurar um banco, exportar documentos e armazenar objetos em um Data Lake. Propor quais campos de `sample_supplies.sales` devem ser normalizados para construir uma tabela analítica de itens vendidos. A implementação será retomada no Spark, quando os arquivos Bronze serão lidos e transformados para Parquet na camada Silver.
+(i) registrar a contagem de documentos das três coleções; 
+(ii) comprovar a exportação em JSON Lines; 
+(iii) verificar no Console Web a presença dos objetos no bucket `datalake-bronze`; 
+(iv) inspecionar o objeto de vendas e identificar seus campos aninhados; 
+(v) explicar a diferença entre restaurar um banco, exportar documentos e armazenar objetos em um Data Lake. 
+(vi) propor quais campos de `sample_supplies.sales` devem ser normalizados para construir uma tabela analítica de itens vendidos para futura implementação com Spark, quando os arquivos Bronze serão lidos e transformados para Parquet na camada Silver.
 
 **Referências:** [MongoDB — Carregar dados de amostra localmente](https://www.mongodb.com/pt-br/docs/manual/sample-data/load-sample-data-local/); [MongoDB — mongorestore](https://www.mongodb.com/docs/database-tools/mongorestore/); [MongoDB — mongoexport](https://www.mongodb.com/docs/database-tools/mongoexport/); [MinIO — mc cp](https://docs.min.io/aistor/reference/cli/mc-cp/).
 
@@ -735,3 +632,93 @@ Dominar object storage deixou de ser apenas um requisito técnico: é um diferen
 - **Python SDK** p/ S3/MinIO [Boto3](https://boto3.amazonaws.com/v1/documentation/api/latest/index.html)
 - **AWS S3** [Developer Guide](https://docs.aws.amazon.com/AmazonS3/latest/dev/Welcome.html)
 - **AWS CLI S3** [Reference Guide](https://docs.aws.amazon.com/cli/latest/reference/s3/)
+
+<!--
+
+#MacOS
+brew install minio/stable/mc
+
+#https://dl.min.io/aistor/minio/release/linux-amd64/
+#wget https://dl.min.io/client/mc/release/linux-amd64/mc
+#chmod +x mc
+#sudo mv mc /usr/local/bin/
+
+cd /opt/idp-bigdata/minio/
+git clone https://github.com/minio/minio
+cd minio/
+git checkout RELEASE.2025-10-15T17-29-55Z
+docker build -t myminio/minio:RELEASE.2025-10-15T17-29-55Z .
+
+### 
+version: '3.7'
+
+services:
+  minio:
+    image: quay.io/minio/minio:RELEASE.2025-09-07T16-13-09Z
+    container_name: minio
+    restart: unless-stopped
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+
+    volumes:
+      - ./minio-data:/data
+      - ./minio-backup:/backup
+
+    command: server /data --console-address ":9001"
+
+    networks:
+      - mybridge
+
+networks:
+  mybridge:
+    external:
+      name: mybridge
+
+volumes:
+  minio-data:
+  minio-backup:
+---
+services:
+  minio:
+    image: myminio/minio:RELEASE.2025-10-15T17-29-55Z
+    container_name: minio
+    restart: unless-stopped
+
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+
+    volumes:
+      - ./minio-data:/data
+      - ./minio-backup:/backup
+
+    command: server /data --console-address ":9001"
+
+    networks:
+      - mybridge
+
+networks:
+  mybridge:
+    external: true
+    name: mybridge
+--- 
+### Testando com curl
+
+Em sua máquina, faça uma requisição ao objeto via terminal: 
+
+```bash
+# Exemplo de download usando a API S3 (substitua pelo nome do seu bucket e objeto)
+curl -O http://localhost:9000/meuprimeirobucket/teste.txt \
+     -u minioadmin:minioadmin
+```
+-->
