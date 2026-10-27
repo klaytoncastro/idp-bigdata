@@ -74,55 +74,111 @@ Como vimos na seção anterior, ao longo da evolução das arquiteturas de TI, c
 > **Importante:** os modelos não determinam, por si só, a quantidade de clientes, o desempenho ou a escalabilidade. Essas características dependem da arquitetura e da implementação. Os três modelos de armazenamento se diferenciam principalmente pela forma como os dados são organizados, endereçados e acessados pelas aplicações.
 
 ```mermaid
-flowchart LR
-    subgraph BLOCK["① BLOCK STORAGE"]
-        direction TB
-        B1["Aplicação / SGBD / VM"]
-        B2["Sistema operacional<br/>Filesystem ou acesso bruto"]
-        B3["I/O de blocos<br/>Endereçamento LBA"]
-        B4[("Volume lógico<br/>Disco / LUN")]
-        B5["DAS / SAN"]
-
-        B1 --> B2 --> B3 --> B4 --> B5
+flowchart TB
+    subgraph APP_TIER ["Camada de Aplicação e Computação"]
+        A["Aplicação / SGBD / Hipervisor (VM)"]
     end
 
-    subgraph FILE["② FILE STORAGE"]
-        direction TB
-        F1["Aplicações / Clientes"]
-        F2["Protocolo de rede<br/>NFS / SMB"]
-        F3["Sistema de arquivos remoto"]
-        F4["Diretórios e arquivos<br/>/projetos/dados.csv"]
-        F5[("Servidor de arquivos<br/>NAS")]
-
-        F1 --> F2 --> F3 --> F4
-        F5 --- F4
+    subgraph OS_TIER ["Camada de Sistema Operacional & Abstração"]
+        B["Sistema Operacional do Servidor"]
+        C["Driver de Bloco / Sistema de Arquivos Local<br/><i>(ex.: ext4, XFS, NTFS, VMFS)</i>"]
+        A --> B
+        B --> C
     end
 
-    subgraph OBJECT["③ OBJECT STORAGE"]
-        direction TB
-        O1["Aplicações / ETL / ML"]
-        O2["API HTTP / REST<br/>S3 / Swift"]
-        O3["Bucket + chave do objeto"]
-        O4["Conteúdo + metadados<br/>ID / Key / Version"]
-        O5[("Object Storage<br/>MinIO / S3 / Swift")]
-
-        O1 --> O2 --> O3 --> O4 --> O5
+    subgraph PROTOCOL_TIER ["Rede / Protocolo de Bloco"]
+        D["I/O de Baixo Nível via Endereçamento LBA<br/><b>(Fibre Channel, iSCSI, FCoE, NVMe-oF)</b>"]
+        C --> D
     end
 
-    B1 ~~~ F1
-    F1 ~~~ O1
+    subgraph STORAGE_TIER ["Infraestrutura de Armazenamento"]
+        E[("Controladora / Storage SAN")]
+        F["LUNs / Conjuntos de Discos (RAID)"]
+        D --> E
+        E --> F
+    end
 
-    classDef block fill:#dbeafe,stroke:#2563eb,color:#1e40af
-    classDef file fill:#dcfce7,stroke:#16a34a,color:#166534
-    classDef object fill:#f3e8ff,stroke:#9333ea,color:#6b21a8
+    classDef blockApp fill:#dbeafe,stroke:#1d4ed8,stroke-width:2px,color:#1e3a8a
+    classDef blockOs fill:#eff6ff,stroke:#3b82f6,stroke-width:2px,color:#1d4ed8
+    classDef blockNet fill:#f8fafc,stroke:#64748b,stroke-width:2px,stroke-dasharray: 4 4,color:#334155
+    classDef blockDisk fill:#bfdbfe,stroke:#1d4ed8,stroke-width:2px,color:#1e3a8a
 
-    class B1,B2,B3,B4,B5 block
-    class F1,F2,F3,F4,F5 file
-    class O1,O2,O3,O4,O5 object
+    class A blockApp
+    class B,C blockOs
+    class D blockNet
+    class E,F blockDisk
+```
 
-    style BLOCK fill:#eff6ff,stroke:#2563eb,stroke-width:2px
-    style FILE fill:#f0fdf4,stroke:#16a34a,stroke-width:2px
-    style OBJECT fill:#faf5ff,stroke:#9333ea,stroke-width:2px
+```mermaid
+flowchart TB
+    subgraph CLIENT_TIER ["Camada de Clientes"]
+        A["Múltiplos Clientes / Servidores Concorrentes"]
+    end
+
+    subgraph NETWORK_TIER ["Camada de Transporte e Protocolo de Rede"]
+        B["Chamadas de Sistema de Arquivos Remoto<br/><b>NFS (Linux/Unix) / SMB-CIFS (Windows)</b>"]
+        A --> B
+    end
+
+    subgraph SERVER_TIER ["Servidor de Arquivos (NAS)"]
+        C["Serviço / Daemon NAS<br/><i>(Coordenação de Concorrência, Locks e ACLs)</i>"]
+        D["Árvore Hierárquica de Diretórios e Metadados<br/><code>/compartilhamento/dados/arquivo.csv</code>"]
+        B --> C
+        C --> D
+    end
+
+    subgraph DISK_TIER ["Armazenamento Físico"]
+        E[("Discos Locais / RAID do NAS")]
+        D --> E
+    end
+
+    classDef fileApp fill:#dcfce7,stroke:#15803d,stroke-width:2px,color:#14532d
+    classDef fileNet fill:#f8fafc,stroke:#64748b,stroke-width:2px,stroke-dasharray: 4 4,color:#334155
+    classDef fileServer fill:#f0fdf4,stroke:#22c55e,stroke-width:2px,color:#166534
+    classDef fileDisk fill:#bbf7d0,stroke:#15803d,stroke-width:2px,color:#14532d
+
+    class A fileApp
+    class B fileNet
+    class C,D fileServer
+    class E fileDisk
+```
+
+```mermaid
+flowchart TB
+    subgraph CLIENT_TIER ["Aplicações e Consumidores"]
+        A["Aplicações Web / Pipelines de Dados / Spark / Treinamento de ML"]
+    end
+
+    subgraph API_TIER ["Interface de Comunicação Padronizada"]
+        B["API HTTP/REST sem Estado<br/><b>Protocolo S3 / Swift (GET, PUT, LIST, DELETE)</b>"]
+        A --> B
+    end
+
+    subgraph NAMESPACE_TIER ["Organização Lógica (Single Flat Namespace)"]
+        C["Bucket + Chave do Objeto (Key)<br/><code>s3://datalake-bronze/mongodb/sample/sales.jsonl</code>"]
+        B --> C
+    end
+
+    subgraph CORE_TIER ["Plataforma de Object Storage (ex.: MinIO, AWS S3, Ceph)"]
+        D["Camada de Metadados<br/><i>(ID Único, Tamanho, Hash/ETag, Políticas WORM, ACL)</i>"]
+        E["Camada de Dados Brutos (BLOB)<br/><i>(Conteúdo Binário imutável / Fragmentos Erasure Coding)</i>"]
+        F[("OSD - Nós de Armazenamento Distribuído<br/><i>(Scale-out / Múltiplos Discos e Servidores)</i>")]
+        
+        C --> D
+        C --> E
+        D --> F
+        E --> F
+    end
+
+    classDef objApp fill:#f3e8ff,stroke:#7e22ce,stroke-width:2px,color:#581c87
+    classDef objNet fill:#f8fafc,stroke:#64748b,stroke-width:2px,stroke-dasharray: 4 4,color:#334155
+    classDef objName fill:#faf5ff,stroke:#a855f7,stroke-width:2px,color:#6b21a8
+    classDef objCore fill:#e9d5ff,stroke:#7e22ce,stroke-width:2px,color:#581c87
+
+    class A objApp
+    class B objNet
+    class C objName
+    class D,E,F objCore
 ```
 
 ### Principais Vantagens e Características
