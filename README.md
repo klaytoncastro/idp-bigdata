@@ -22,12 +22,13 @@ Ao longo do curso, exploraremos conceitos, infraestrutura e aplicações de Big 
 | 12 | [Delta Lake](./delta/)  | Prática com Delta Lake                               | 05/11/2026 |
 | 13 | [RabbitMQ](./rabbitmq/) | Prática com Broker de Mensagens e Filas (P2P/Pub-Sub)| 12/11/2026 |
 | 14 | [Kafka](./kafka/)       | Prática com Event Streaming e Broker Distribuído    | 14/11/2026 |
-<!--
-| 12 | [Airflow](./airflow/)                                                                | Orquestração de Workflows e Automação de Pipelines               | 19/06/2026 |
+| 15 | [Airflow](./airflow/)   | Orquestração de Workflows e Automação de Pipelines               | 19/11/2026 |
+| 16 | [Streamlit](./streamlit/)  | Dashboards Interativos e Visualização de Dados             | 23/11/2026 |
+| 17 | [Pipeline](./pipeline/)    | Desenvolvimento de Pipeline de Dados com Múltiplas Ferramentas   | 01/12/2026 |
 
-| 14 | [Pipeline](./pipeline/)                                                              | Desenvolvimento de Pipeline de Dados com Múltiplas Ferramentas   | 26/06/2026 |
+
+<!--
 | 13 | [Celery](./celery/)                                                                  | Orquestração, workers, filas e serviços de Mensageria            | 13/11/2025 |
-| 15 | [Streamlit](./streamlit/)                                                            | Dashboards Interativos e Visualização de Dados             | 14/05/2025 |
 | 17 | [Projeto Final]                                                                      | Projeto Capstone da Disciplina                             | 25/06/2025 |
 -->
 
